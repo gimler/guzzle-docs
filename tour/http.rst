@@ -452,7 +452,25 @@ Some web services require a Cookie in order to maintain a session.  The ``Guzzle
 
     echo $request;
 
-Wrapping it all up
-~~~~~~~~~~~~~~~~~~
+MD5 hash validator plugin
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Phew!  That was a lot of information.  There's more to the Guzzle\Http namespace than what was described above.  As always, you can poke around the source and take a look at the unit tests for more information.
+Entity bodies can sometimes be modified over the wire due to a faulty TCP transport or misbehaving proxy.  If an HTTP response contains a Content-MD5 header, then a MD5 hash of the entity body of a response can be compared against the Content-MD5 header of the response to determine if the response was delivered intact.  The Md5ValidatorPlugin will throw an ``UnexpectedValueException`` if the calculated MD5 hash does not match the Content-MD5 hash.
+
+.. code-block:: php
+
+    <?php
+    use Guzzle\Http\Message\RequestFactory;
+    use Guzzle\Http\Plugin\Md5ValidatorPlugin;
+
+    $plugin = new Md5ValidatorPlugin();
+    $request = RequestFactory::get('http://www.yahoo.com/');
+    $request->getEventManager()->attach($plugin);
+    $request->send();
+
+Calculating the MD5 hash of a large entity body or an entity body that was transferred using a Content-Encoding is an expensive operation.  When working in high performance applications, you might consider skipping the MD5 hash validation for entity bodies bigger than a certain size or Content-Encoded entity bodies (see ``Guzzle\Http\Plugin\Md5ValidatorPlugin`` for more information).
+
+Wrapping it all up
+------------------
+
+Phew!  That was a lot of information.  There's more to the ``Guzzle\Http`` namespace than what was described above.  As always, you can poke around the source and take a look at the unit tests for more information.

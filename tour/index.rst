@@ -1,6 +1,6 @@
-===========
-Tour Guzzle
-===========
+====
+Tour
+====
 
 Take a tour of Guzzle:
 

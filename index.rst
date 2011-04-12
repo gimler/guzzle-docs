@@ -4,8 +4,8 @@ Guzzle Documentation
 
 Guzzle is a PHP framework for building REST webservice clients.
 
-Tour Guzzle
------------
+Tour
+----
 
 Read the :doc:`tour <tour/index>` to get an overview at what you can do with Guzzle:
 
