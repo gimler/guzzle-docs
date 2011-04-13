@@ -1,12 +1,12 @@
 Guzzle Documentation
 ====================
 
-Documentation for the [Guzzle PHP RESTful web service client framework](https://github.com/guzzle/guzzle).
+Documentation for [Guzzle](https://github.com/guzzle/guzzle), the RESTful web service client framework for PHP.
 
 Building the documentation
 --------------------------
 
-The documentation is written in ReStructed text and can be built using [Sphinx](http://sphinx.pocoo.org/).
+The documentation is written in [reStructuredText](http://docutils.sourceforge.net/rst.html) and can be built using [Sphinx](http://sphinx.pocoo.org/).
 
 1. Install sphinx:
 
