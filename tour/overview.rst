@@ -25,7 +25,21 @@ Requirements
 Installing Guzzle
 -----------------
 
-Guzzle can be installed by cloning the Guzzle repository on github::
+Installing only Guzzle
+~~~~~~~~~~~~~~~~~~~~~~
+
+If you aren't using any Guzzle web service clients like guzzle-aws or guzzle-unfuddle, then you can just download the `guzzle phar file <http://build.guzzlephp.org/guzzle.phar>`_ and include it in your php scripts.
+
+.. code-block:: php
+
+    <?php
+
+    require 'guzzle.phar';
+
+Installing Guzzle and Guzzle web service clients
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Guzzle can be installed by cloning the Guzzle github repository::
 
     git clone https://github.com/guzzle/guzzle.git
 
@@ -45,6 +59,8 @@ You will need to add Guzzle to your application's autoloader.  Guzzle ships with
 
 *Substitute '/path/to/' with the full path to your Guzzle installation.*
 
+If you are going to use Guzzle web service clients in your projects (e.g. guzzle-aws), you will need to add them to your main project as git submodules.  See the README of each project for more information on how to install a particular client.  After installing the web service clients, you can build a single phar file containing the Guzzle framework and all of your installed Guzzle web service clients using ``phing -f build/build.xml phar``.  Then you simply include the phar file in your PHP scripts.
+
 Installing web service clients
 ------------------------------
 
@@ -57,12 +73,12 @@ Guzzle web service clients are distributed separately from the Guzzle framework.
 * `Unfuddle <https://github.com/guzzle/guzzle-unfuddle>`_ - Unfuddle web service API client
 * `Cardinal Commerce <https://github.com/guzzle/guzzle-cardinal-commerce>`_ - Cardinal Commerce web service client
 
-When installing a Guzzle service, check the service's installation instructions for specific examples on how to install the service.  Services can be installed using a git submodule within your Guzzle installation.  Here is an example of installing the AWS service::
+When installing a Guzzle web service client, check the service's installation instructions for specific examples on how to install the service.  Services can typically be installed using a git submodule within your Guzzle installation.  Here is an example of installing the AWS web service client::
 
     cd /path/to/guzzle
-    git submodule add git://github.com/guzzle/guzzle-aws.git ./Service/Aws
+    git submodule add git://github.com/guzzle/guzzle-aws.git ./src/Guzzle/Aws
 
 Autoloading Services
 ~~~~~~~~~~~~~~~~~~~~
 
-Services that are installed within the path to Guzzle under the ``Service`` folder will be autoloaded automatically using the autoloader settings configured for the Guzzle library (e.g. /Guzzle/Service/Aws).  If you install a Guzzle service outside of this directory structure, you will need to add the service to the autoloader separately.
+Services that are installed within the path of Guzzle will be autoloaded automatically using the autoloader settings configured for the Guzzle library (e.g. /Guzzle/Aws).  If you install a Guzzle service outside of this directory structure, you will need to add the service to the autoloader separately.
