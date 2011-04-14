@@ -94,14 +94,14 @@ The services.xml file includes ``<client>`` elements that describe each web serv
                 <param name="secret_key" value="abcd" />
             </client>
             <!-- Amazon S3 client that extends the abstract client -->
-            <client name="s3" classs="Guzzle.Service.Aws.S3.S3Client" extends="abstract.aws">
+            <client name="s3" classs="Guzzle.Aws.S3.S3Client" extends="abstract.aws">
                 <param name="devpay_product_token" value="XYZ" />
                 <param name="devpay_user_token" value="123" />
             </client>
-            <client name="simple_db" class="Guzzle.Service.Aws.SimpleDb.SimpleDbClient" extends="abstract.aws" />
-            <client name="sqs" class="Guzzle.Service.Aws.Sqs.SqsClient" extends="abstract.aws" />
+            <client name="simple_db" class="Guzzle.Aws.SimpleDb.SimpleDbClient" extends="abstract.aws" />
+            <client name="sqs" class="Guzzle.Aws.Sqs.SqsClient" extends="abstract.aws" />
             <!-- Unfuddle client -->
-            <client name="unfuddle" class="Guzzle.Service.Unfuddle.UnfuddleClient">
+            <client name="unfuddle" class="Guzzle.Unfuddle.UnfuddleClient">
                 <param name="username" value="test-user" />
                 <param name="password" value="my-password" />
                 <param name="subdomain" value="my-subdomain" />
@@ -135,7 +135,7 @@ Success! You've loaded your services.xml file, and subsequently created ServiceB
 Get a client from the ServiceBuilder by name
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Retrieving clients from a ServiceBuilder is simple.  Clients are referenced by a customizable name you provide in your services.xml file.  The ServiceBuilder can also be considered a sort of multiton object-- it will only instantiate a client once and return that client for subsequent retrievals.  You can get a "throwaway" client (a client that is not persisted by the ServiceBuilder) by passing ``TRUE`` in the second argument of ``ServiceBuilder::get()``.
+Clients are referenced by a customizable name you provide in your services.xml file.  The ServiceBuilder can also be considered a sort of multiton object-- it will only instantiate a client once and return that client for subsequent retrievals.  You can get a "throwaway" client (a client that is not persisted by the ServiceBuilder) by passing ``TRUE`` in the second argument of ``ServiceBuilder::get()``.
 
 Here's an example of retrieving an Unfuddle client from your ServiceBuilder:
 
@@ -161,9 +161,9 @@ Commands are used to take action on a web service and format the response from t
 
 Commands can be instantiated and configured by a client by calling the ``getCommand`` method on a client and using the short form of a command's name.  The short form of a command's name is calculated based on the folder hierarchy of a command and converting the CamelCased named commands into snake_case.  Here are some examples on how the command names are calculated:
 
-#. ``Guzzle\Service\Aws\S3\Command\Bucket\ListBucket`` **->** bucket.list_bucket
-#. ``Guzzle\Service\Aws\S3\Command\GetAcl`` **->** get_acl
-#. ``Guzzle\Service\Unfuddle\Command\People\GetCurrentPerson`` **->** people.get_current_person
+#. ``Guzzle\Aws\S3\Command\Bucket\ListBucket`` **->** bucket.list_bucket
+#. ``Guzzle\Aws\S3\Command\GetAcl`` **->** get_acl
+#. ``Guzzle\Unfuddle\Command\People\GetCurrentPerson`` **->** people.get_current_person
 
 Notice how any sub-namespace beneath ``Command`` is converted from ``\`` to ``.`` (a period).  CamelCasing is converted to lowercased snake_casing (e.g. GetAcl == get_acl).
 
@@ -208,7 +208,7 @@ The GetObject command just returns the HTTP response object when it is executed.
     echo $command->getRequest();
     echo $command->getResponse();
 
-The ListBucket command above returns a ``Guzzle\Service\Aws\S3\Model\BucketIterator`` which will iterate over the entire contents of a bucket.  Note: Don't use this command blindly-- unless you specify a limit, it will iterate over every page of results from AWS, which could be a large number of requests.
+The ListBucket command above returns a ``Guzzle\Aws\S3\Model\BucketIterator`` which will iterate over the entire contents of a bucket.  Note: Don't use this command blindly-- unless you specify a limit, it will iterate over every page of results from AWS, which could be a large number of requests.
 
 You can take some shortcuts in your code by passing key-value pair arguments to a command:
 
@@ -233,7 +233,7 @@ Commands can be sent in parallel using ``Guzzle\Service\Command\CommandSet`` obj
     // Get an Amazon SimpleDB client from the ServiceBuilder
     $client = $serviceBuilder->get('simple_db)';
 
-    // Createa a CommandSet that will contain 3 commands
+    // Create a CommandSet that will contain 3 commands
     $set = new CommandSet(array(
         $client->getCommand('get_attributes', array(
             'domain' => 'test',
@@ -299,12 +299,12 @@ Guzzle doesn't require that all of the commands in a CommandSet originate from t
 Non-Batchable commands
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Some commands cannot be sent in parallel (i.e. ``Guzzle\Service\Aws\S3\Command\Bucket\ClearBucket``).  These types of commands have the canBatch attribute on them set to FALSE and cannot be sent in parallel using a CommandSet.  When a CommandSet contains both batchable and non-batchable commands, the CommandSet will first execute the non-batchable commands serially, and the batchable commands in parallel.
+Some commands cannot be sent in parallel (i.e. ``Guzzle\Aws\S3\Command\Bucket\ClearBucket``).  These types of commands have the canBatch attribute on them set to FALSE and cannot be sent in parallel using a CommandSet.  When a CommandSet contains both batchable and non-batchable commands, the CommandSet will first execute the non-batchable commands serially followed by the batchable commands in parallel.
 
 Adding observers to Client objects
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Any observer attached to the ``EventManager`` of a ``Client`` object will automatically be attached to all request objects created by the client.  This allows you to attach, for example, an ExponentialBackoffPlugin to a client object, and from that point on, every request sent through that client will utilize the ExponentialBackoffPlugin.  Plugins that are required for services are usually attached to a client in the client's builder object.  For example, all AWS clients will use the ExponentialBackoffPlugin.  In this case, you will not need to attach it again.
+Any observer attached to the ``EventManager`` of a ``Client`` object will automatically be attached to all request objects created by the client.  This allows you to attach, for example, an ExponentialBackoffPlugin to a client object, and from that point on, every request sent through that client will utilize the ExponentialBackoffPlugin.  Plugins that are required for services are usually attached to a client in the client's factory method.  For example, all AWS clients will use the ExponentialBackoffPlugin.  In this case, you will not need to attach it again.
 
 .. code-block:: php
 

@@ -10,15 +10,16 @@ Guzzle makes writing web service clients an easy task by providing a simple patt
 #. Create commands for each API action.  Guzzle uses the `command pattern <http://en.wikipedia.org/wiki/Command_pattern>`_.
 #. Add the web service client configuration to your services.xml file
 
-Or, more simply, run ``phing -f build/build.xml`` template to create a skeleton template for a new web service client.
+Or, more simply, run ``phing -f build/build.xml template`` to create a skeleton template for a new web service client.
 
 Requirements
 ------------
 
 #. PHP 5.3+ compiled with the cURL extension
 #. A recent version of cURL 7.16.2+ compiled with OpenSSL and zlib
-#. PHPUnit is required to run the unit tests
-#. node.js is required to run the unit tests
+#. `PHPUnit <http://www.phpunit.de/manual/3.6/en/installation.html>`_ is required to run the unit tests
+#. `node.js <http://nodejs.org>`_ is required to run the unit tests
+#. `Phing <http://www.phing.info/trac/>`_ is required to run the build scripts
 
 Installing Guzzle
 -----------------

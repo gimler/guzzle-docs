@@ -86,7 +86,7 @@ You should add the service description to your client in the client's factory me
 
     <?php
 
-    namespace Guzzle\Service\MyService;
+    namespace Guzzle\MyService;
 
     use Guzzle\Common\Inspector;
     use Guzzle\Http\Message\RequestInterface;
@@ -158,7 +158,7 @@ You should add the service description to your client in the client's factory me
 How to write an XML service description
 ---------------------------------------
 
-XML service descriptions are stored in a separate XML file for each web service client.  The XML file should be stored in the same location as the client and, by convention, named the same as the web service client name with a .xml file extension (e.g. MyServiceClient.php => MyService.xml).  The root node of the XML file must be ``<client>``.  The ``<client>`` node must contain one or more ``<command>`` nodes which define each dynamic command that can be sent by the client.
+XML service descriptions are stored in a separate XML file for each web service client.  The XML file should be stored in the same location as the client and, by convention, named client.xml.  The root node of the XML file must be ``<client>``.  The ``<client>`` node must contain one or more ``<command>`` nodes which define each dynamic command that can be sent by the client.
 
 Define commands using ``<command>`` nodes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -168,12 +168,12 @@ Commands are defined using ``<command>`` nodes.  A command node is a single comm
 Dynamic commands
 ^^^^^^^^^^^^^^^^
 
-Dynamic commands are commands that build HTTP requests completely based on the command definition and do not require a concrete command class.  Dynamic command nodes require the following attributes:
+Dynamic commands are commands that build HTTP requests completely based on the command definition and do not require a concrete command class.  Dynamic command nodes utilize the following attributes:
 
 +-----------+----------------------------------------------------------------------+
 | Attribute | Description                                                          |
 +===========+======================================================================+
-|  name     | The key used to reference the command.  Please use snake_casing.     |
+|  name     | The key used to reference the command.  Use snake_casing.            |
 +-----------+----------------------------------------------------------------------+
 |  method   | The HTTP method the command will execute (GET, HEAD, DELETE, POST,   |
 |           | PUT, OPTIONS).                                                       |

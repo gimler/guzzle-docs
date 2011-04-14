@@ -9,16 +9,23 @@ Building web service clients using commands is better than creating requests man
     #. Changes can be made to the underlying request and response processing without breaking the interface.
     #. Can create dynamic commands based on an XML service description.
 
-Simple web service clients make the assumption that the end-developer has an intricate understanding of how to send requests to a web service and how that web service will respond.  If you want to build a reusable REST web service client for an application you plan on maintaining, then creating a simple client might not cut it.  Simple clients might work for extremely simple web services (like `Yahoo weather <http://developer.yahoo.com/weather/>`_ for example) or quickly prototyping, but when you're dealing with a huge web service with a ton of options (e.g. Amazon S3), then you're going to want to build a robust web service client that executes commands.
+Simple web service clients make the assumption that the end-developer has an intricate understanding of how to send requests to a web service and how that web service will respond.  If you want to build a reusable RESTful web service client for an application you plan on maintaining, then creating a simple client might not cut it.  Simple clients might work for extremely simple web services (like `Yahoo weather <http://developer.yahoo.com/weather/>`_ for example) or quickly prototyping, but when you're dealing with a huge web service with a ton of options (e.g. Amazon S3), then you're going to want to build a robust web service client that executes commands.
 
 A command-based web service client that abstracts away the HTTP request and response makes a client more future-proof; if the API you are interacting with changes (for example, adds a required field), then you would only have to update the command in one place rather than every single file in your project that interacts with the web service.  Guzzle uses the `command pattern <http://en.wikipedia.org/wiki/Command_pattern>`_ for building requests and processing responses.  Abstracting the underlying implementation helps new developers to quickly send requests to an API using any of the best-practices coded into the command itself, rather than assuming that every developer on your team has an intricate understanding of the web service.
 
-The following document will describe how to build a robust command-based web service client for Guzzle.
+Commands can also be created for developers dynamically using an :doc:`XML service description </guide/service/creating_dynamic_commands>`.
+
+The following document will describe how to build a command-based web service client for Guzzle.
 
 Setting up
 ----------
 
-The first thing you will need to do is create the directory structure of your project.  The directory structure should mirror the following::
+The first thing you will need to do is create the directory structure of your project.  You can quickly create the required directory structure of your project by running a phing build target from your git clone of https://github.com/guzzle/guzzle.git::
+
+    cd /path/to/guzzle/build
+    phing template
+
+This phing build target will ask you a series of questions and generate a template for your web service client at a requested path.  The directory structure should mirror the following::
 
     Command\
         <Name...>Command.php
@@ -31,127 +38,49 @@ The first thing you will need to do is create the directory structure of your pr
         bootstrap.php
         services.xml
     .gitignore
-    LICENSE
-    README.rst
     <Service>Client.php
     phpunit.xml.dist
-    client.xml # optional
+    LICENSE
+    README.rst
+    build.xml
+    client.xml
 
-``.gitignore``
-~~~~~~~~~~~~~~
+After running the phing build target to generate the project's skeleton, you will need to modify the Client.php file by updating the factory method, adding a constructor if needed, and adding any class properties.
 
-To fit in with other Guzzle web service clients, your project should be hosted on github.  Before you deploy your project to github, you should make sure that certain files will not be committed to your repository.  This can be accomplished by adding a `.gitignore <http://www.kernel.org/pub/software/scm/git/docs/gitignore.html>`_ file.  At a minimum, the contents of your .gitignore file should contain the following::
-
-    phpunit.xml
-    coverage
-
-``Command\``
-~~~~~~~~~~~~
+Command/
+~~~~~~~~
 
 Place all of the commands for your web service in this folder.
 
-``Tests\``
-~~~~~~~~~~
+Tests/
+~~~~~~
 
 We strongly encourage you to thoroughly unit test you services.  Place your ``bootstrap.php`` file and services.xml file in this folder.  The boostrap.php file is responsible for setting up PHPUnit tests.  The services.xml file contains the client configurations needed to instantiate your client using the ``Guzzle\Service\ServiceBuilder``.
 
-Here is what your bootstrap.php file should look like (replace ``MY_SERVICE_NAMESPACE`` with the namespace of your service):
-
-.. code-block:: php
-
-    <?php
-
-    require_once $_SERVER['GUZZLE'] . '/library/vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
-
-    use Symfony\Component\ClassLoader\UniversalClassLoader;
-
-    $loader = new UniversalClassLoader();
-    $loader->registerNamespaces(array(
-        'Guzzle' => $_SERVER['GUZZLE'] . '/library',
-        'Guzzle\\Tests' => $_SERVER['GUZZLE'] . '/tests'
-    ));
-    $loader->register();
-
-    spl_autoload_register(function($class) {
-        if (0 === strpos($class, 'Guzzle\\Service\\<MY_SERVICE_NAMEPSACE>\\')) {
-            $path = implode('/', array_slice(explode('\\', $class), 3)) . '.php';
-            require_once __DIR__ . '/../' . $path;
-            return true;
-        }
-    });
-
-``LICENSE``
+Client.php
 ~~~~~~~~~~~
 
-It isn't required, but it's always a good idea to distribute your projects with some sort of license.  Guzzle uses the `MIT license <http://www.opensource.org/licenses/mit-license.php>`_, but you are free to license your code however you wish.
+Rename this class to the CamelCase name of the web service you are implementing followed by ``Client``.  Use strict CamelCasing (e.g. Xml is correct, XML is not).  A good client name would be something like ``FooBarClient.php``.
 
-``README.rst``
-~~~~~~~~~~~~~~
+phpunit.xml.dist
+~~~~~~~~~~~~~~~~
 
-Readme files are not required, but they are strongly encouraged if you want people to know what they can do with your project.
+Different developers will configure their development environment differently.  A phpunit.xml file is required to run PHPUnit tests against your service.  ``phpunit.xml.dist`` provides a template for developers to copy and modify.  Here's an example of a generic Guzzle ``phpunit.xml.dist`` file that can be used with most services.  If your web service client has sub-webservices like the Guzzle AWS client, you will need to set the ``<server name="GUZZLE_SERVICE_MULTI" value="0" />`` value to ``1``.
 
-``<Service>Client.php``
-~~~~~~~~~~~~~~~~~~~~~~~
+A phing build script will be created with your project template that will prompt the user for the path to their installation of Guzzle and make a working copy of phpunit.xml::
 
-Replace ``<Service>`` with the CamelCase name of the web service you are implementing.  Use strict CamelCasing (e.g. Xml is correct, XML is not).
+    cd /path/to/client
+    phing
 
-``phpunit.xml.dist``
-~~~~~~~~~~~~~~~~~~~~
-
-Different developers will configure their development environment differently.  A phpunit.xml file is required to run PHPUnit tests against your service.  ``phpunit.xml.dist`` provides a template for developers to copy and modify.  Here's an example of a generic Guzzle ``phpunit.xml.dist`` file that can be used with most services:
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-
-    <phpunit bootstrap="./Tests/bootstrap.php" colors="true">
-        <php>
-            <!--
-                Change the following value to the path of your Guzzle installation
-                e.g. /Users/michael/projects/guzzle
-            -->
-            <server name="GUZZLE" value="/path/to/guzzle" />
-
-            <!--
-                This value specifies the path to the test services.xml file that
-                passes arguments to a service builder
-            -->
-            <server name="GUZZLE_SERVICE_FILE" value="./Tests/services.xml" />
-
-            <!--
-                Guzzle tries to figure out the path to mock files automatically.
-                Set the following value to "1" if your Guzzle service contains
-                multiple clients under one service namespace (e.g. Aws\S3, Aws\Sqs)
-            -->
-            <server name="GUZZLE_SERVICE_MULTI" value="0" />
-        </php>
-
-        <testsuites>
-            <testsuite name="guzzle-service">
-                <directory suffix="Test.php">./Tests</directory>
-            </testsuite>
-        </testsuites>
-
-        <filter>
-            <whitelist>
-                <directory>./</directory>
-                <exclude>
-                    <directory>./Tests</directory>
-                    <directory>./docs</directory>
-                </exclude>
-            </whitelist>
-        </filter>
-    </phpunit>
-
-``client.xml``
-~~~~~~~~~~~~~~
+client.xml
+~~~~~~~~~~
 
 This is an optional XML file that describes how dynamic commands should be sent from your client.  Dynamic commands are helpful for quickly building simple commands that interact with a web service.
 
 Create a client
 ---------------
 
-Now that the directory structure is in place, you can start creating your web service client.  Create a new <Service Name>Client.php file that extends the ``Guzzle\Service\Client`` class.  Replace ``<Service Name>`` with the CamelCase name of the web service you are interacting with.  Next you will need to create your client's constructor.  Your client's constructor can require any number of arguments that your client needs.  In order for a ServiceBuilder to create your client using a parameterized array, you'll need to implement a ``factory`` method that maps an array of parameters into a an instantiated client object.  Any class composition should be handled in your client's factory method.
+Now that the directory structure is in place, you can start creating your web service client.  Rename Client.php to the CamelCase name of the web service you are interacting with.  Next you will need to create your client's constructor.  Your client's constructor can require any number of arguments that your client needs.  In order for a ServiceBuilder to create your client using a parameterized array, you'll need to implement a ``factory`` method that maps an array of parameters into a an instantiated client object.  Any class composition should be handled in your client's factory method.
 
 **Your client will not work with a service builder if you do not create a factory method.**
 
@@ -161,7 +90,7 @@ Here is the start of a custom web service client.  First we will extend the ``Gu
 
     <?php
 
-    namespace Guzzle\Service\MyService;
+    namespace Guzzle\MyService;
 
     use Guzzle\Common\Inspector;
     use Guzzle\Http\Message\RequestInterface;
@@ -241,7 +170,7 @@ Commands can be created in one of two ways: create a concrete command class that
 Commands help to hide complexity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Commands are the method in which you abstract away the underlying format of the requests that need to be sent to take action on a web service.  Commands in Guzzle are meant to be built by executing a series of setter methods on a command object.  Commands are only validated when they are being executed.  A ``Guzzle\Service\Client`` object is responsible for executing commands.  Commands created for your web service must implement ``Guzzle\Service\Command\CommandIterface``, but it's easier to extend the ``Guzzle\Service\Command\AbstractCommand`` class and implement the ``build`` method.  The ``build()`` method is responsible for using the arguments of the command to build one or more HTTP requests.
+Commands are the method in which you abstract away the underlying format of the requests that need to be sent to take action on a web service.  Commands in Guzzle are meant to be built by executing a series of setter methods on a command object.  Commands are only validated when they are being executed.  A ``Guzzle\Service\Client`` object is responsible for executing commands.  Commands created for your web service must implement ``Guzzle\Service\Command\CommandIterface``, but it's easier to extend the ``Guzzle\Service\Command\AbstractCommand`` class and implement the ``build()`` method.  The ``build()`` method is responsible for using the arguments of the command to build one or more HTTP requests.
 
 Docblock annotations for commands
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -251,7 +180,9 @@ The required parameters of a command are validated based on docblock annotations
 .. code-block:: php
 
     <?php
-    namespace Guzzle\Service\MyService\Command;
+
+    namespace Guzzle\MyService\Command;
+
     use Guzzle\Service\Command\AbstractCommand;
 
     /**
@@ -300,7 +231,7 @@ Commands can turn HTTP responses into something more valuable for your applicati
 
     <?php
 
-    namespace Guzzle\Service\MyService\Command;
+    namespace Guzzle\MyService\Command;
 
     use Guzzle\Service\Command\AbstractCommand;
 
@@ -378,14 +309,14 @@ The ``Guzzle\Service\ResourceIterator`` class should be used when dealing with r
 
 You might want to retrieve more than one page of results but not necessarily every page of results from a ResourceIterator.  In this case, you should allow end-developers to set a limit parameter on your command.  A limit parameter can be added to a ResourceIterator so that the iterator will not retrieve more resources than the limit amount.  For example, if you are retrieving 10 resources per page and your limit is set to 15, the resource iterator will retrieve a page of 10 resources followed by a page of 5 resources so that it will stay under the limit.  It is not guaranteed that the limit will limit the results to exactly the limit amount as this is dependent on the web service honoring the limit.
 
-See ``Guzzle\Service\Aws\S3\Model\BucketIterator`` and ``Guzzle\Service\Aws\SimpleDb\Model\SelectIterator`` for examples of building resource iterators.
+See ``Guzzle\Aws\S3\Model\BucketIterator`` and ``Guzzle\Aws\SimpleDb\Model\SelectIterator`` for examples of building resource iterators.
 
 Unit test your service
 ----------------------
 
 We hope that you unit test every aspect of your Guzzle clients.  Unit testing a Guzzle web service client is not very difficult thanks to some of the freebies you get from the ``Guzzle\Tests`` namespace.  You can set mock responses on your requests, or send requests to the test node.js server that comes with Guzzle.
 
-When unit testing with Guzzle, you should extend the ``Guzzle\Tests\GuzzleTestCase`` class to get access to various helper methods.  You should not actually interact with the real web service when unit testing with Guzzle.  Mock responses can be queued up for a client using the ``$this->setMockResponse($client, $filename)`` method of your test class.  Pass the client you are adding mock responses to and a single filename or array of filenames referencing files stored in the ``Tests\Command\Mock`` folder of your application.  This will set one or more mock responses on the next requests issued by the client.  Mock response files should contain a full HTTP response message::
+When unit testing with Guzzle, you should extend the ``Guzzle\Tests\GuzzleTestCase`` class to get access to various helper methods.  You should not actually interact with the real web service when unit testing with Guzzle.  Mock responses can be queued up for a client using the ``$this->setMockResponse($client, $filename)`` method of your test class.  Pass the client you are adding mock responses to and a single filename or array of filenames referencing files stored in the ``Tests\Command\Mock`` folder of your project.  This will set one or more mock responses on the next requests issued by the client.  Mock response files should contain a full HTTP response message::
 
     HTTP/1.1 200 OK
     Date: Wed, 25 Nov 2009 12:00:00 GMT
