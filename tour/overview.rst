@@ -49,11 +49,11 @@ You will need to add Guzzle to your application's autoloader.  Guzzle ships with
 
     <?php
 
-    require_once '/path/to/guzzle/library/vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+    require_once '/path/to/guzzle/vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 
     $classLoader = new \Symfony\Component\ClassLoader\UniversalClassLoader();
     $classLoader->registerNamespaces(array(
-        'Guzzle' => '/path/to/guzzle/library'
+        'Guzzle' => '/path/to/guzzle/src'
     ));
     $classLoader->register();
 
