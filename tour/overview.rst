@@ -4,8 +4,6 @@ Overview
 
 **Guzzle is a PHP 5.3+ framework for consuming web services and building RESTful web service clients.**
 
-Guzzle provides the tools necessary to quickly build a testable web service client with complete control over preparing HTTP requests and processing HTTP responses.  Guzzle helps on the HTTP layer by allowing requests to be sent in parallel, automatically managing persistent cURL connections between requests for multiple hosts, and providing various pluggable behaviors for HTTP transactions including exponential backoff, over the wire logging, caching, and cookie management.
-
 Guzzle makes writing web service clients an easy task by providing a simple pattern to follow:
 
 #. Extend the default ``Guzzle\Service\Client`` class
