@@ -4,8 +4,6 @@ Overview
 
 **Guzzle is a PHP 5.3+ framework for consuming web services and building RESTful web service clients.**
 
-Most web service clients follow a specific pattern: create a client class, create methods for each action that can be taken on the API, create a cURL handle to transfer an HTTP request to the client, parse the response, implement error handling, and return the result. You've probably had to interact with an API that either doesn't have a PHP client or the currently available PHP clients are not up to an acceptable level of quality. When facing these types of situations, you probably find yourself writing a web service that lacks advanced features like over the wire logging, parallel requests, persistent connections, exponential backoff, or cookie management. It wouldn't make sense to spend all that time writing those features-- it's just a simple web service client for just one API... But then you build another client... and another. Suddenly you find yourself with several web service clients to maintain, each client a God class, each reeking of code duplication and lacking most, if not all, of the aforementioned features.  Enter Guzzle.
-
 Guzzle provides the tools necessary to quickly build a testable web service client with complete control over preparing HTTP requests and processing HTTP responses.  Guzzle helps on the HTTP layer by allowing requests to be sent in parallel, automatically managing persistent cURL connections between requests for multiple hosts, and providing various pluggable behaviors for HTTP transactions including exponential backoff, over the wire logging, caching, and cookie management.
 
 Guzzle makes writing web service clients an easy task by providing a simple pattern to follow:
@@ -13,6 +11,8 @@ Guzzle makes writing web service clients an easy task by providing a simple patt
 #. Extend the default ``Guzzle\Service\Client`` class
 #. Create commands for each API action.  Guzzle uses the `command pattern <http://en.wikipedia.org/wiki/Command_pattern>`_.
 #. Add the web service client configuration to your services.xml file
+
+Or, more simply, run ``phing -f build/build.xml`` template to create a skeleton template for a new web service client.
 
 Requirements
 ------------
