@@ -12,10 +12,8 @@ The documentation is written in [reStructuredText](http://docutils.sourceforge.n
 
     easy_install sphinx
 
-2. In the git project folder, create the sphinx project:
-
-    sphinx-quickstart
-
-3. Make the HTML documentation
+2. Make the HTML documentation
 
     make html
+
+3. Open ./_build/html/index.html in your browser.
