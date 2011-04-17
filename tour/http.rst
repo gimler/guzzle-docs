@@ -51,12 +51,6 @@ Guzzle provides full access to request and response messages.  Requests can be c
     // Create a request by method
     $request = RequestFactory::create('TRACE', 'http://www.example.com/');
 
-    // Create a GET/HEAD/DELETE request manually
-    $request = new Guzzle\Http\Message\Request('GET', 'http://www.example.com/path?query=123&value=abc');
-
-    // Create a POST/PUT request using the EntityEnclosingRequest class
-    $request = new Guzzle\Http\Message\EntityEnclosingRequest('PUT', 'http://www.example.com/path?query=123&value=abc');
-
     // Check if a resource supports the DELETE method
     $supportsDelete = RequestFactory::options('http://www.example.com/path')->send()->isMethodAllowed('delete');
 
