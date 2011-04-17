@@ -262,7 +262,7 @@ Commands can turn HTTP responses into something more valuable for your applicati
         protected function build()
         {
             $this->request = $this->client->get('/{{key}}', $this);
-            $this->request->setHeader('X-Header', $this->get('other_value');
+            $this->request->setHeader('X-Header', $this->get('other_value'));
         }
 
         protected function process()
