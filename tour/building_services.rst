@@ -2,6 +2,8 @@
 Building Web Service Clients
 ============================
 
+.. highlight:: php
+
 Building web service clients using commands is better than creating requests manually.
 
     #. Better choice for maintainability, features, and ease of use.
@@ -84,9 +86,7 @@ Now that the directory structure is in place, you can start creating your web se
 
 **Your client will not work with a service builder if you do not create a factory method.**
 
-Here is the start of a custom web service client.  First we will extend the ``Guzzle\Service\Client`` class.  Next we will create a constructor that accepts several web service specific arguments.  After creating your constructor, you must create a factory method that accepts an array of configuration data.  The factory method accepts parameters, adds default parameters, validates that required parameters are present, creates a new client, attaches any observers needed for the client, and returns the client object.
-
-.. code-block:: php
+Here is the start of a custom web service client.  First we will extend the ``Guzzle\Service\Client`` class.  Next we will create a constructor that accepts several web service specific arguments.  After creating your constructor, you must create a factory method that accepts an array of configuration data.  The factory method accepts parameters, adds default parameters, validates that required parameters are present, creates a new client, attaches any observers needed for the client, and returns the client object::
 
     <?php
 
@@ -175,9 +175,7 @@ Commands are the method in which you abstract away the underlying format of the 
 Docblock annotations for commands
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The required parameters of a command are validated based on docblock annotations on the command class.  Docblock annotations are also responsible for adding default parameters, setting static parameters on a command that cannot be changed, and enforcing type safety on different command parameters:
-
-.. code-block:: php
+The required parameters of a command are validated based on docblock annotations on the command class.  Docblock annotations are also responsible for adding default parameters, setting static parameters on a command that cannot be changed, and enforcing type safety on different command parameters::
 
     <?php
 
@@ -225,9 +223,7 @@ As a general rule, most of the options for a command should essentially translat
 Commands can turn HTTP responses into something more valuable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Commands can turn HTTP responses into something more valuable for your application.  After a command is executed, it calls the ``process()`` method of the command.  The AbstractCommand class will automatically create a SimpleXMLElement if the response received by the command has a Content-Type of ``application/xml``.  If you want to provide more valuable results from your commands, you can override the ``process`` method and return any value you want.  To help developers who use code completion, be sure to update the ``@return`` annotation of your ``getResult`` method if you return a custom result (this will require you to override the ``getResult`` method too).
-
-.. code-block:: php
+Commands can turn HTTP responses into something more valuable for your application.  After a command is executed, it calls the ``process()`` method of the command.  The AbstractCommand class will automatically create a SimpleXMLElement if the response received by the command has a Content-Type of ``application/xml``.  If you want to provide more valuable results from your commands, you can override the ``process`` method and return any value you want.  To help developers who use code completion, be sure to update the ``@return`` annotation of your ``getResult`` method if you return a custom result (this will require you to override the ``getResult`` method too)::
 
     <?php
 
@@ -279,9 +275,7 @@ Commands can turn HTTP responses into something more valuable for your applicati
 
 There's our implemented command.  The ``build`` method is responsible for creating an HTTP request to send to the web service.  This command will send a request to a web service that uses the ``key`` parameter as part of the path of the request, and adds an ``X-Header`` header value to the request using the ``other_value`` parameter of the command.  Parameters passed to a command can be referenced by calling ``$this->get($parameterName)``.  This command will return an ``AwesomeObject`` when the ``getResult`` method is called on the command.  We are overriding the ``getResult`` method in our command so that developers who use code completion will know what type of object is returned from the command.  You will notice that there are setter methods on the client for setting the keys referenced in the docblock.  These are strongly encouraged to help developers to quickly use your command with code completion.  You can also do fancy stuff to the values provided to setter methods, like creating objects or extra validation.  There's no need to create a setter method for the ``headers`` key, as that is implicitly managed by the AbstractCommand object.
 
-Here's how you would execute this command using the client we created:
-
-.. code-block:: php
+Here's how you would execute this command using the client we created::
 
     <?php
 

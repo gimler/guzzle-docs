@@ -2,6 +2,8 @@
 Taming HTTP
 ===========
 
+.. highlight:: php
+
 Guzzle gives PHP developers complete control over HTTP requests while utilizing HTTP/1.1 best practices.  Guzzle's HTTP functionality is a robust framework built on top of the `PHP libcurl bindings <http://www.php.net/curl>`_.
 
 Quick overview of Guzzle's HTTP features
@@ -32,9 +34,7 @@ Sending requests and using responses
 Requests
 ~~~~~~~~
 
-Guzzle provides full access to request and response messages.  Requests can be created manually or using the RequestFactory.  Using the RequestFactory is the preferred method of creating requests:
-
-.. code-block:: php
+Guzzle provides full access to request and response messages.  Requests can be created manually or using the RequestFactory.  Using the RequestFactory is the preferred method of creating requests::
 
     <?php
 
@@ -60,9 +60,7 @@ Guzzle provides full access to request and response messages.  Requests can be c
     // Check if a resource supports the DELETE method
     $supportsDelete = RequestFactory::options('http://www.example.com/path')->send()->isMethodAllowed('delete');
 
-If you know exactly what HTTP message you want to send, you can create request objects from messages:
-
-.. code-block:: php
+If you know exactly what HTTP message you want to send, you can create request objects from messages::
 
     <?php
 
@@ -102,9 +100,7 @@ Request objects are all about building an HTTP message.  Each part of an HTTP re
 PUT
 ^^^
 
-Here's how to send a PUT request (substitute POST for PUT to send a custom POST request):
-
-.. code-block:: php
+Here's how to send a PUT request (substitute POST for PUT to send a custom POST request)::
 
     <?php
 
@@ -118,9 +114,7 @@ Here's how to send a PUT request (substitute POST for PUT to send a custom POST 
 POST
 ^^^^
 
-Guzzle helps to make it extremely easy to send POST requests.  POST requests will be sent with an ``application/x-www-form-urlencoded`` Content-Type header if no files are being sent in the POST.  If files are specified in the POST, then the Content-Type header will become ``multipart/form-data``.  Here's how to send a multipart/form-data POST containing files and fields:
-
-.. code-block:: php
+Guzzle helps to make it extremely easy to send POST requests.  POST requests will be sent with an ``application/x-www-form-urlencoded`` Content-Type header if no files are being sent in the POST.  If files are specified in the POST, then the Content-Type header will become ``multipart/form-data``.  Here's how to send a multipart/form-data POST containing files and fields::
 
     <?php
 
@@ -134,9 +128,7 @@ Guzzle helps to make it extremely easy to send POST requests.  POST requests wil
 
     $response = $request->send();
 
-This can be achieved more succinctly using only the RequestFactory.  ``RequestFactory::post()`` accepts three arguments: the URL, optional headers, and the post fields.  To send files in the POST request, prepend the ``@`` symbol to the array value (just like you would if you were using the PHP ``curl_set_opt`` function).
-
-.. code-block:: php
+This can be achieved more succinctly using only the RequestFactory.  ``RequestFactory::post()`` accepts three arguments: the URL, optional headers, and the post fields.  To send files in the POST request, prepend the ``@`` symbol to the array value (just like you would if you were using the PHP ``curl_set_opt`` function)::
 
     <?php
 
@@ -148,9 +140,7 @@ This can be achieved more succinctly using only the RequestFactory.  ``RequestFa
 Dealing with errors
 ^^^^^^^^^^^^^^^^^^^
 
-Requests that receive a 4xx or 5xx response will throw a ``Guzzle\Http\Message\BadResponseException``.  Here's an example of catching a BadResponseException:
-
-.. code-block:: php
+Requests that receive a 4xx or 5xx response will throw a ``Guzzle\Http\Message\BadResponseException``.  Here's an example of catching a BadResponseException::
 
     <?php
 
@@ -164,9 +154,7 @@ Throwing an exception when a 4xx or 5xx response is encountered is the default b
 
     function onComplete(RequestInterface $request, Response $response, array $default);
 
-The default onComplete method is passed to any custom onComplete method.  This is useful if you wish to override only certain responses and still utilize the default onComplete method.  Here's an example of logging all redirects, but still calling the default onComplete method:
-
-.. code-block:: php
+The default onComplete method is passed to any custom onComplete method.  This is useful if you wish to override only certain responses and still utilize the default onComplete method.  Here's an example of logging all redirects, but still calling the default onComplete method::
 
     <?php
 
@@ -218,9 +206,7 @@ Entity Bodies
 
 EntityBody objects provide a great deal of functionality: compression, decompression, calculate the Content-MD5, calculate the Content-Length (when the resource is repeatable), chunked reading, guessing the Content-Type, determining if the entity body should be compressed, and more.  Guzzle doesn't need to load an entire entity body into a string when sending or retrieving data; entity bodies are streamed when being uploaded and downloaded.
 
-Here's an example of gzip compressing a text file then sending the file to a URL:
-
-.. code-block:: php
+Here's an example of gzip compressing a text file then sending the file to a URL::
 
     <?php
     use Guzzle\Http\EntityBody;
@@ -238,9 +224,7 @@ Responses
 
 Sending a request will return a ``Guzzle\Http\Message\Response`` object.  You can view the HTTP response message by casting the Response object to a string.  Casting the response to a string will return the entity body of the response as a string too, so this might be an expensive operation if the entity body is stored in a file or network stream.  If you only want to see the response headers, you can call ``getRawHeaders()``.
 
-The Response object contains helper methods for retrieving common response headers.  These helper methods normalize the variations of HTTP response headers so that you will not need to check for the upper-case existence, lowercase existence, or if you aren't sure if the header will contain a hyphen:
-
-.. code-block:: php
+The Response object contains helper methods for retrieving common response headers.  These helper methods normalize the variations of HTTP response headers so that you will not need to check for the upper-case existence, lowercase existence, or if you aren't sure if the header will contain a hyphen::
 
     <?php
 
@@ -259,9 +243,7 @@ Send HTTP requests in parallel
 
 Sending many HTTP requests serially (one at a time) can cause an unnecessary delay in a script's execution. Each request must complete before a subsequent request can be sent. By sending requests in parallel, a pool of HTTP requests can complete at the speed of the slowest request in the pool, significantly reducing the amount of time needed to execute multiple HTTP requests. Guzzle provides a wrapper for the curl_multi functions in PHP.
 
-Here's an example of sending three requests in parallel using a Pool object:
-
-.. code-block:: php
+Here's an example of sending three requests in parallel using a Pool object::
 
     <?php
     use Guzzle\Http\Message\RequestFactory;
@@ -292,9 +274,7 @@ Persistent HTTP connections is an extremely important aspect of the HTTP/1.1 pro
 
 HTTP requests and cURL handles are completely separate entities in Guzzle. In order for a request to get a cURL handle to transfer its message to a server, a request retrieves a cURL handle from a cURL handle factory. The default cURL handle factory will maintain a pool of open cURL handles and return an already existent cURL handle (with a persistent HTTP connection) if available, or create a new cURL handle if needed.  Unless you override the curl factory of a request, all requests in Guzzle use the default ``Guzzle\Http\Curl\CurlFactory``.
 
-Guzzle is pretty good about managing cURL handles.  A handle will be closed if the server closes the connection, if a cURL handle has an option that is not easily removed and would corrupt a subsequent request, or if the cURL handle has been idle for too long.  Guzzle limits the number of concurrent idle connections to a host to 2 connections by default.  These connection limits can be adjusted for specific hosts if needed:
-
-.. code-block:: php
+Guzzle is pretty good about managing cURL handles.  A handle will be closed if the server closes the connection, if a cURL handle has an option that is not easily removed and would corrupt a subsequent request, or if the cURL handle has been idle for too long.  Guzzle limits the number of concurrent idle connections to a host to 2 connections by default.  These connection limits can be adjusted for specific hosts if needed::
 
     <?php
     use Guzzle\Http\Curl\CurlFactory;
@@ -384,9 +364,7 @@ The code sample above wraps a ``Zend_Log`` object using a ``Guzzle\Common\Log\Ze
 Truncated exponential backoff
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The ``Guzzle\Http\Plugin\ExponentialBackoffPlugin`` automatically retries failed HTTP requests using truncated exponential backoff.  Single requests and requests sent in parallel are retried with this plugin.
-
-.. code-block:: php
+The ``Guzzle\Http\Plugin\ExponentialBackoffPlugin`` automatically retries failed HTTP requests using truncated exponential backoff.  Single requests and requests sent in parallel are retried with this plugin::
 
     <?php
     use Guzzle\Http\Message\RequestFactory;
@@ -401,9 +379,7 @@ By default, the ExponentialBackoffPlugin will retry all 500 and 503 responses up
 PHP-based caching forward proxy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Guzzle can leverage HTTP's caching specifications using the ``Guzzle\Http\Plugin\CachePlugin``.  The CachePlugin provides a private transparent proxy cache that caches HTTP responses.  The caching logic, based on `RFC 2616 <http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html>`_, uses HTTP headers to control caching behavior, cache lifetime, and supports ETag and Last-Modified based revalidation.
-
-.. code-block:: php
+Guzzle can leverage HTTP's caching specifications using the ``Guzzle\Http\Plugin\CachePlugin``.  The CachePlugin provides a private transparent proxy cache that caches HTTP responses.  The caching logic, based on `RFC 2616 <http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html>`_, uses HTTP headers to control caching behavior, cache lifetime, and supports ETag and Last-Modified based revalidation::
 
     <?php
     use Doctrine\Common\Cache\ArrayCache;
@@ -431,9 +407,7 @@ Guzzle doesn't try to reinvent the wheel when it comes to caching or logging.  P
 Cookie session plugin
 ~~~~~~~~~~~~~~~~~~~~~
 
-Some web services require a Cookie in order to maintain a session.  The ``Guzzle\Http\Plugin\CookiePlugin`` will add cookies to requests and parse cookies from responses using a CookieJar object.
-
-.. code-block:: php
+Some web services require a Cookie in order to maintain a session.  The ``Guzzle\Http\Plugin\CookiePlugin`` will add cookies to requests and parse cookies from responses using a CookieJar object::
 
     <?php
     use Guzzle\Http\Message\RequestFactory;
@@ -455,9 +429,7 @@ Some web services require a Cookie in order to maintain a session.  The ``Guzzle
 MD5 hash validator plugin
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Entity bodies can sometimes be modified over the wire due to a faulty TCP transport or misbehaving proxy.  If an HTTP response contains a Content-MD5 header, then a MD5 hash of the entity body of a response can be compared against the Content-MD5 header of the response to determine if the response was delivered intact.  The Md5ValidatorPlugin will throw an ``UnexpectedValueException`` if the calculated MD5 hash does not match the Content-MD5 hash.
-
-.. code-block:: php
+Entity bodies can sometimes be modified over the wire due to a faulty TCP transport or misbehaving proxy.  If an HTTP response contains a Content-MD5 header, then a MD5 hash of the entity body of a response can be compared against the Content-MD5 header of the response to determine if the response was delivered intact.  The Md5ValidatorPlugin will throw an ``UnexpectedValueException`` if the calculated MD5 hash does not match the Content-MD5 hash::
 
     <?php
     use Guzzle\Http\Message\RequestFactory;

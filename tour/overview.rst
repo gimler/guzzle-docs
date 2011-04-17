@@ -2,6 +2,8 @@
 Overview
 ========
 
+.. highlight:: php
+
 **Guzzle is a PHP 5.3+ framework for consuming web services and building RESTful web service clients.**
 
 Guzzle makes writing web service clients an easy task by providing a simple pattern to follow:
@@ -27,9 +29,7 @@ Installing Guzzle
 Installing only Guzzle
 ~~~~~~~~~~~~~~~~~~~~~~
 
-If you aren't using any Guzzle web service clients like guzzle-aws or guzzle-unfuddle, then you can just download the `guzzle phar file <http://build.guzzlephp.org/guzzle.phar>`_ and include it in your php scripts.
-
-.. code-block:: php
+If you aren't using any Guzzle web service clients like guzzle-aws or guzzle-unfuddle, then you can just download the `guzzle phar file <http://build.guzzlephp.org/guzzle.phar>`_ and include it in your php scripts::
 
     <?php
 
@@ -42,12 +42,9 @@ Guzzle can be installed by cloning the Guzzle github repository::
 
     git clone https://github.com/guzzle/guzzle.git
 
-You will need to add Guzzle to your application's autoloader.  Guzzle ships with a few select classes from other vendors, one of which is the `Symfony2 <http://symfony.com/>`_ universal class loader.  If your application does not already use an autoloader, you can use the Symfony2 autoloader distributed with Guzzle:
-
-.. code-block:: php
+You will need to add Guzzle to your application's autoloader.  Guzzle ships with a few select classes from other vendors, one of which is the `Symfony2 <http://symfony.com/>`_ universal class loader.  If your application does not already use an autoloader, you can use the Symfony2 autoloader distributed with Guzzle::
 
     <?php
-
     require_once '/path/to/guzzle/vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 
     $classLoader = new \Symfony\Component\ClassLoader\UniversalClassLoader();
