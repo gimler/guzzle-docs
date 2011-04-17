@@ -132,6 +132,34 @@ A service builder can be instantiated with an array of configuration data or usi
 
 Success! You've loaded your services.xml file, and subsequently created ServiceBuilders using the same cache adapter will be loaded from the APC cache.  The instantiated ServiceBuilder should now be used throughout the  execution of your script.  One solution for easily retrieving your ServiceBuilder would be to pass it around using a `registry <http://martinfowler.com/eaaCatalog/registry.html>`_ or `multiton pattern <http://en.wikipedia.org/wiki/Multiton_pattern>`_.
 
+Create a service builder without XML
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Don't like XML?  No worries-- here's an example of how to create a service builder using an array of configuration data:
+
+.. code-block:: php
+
+    <?php
+
+    $builder = new ServiceBuilder(array(
+        's3' => array(
+            'class' => 'Guzzle\\Aws\\S3\\S3Client',
+            'params' => array(
+                'access_key' => 'xyz',
+                'secret' => 'abc',
+                'subdomain' => 'michael',
+            ),
+        ),
+        'unfuddle' => array(
+            'class' => 'Guzzle\\Unfuddle\\UnfuddleClient',
+            'params' => array(
+                'username' => 'test-user',
+                'password' => 'test-password',
+                'subdomain' => 'test'
+            )
+        )
+    ));
+
 Get a client from the ServiceBuilder by name
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
