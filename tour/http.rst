@@ -161,7 +161,9 @@ The default onComplete method is passed to any custom onComplete method.  This i
             call_user_func($default, $request, $response);
         });
 
-Connection problems and cURL specific errors can also occur when transferring requests using Guzzle.  When Guzzle encounters cURL specific errors, a ``Guzzle\Http\Curl\CurlException`` is thrown with an informative error message and access to the cURL error message.  Sending a request that cannot resolve a host name will result in a CurlException with an exception message similar to the following::
+Connection problems and cURL specific errors can also occur when transferring requests using Guzzle.  When Guzzle encounters cURL specific errors, a ``Guzzle\Http\Curl\CurlException`` is thrown with an informative error message and access to the cURL error message.  Sending a request that cannot resolve a host name will result in a CurlException with an exception message similar to the following:
+
+.. code-block:: none
 
     [curl] 6: Couldn't resolve host 'www.nonexistenthost.com' [url] http://www.nonexistenthost.com/ [info] array (
       'url' => 'http://www.nonexistenthost.com/',
@@ -203,6 +205,7 @@ EntityBody objects provide a great deal of functionality: compression, decompres
 Here's an example of gzip compressing a text file then sending the file to a URL::
 
     <?php
+
     use Guzzle\Http\EntityBody;
 
     $body = EntityBody::factory('/path/to/file.txt');
@@ -240,6 +243,7 @@ Sending many HTTP requests serially (one at a time) can cause an unnecessary del
 Here's an example of sending three requests in parallel using a Pool object::
 
     <?php
+
     use Guzzle\Http\Message\RequestFactory;
     use Guzzle\Http\Pool\PoolRequestException;
     use Guzzle\Http\Pool\Pool;
@@ -271,6 +275,7 @@ HTTP requests and cURL handles are completely separate entities in Guzzle. In or
 Guzzle is pretty good about managing cURL handles.  A handle will be closed if the server closes the connection, if a cURL handle has an option that is not easily removed and would corrupt a subsequent request, or if the cURL handle has been idle for too long.  Guzzle limits the number of concurrent idle connections to a host to 2 connections by default.  These connection limits can be adjusted for specific hosts if needed::
 
     <?php
+
     use Guzzle\Http\Curl\CurlFactory;
 
     $factory = CurlFactory::getInstance();
@@ -288,11 +293,10 @@ Guzzle provides easy to use request plugins that add behavior to requests based 
 Over the wiring logging
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Use the ``Guzzle\Http\Plugin\LogPlugin`` to view all data sent over the wire, including entity bodies and redirects:
-
-.. code-block:: php
+Use the ``Guzzle\Http\Plugin\LogPlugin`` to view all data sent over the wire, including entity bodies and redirects::
 
     <?php
+
     use Guzzle\Http\Message\RequestFactory;
     use Guzzle\Common\Log\ZendLogAdapter;
     use Guzzle\Http\Plugin\LogPlugin;
@@ -306,7 +310,9 @@ Use the ``Guzzle\Http\Plugin\LogPlugin`` to view all data sent over the wire, in
 
     $request->send();
 
-The code sample above wraps a ``Zend_Log`` object using a ``Guzzle\Common\Log\ZendLogAdapter``.  After attaching the request to the plugin, all data sent over the wire will be logged to stdout.  The above code sample would output something like::
+The code sample above wraps a ``Zend_Log`` object using a ``Guzzle\Common\Log\ZendLogAdapter``.  After attaching the request to the plugin, all data sent over the wire will be logged to stdout.  The above code sample would output something like:
+
+.. code-block:: none
 
     2011-03-10T20:07:56-06:00 DEBUG (7): www.google.com - "GET / HTTP/1.1" - 200 0 - 0.195698 0 45887
     * About to connect() to google.com port 80 (#0)
@@ -361,6 +367,7 @@ Truncated exponential backoff
 The ``Guzzle\Http\Plugin\ExponentialBackoffPlugin`` automatically retries failed HTTP requests using truncated exponential backoff.  Single requests and requests sent in parallel are retried with this plugin::
 
     <?php
+
     use Guzzle\Http\Message\RequestFactory;
     use Guzzle\Http\Plugin\ExponentialBackoffPlugin;
 
@@ -376,6 +383,7 @@ PHP-based caching forward proxy
 Guzzle can leverage HTTP's caching specifications using the ``Guzzle\Http\Plugin\CachePlugin``.  The CachePlugin provides a private transparent proxy cache that caches HTTP responses.  The caching logic, based on `RFC 2616 <http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html>`_, uses HTTP headers to control caching behavior, cache lifetime, and supports ETag and Last-Modified based revalidation::
 
     <?php
+
     use Doctrine\Common\Cache\ArrayCache;
     use Guzzle\Common\Cache\DoctrineCacheAdapter;
     use Guzzle\Http\Plugin\CachePlugin;
@@ -404,6 +412,7 @@ Cookie session plugin
 Some web services require a Cookie in order to maintain a session.  The ``Guzzle\Http\Plugin\CookiePlugin`` will add cookies to requests and parse cookies from responses using a CookieJar object::
 
     <?php
+
     use Guzzle\Http\Message\RequestFactory;
     use Guzzle\Http\Plugin\CookiePlugin;
     use Guzzle\Http\Plugin\CookieJar\ArrayCookieJar;
@@ -426,6 +435,7 @@ MD5 hash validator plugin
 Entity bodies can sometimes be modified over the wire due to a faulty TCP transport or misbehaving proxy.  If an HTTP response contains a Content-MD5 header, then a MD5 hash of the entity body of a response can be compared against the Content-MD5 header of the response to determine if the response was delivered intact.  The Md5ValidatorPlugin will throw an ``UnexpectedValueException`` if the calculated MD5 hash does not match the Content-MD5 hash::
 
     <?php
+
     use Guzzle\Http\Message\RequestFactory;
     use Guzzle\Http\Plugin\Md5ValidatorPlugin;
 

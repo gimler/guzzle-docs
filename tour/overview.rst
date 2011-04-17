@@ -47,6 +47,7 @@ Guzzle can be installed by cloning the Guzzle github repository:
 You will need to add Guzzle to your application's autoloader.  Guzzle ships with a few select classes from other vendors, one of which is the `Symfony2 <http://symfony.com/>`_ universal class loader.  If your application does not already use an autoloader, you can use the Symfony2 autoloader distributed with Guzzle::
 
     <?php
+
     require_once '/path/to/guzzle/vendor/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 
     $classLoader = new \Symfony\Component\ClassLoader\UniversalClassLoader();

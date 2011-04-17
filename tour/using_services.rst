@@ -12,6 +12,7 @@ Using simple web services
 The Guzzle ``Guzzle\Service\Client`` object can be used directly with a simple web service.  Robust web service clients should interact with a web service using command objects, but if you want to quickly interact with a web service, you can create a client and build your HTTP requests manually.  In the following example, we are interacting with the Unfuddle API and issuing a GET request to retrieve a listing of tickets in the 123 project::
 
     <?php
+
     use Guzzle\Service\Client;
 
     $client = new Client('https://mydomain.unfuddle.com/api/v1');
@@ -119,6 +120,7 @@ A service builder is responsible for creating concrete client objects based on c
 A service builder can be instantiated with an array of configuration data or using a factory method that will parse the services.xml file into the configuration data it needs to configure services.  The XML file definition for services is easy to use and recommended over creating your web service clients manually; however, there is a performance penalty, so it is recommended that you cache the parsed configuration data of the XML file by supplying a CacheAdapter to the ServiceBuilder::factory() method::
 
     <?php
+
     use Doctrine\Common\Cache\ApcCache;
     use Guzzle\Common\CacheAdapter\DoctrineCacheAdapter;
     use Guzzle\Service\Builder\ServiceBuilder;
@@ -229,6 +231,7 @@ The ListBucket command above returns a ``Guzzle\Aws\S3\Model\BucketIterator`` wh
 You can take some shortcuts in your code by passing key-value pair arguments to a command::
 
     <?php
+
     $objects = $client->getCommand('bucket.list_bucket', array('bucket' => 'my_bucket'))->execute();
 
 Executing commands in parallel using CommandSets
@@ -237,6 +240,7 @@ Executing commands in parallel using CommandSets
 Commands can be sent in parallel using ``Guzzle\Service\Command\CommandSet`` objects::
 
     <?php
+
     use Guzzle\Http\Pool\PoolRequestException;
     use Guzzle\Service\Command\CommandSet;
     use Guzzle\Service\Command\CommandSetException;
@@ -277,6 +281,7 @@ Commands can be sent in parallel using ``Guzzle\Service\Command\CommandSet`` obj
 Guzzle doesn't require that all of the commands in a CommandSet originate from the same client.  This allows you to write extremely efficient code when you need to send several requests to multiple services::
 
     <?php
+
     use Guzzle\Service\Command\CommandSet;
 
     // Get all of the commands from a registered client object
@@ -316,6 +321,7 @@ Adding observers to Client objects
 Any observer attached to the ``EventManager`` of a ``Client`` object will automatically be attached to all request objects created by the client.  This allows you to attach, for example, an ExponentialBackoffPlugin to a client object, and from that point on, every request sent through that client will utilize the ExponentialBackoffPlugin.  Plugins that are required for services are usually attached to a client in the client's factory method.  For example, all AWS clients will use the ExponentialBackoffPlugin.  In this case, you will not need to attach it again::
 
     <?php
+
     use Doctrine\Common\Cache\ArrayCache;
     use Guzzle\Common\Cache\DoctrineCacheAdapter;
     use Guzzle\Http\Plugin\CachePlugin;
