@@ -22,12 +22,16 @@ The following document will describe how to build a command-based web service cl
 Setting up
 ----------
 
-The first thing you will need to do is create the directory structure of your project.  You can quickly create the required directory structure of your project by running a phing build target from your git clone of https://github.com/guzzle/guzzle.git::
+The first thing you will need to do is create the directory structure of your project.  You can quickly create the required directory structure of your project by running a phing build target from your git clone of https://github.com/guzzle/guzzle.git:
+
+.. code-block:: bash
 
     cd /path/to/guzzle/build
     phing template
 
-This phing build target will ask you a series of questions and generate a template for your web service client at a requested path.  The directory structure should mirror the following::
+This phing build target will ask you a series of questions and generate a template for your web service client at a requested path.  The directory structure should mirror the following:
+
+.. code-block:: none
 
     Command\
         <Name...>Command.php
@@ -69,7 +73,9 @@ phpunit.xml.dist
 
 Different developers will configure their development environment differently.  A phpunit.xml file is required to run PHPUnit tests against your service.  ``phpunit.xml.dist`` provides a template for developers to copy and modify.  Here's an example of a generic Guzzle ``phpunit.xml.dist`` file that can be used with most services.  If your web service client has sub-webservices like the Guzzle AWS client, you will need to set the ``<server name="GUZZLE_SERVICE_MULTI" value="0" />`` value to ``1``.
 
-A phing build script will be created with your project template that will prompt the user for the path to their installation of Guzzle and make a working copy of phpunit.xml::
+A phing build script will be created with your project template that will prompt the user for the path to their installation of Guzzle and make a working copy of phpunit.xml:
+
+.. code-block:: bash
 
     cd /path/to/client
     phing
@@ -192,7 +198,8 @@ The required parameters of a command are validated based on docblock annotations
      */
     class Simple extends AbstractCommand
     {
-    // ...
+        // ...
+    }
 
 In the above example, we are creating a simple command to send a web service request.  Docblock annotations for commands start with the ``@guzzle`` token.  The next token in is the parameter name (you must use snake_case parameter names).  After the @guzzle token and parameter name are a series of optional attributes.  These attributes are as follows:
 
@@ -310,7 +317,9 @@ Unit test your service
 
 We hope that you unit test every aspect of your Guzzle clients.  Unit testing a Guzzle web service client is not very difficult thanks to some of the freebies you get from the ``Guzzle\Tests`` namespace.  You can set mock responses on your requests, or send requests to the test node.js server that comes with Guzzle.
 
-When unit testing with Guzzle, you should extend the ``Guzzle\Tests\GuzzleTestCase`` class to get access to various helper methods.  You should not actually interact with the real web service when unit testing with Guzzle.  Mock responses can be queued up for a client using the ``$this->setMockResponse($client, $filename)`` method of your test class.  Pass the client you are adding mock responses to and a single filename or array of filenames referencing files stored in the ``Tests\Command\Mock`` folder of your project.  This will set one or more mock responses on the next requests issued by the client.  Mock response files should contain a full HTTP response message::
+When unit testing with Guzzle, you should extend the ``Guzzle\Tests\GuzzleTestCase`` class to get access to various helper methods.  You should not actually interact with the real web service when unit testing with Guzzle.  Mock responses can be queued up for a client using the ``$this->setMockResponse($client, $filename)`` method of your test class.  Pass the client you are adding mock responses to and a single filename or array of filenames referencing files stored in the ``Tests\Command\Mock`` folder of your project.  This will set one or more mock responses on the next requests issued by the client.  Mock response files should contain a full HTTP response message:
+
+.. code-block:: none
 
     HTTP/1.1 200 OK
     Date: Wed, 25 Nov 2009 12:00:00 GMT
