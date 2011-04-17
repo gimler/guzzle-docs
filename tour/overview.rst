@@ -38,7 +38,9 @@ If you aren't using any Guzzle web service clients like guzzle-aws or guzzle-unf
 Installing Guzzle and Guzzle web service clients
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Guzzle can be installed by cloning the Guzzle github repository::
+Guzzle can be installed by cloning the Guzzle github repository:
+
+.. code-block:: bash
 
     git clone https://github.com/guzzle/guzzle.git
 
@@ -69,7 +71,9 @@ Guzzle web service clients are distributed separately from the Guzzle framework.
 * `Unfuddle <https://github.com/guzzle/guzzle-unfuddle>`_ - Unfuddle web service API client
 * `Cardinal Commerce <https://github.com/guzzle/guzzle-cardinal-commerce>`_ - Cardinal Commerce web service client
 
-When installing a Guzzle web service client, check the service's installation instructions for specific examples on how to install the service.  Services can typically be installed using a git submodule within your Guzzle installation.  Here is an example of installing the AWS web service client::
+When installing a Guzzle web service client, check the service's installation instructions for specific examples on how to install the service.  Services can typically be installed using a git submodule within your Guzzle installation.  Here is an example of installing the AWS web service client:
+
+.. code-block:: bash
 
     cd /path/to/guzzle
     git submodule add git://github.com/guzzle/guzzle-aws.git ./src/Guzzle/Aws
