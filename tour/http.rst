@@ -396,9 +396,6 @@ Guzzle can leverage HTTP's caching specifications using the ``Guzzle\Http\Plugin
     $request->getEventManager()->attach($cache);
     $request->send();
 
-    // Reset the request to new so it can be reused
-    $request->setState('new');
-
     // The next request will revalidate against the origin server to see if it
     // has been modified.  If a 304 response is recieved the response will be
     // served from cache
@@ -425,7 +422,7 @@ Some web services require a Cookie in order to maintain a session.  The ``Guzzle
     $request->send();
 
     // Send the request again, noticing that cookies are being sent
-    $request->setState('new')->send();
+    $request->send();
 
     echo $request;
 
