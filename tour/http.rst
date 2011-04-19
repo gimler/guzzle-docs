@@ -16,7 +16,7 @@ Quick overview of Guzzle's HTTP features
 * Responses can be cached and served from cache using the CachePlugin
 * Failed requests can be retried using truncated `exponential backoff <http://en.wikipedia.org/wiki/Exponential_backoff>`_ using the ExponentialBackoffPlugin
 * All data sent over the wire can be logged using the LogPlugin
-* Cookies sessions can be maintained between requests using the CookiePlugin
+* Cookie sessions can be maintained between requests using the CookiePlugin
 * Send requests in parallel
 * Supports HTTPS and SSL certificate validation
 * Requests can be sent through a proxy
@@ -26,7 +26,11 @@ Quick overview of Guzzle's HTTP features
 * Subject/Observer signal slot system for modifying request behavior
 * Request signal slot events for before/progress/complete/failure/etc...
 
-Most of the functionality implemented in the libcurl bindings has been simplified and abstracted by Guzzle. Developers who need access to `cURL specific functionality <http://www.php.net/curl_setopt>`_ that is not abstracted by Guzzle (e.g. proxies and SSL) can still add cURL handle specific behavior to Guzzle HTTP requests using something like this: ``$request->getCurlOptions()->set(CURLOPT_SSL_VERIFYHOST, true);``
+Most of the functionality implemented in the libcurl bindings has been simplified and abstracted by Guzzle. Developers who need access to `cURL specific functionality <http://www.php.net/curl_setopt>`_ that is not abstracted by Guzzle (e.g. proxies and SSL) can still add cURL handle specific behavior to Guzzle HTTP requests using something like this::
+
+    <?php
+
+    $request->getCurlOptions()->set(CURLOPT_SSL_VERIFYHOST, true);
 
 Sending requests and using responses
 ------------------------------------
@@ -375,7 +379,7 @@ The ``Guzzle\Http\Plugin\ExponentialBackoffPlugin`` automatically retries failed
     $request->getEventManager()->attach(new ExponentialBackoffPlugin());
     $request->send();
 
-By default, the ExponentialBackoffPlugin will retry all 500 and 503 responses up to 3 times.  The number of retries and the HTTP status codes the are retried can be configured in the constructor of the plugin.
+By default, the ExponentialBackoffPlugin will retry all 500 and 503 responses up to 3 times.  The number of retries and the HTTP status codes that are retried can be configured in the constructor of the plugin.
 
 PHP-based caching forward proxy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -401,7 +405,7 @@ Guzzle can leverage HTTP's caching specifications using the ``Guzzle\Http\Plugin
     // served from cache
     $request->send();
 
-Guzzle doesn't try to reinvent the wheel when it comes to caching or logging.  Plenty of other frameworks, namely the `Zend Framework <http://framework.zend.com/>`_, have excellent solutions in place that you are probably already using in your applications.  Guzzle uses adapters for caching and logging.  Guzzle currently supports log adapters for the Zend Framework and cache adapters for `Doctrine 2.0 <http://www.doctrine-project.org/>`_ and the Zend Framework.
+Guzzle doesn't try to reinvent the wheel when it comes to caching or logging.  Plenty of other frameworks, namely the `Zend Framework <http://framework.zend.com/>`_, have excellent solutions in place that you are probably already using in your applications.  Guzzle uses adapters for caching and logging.  Guzzle currently supports log adapters for the Zend Framework and Monolog, and cache adapters for `Doctrine 2.0 <http://www.doctrine-project.org/>`_ and the Zend Framework.
 
 Cookie session plugin
 ~~~~~~~~~~~~~~~~~~~~~
@@ -429,7 +433,7 @@ Some web services require a Cookie in order to maintain a session.  The ``Guzzle
 MD5 hash validator plugin
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Entity bodies can sometimes be modified over the wire due to a faulty TCP transport or misbehaving proxy.  If an HTTP response contains a Content-MD5 header, then a MD5 hash of the entity body of a response can be compared against the Content-MD5 header of the response to determine if the response was delivered intact.  The Md5ValidatorPlugin will throw an ``UnexpectedValueException`` if the calculated MD5 hash does not match the Content-MD5 hash::
+Entity bodies can sometimes be modified over the wire due to a faulty TCP transport or misbehaving proxy.  If an HTTP response contains a Content-MD5 header, then a MD5 hash of the entity body of a response can be compared against the Content-MD5 header of the response to determine if the response was delivered intact.  The ``Guzzle\Http\Plugin\Md5ValidatorPlugin`` will throw an ``UnexpectedValueException`` if the calculated MD5 hash does not match the Content-MD5 hash::
 
     <?php
 

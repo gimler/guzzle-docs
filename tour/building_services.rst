@@ -9,7 +9,7 @@ Building web service clients using commands is better than creating requests man
     #. Better choice for maintainability, features, and ease of use.
     #. Best practices are inherently implemented for the end-developer.
     #. Changes can be made to the underlying request and response processing without breaking the interface.
-    #. Can create dynamic commands based on an XML service description.
+    #. Can create :doc:`dynamic commands </guide/service/creating_dynamic_commands>` based on an XML service description.
 
 Simple web service clients make the assumption that the end-developer has an intricate understanding of how to send requests to a web service and how that web service will respond.  If you want to build a reusable RESTful web service client for an application you plan on maintaining, then creating a simple client might not cut it.  Simple clients might work for extremely simple web services (like `Yahoo weather <http://developer.yahoo.com/weather/>`_ for example) or quickly prototyping, but when you're dealing with a huge web service with a ton of options (e.g. Amazon S3), then you're going to want to build a robust web service client that executes commands.
 
@@ -71,7 +71,7 @@ Rename this class to the CamelCase name of the web service you are implementing 
 phpunit.xml.dist
 ~~~~~~~~~~~~~~~~
 
-Different developers will configure their development environment differently.  A phpunit.xml file is required to run PHPUnit tests against your service.  ``phpunit.xml.dist`` provides a template for developers to copy and modify.  Here's an example of a generic Guzzle ``phpunit.xml.dist`` file that can be used with most services.  If your web service client has sub-webservices like the Guzzle AWS client, you will need to set the ``<server name="GUZZLE_SERVICE_MULTI" value="0" />`` value to ``1``.
+Different developers will configure their development environment differently.  A phpunit.xml file is required to run PHPUnit tests against your service.  ``phpunit.xml.dist`` provides a template for developers to copy and modify.  If your web service client has sub-webservices like the Guzzle AWS client, you will need to set the ``<server name="GUZZLE_SERVICE_MULTI" value="0" />`` value to ``1``.
 
 A phing build script will be created with your project template that will prompt the user for the path to their installation of Guzzle and make a working copy of phpunit.xml:
 
@@ -88,7 +88,7 @@ This is an optional XML file that describes how dynamic commands should be sent 
 Create a client
 ---------------
 
-Now that the directory structure is in place, you can start creating your web service client.  Rename Client.php to the CamelCase name of the web service you are interacting with.  Next you will need to create your client's constructor.  Your client's constructor can require any number of arguments that your client needs.  In order for a ServiceBuilder to create your client using a parameterized array, you'll need to implement a ``factory`` method that maps an array of parameters into a an instantiated client object.  Any class composition should be handled in your client's factory method.
+Now that the directory structure is in place, you can start creating your web service client.  Rename Client.php to the CamelCase name of the web service you are interacting with.  Next you will need to create your client's constructor.  Your client's constructor can require any number of arguments that your client needs.  In order for a ServiceBuilder to create your client using a parameterized array, you'll need to implement a ``factory()`` method that maps an array of parameters into an instantiated client object.  Any class composition should be handled in your client's factory method.
 
 **Your client will not work with a service builder if you do not create a factory method.**
 
@@ -166,7 +166,7 @@ Here is the start of a custom web service client.  First we will extend the ``Gu
 
 The ``Inspector::prepareConfig`` method is responsible for adding default parameters to a configuration object and ensuring that required parameters are in the configuration.   The code present in the example factory method will be very similar to the code your will need in your client's factory method.  Any object composition required to build the client should be added in the factory method (for example, attaching event observers to the client based on configuration settings).
 
-Miscellaneous helpers methods for your web service can also be put in the client.  For example, the Amazon S3 client has methods to create a signed URL.
+Miscellaneous helper methods for your web service can also be put in the client.  For example, the Amazon S3 client has methods to create a signed URL.
 
 Create commands
 ---------------
@@ -230,7 +230,7 @@ As a general rule, most of the options for a command should essentially translat
 Commands can turn HTTP responses into something more valuable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Commands can turn HTTP responses into something more valuable for your application.  After a command is executed, it calls the ``process()`` method of the command.  The AbstractCommand class will automatically create a SimpleXMLElement if the response received by the command has a Content-Type of ``application/xml``.  If you want to provide more valuable results from your commands, you can override the ``process`` method and return any value you want.  To help developers who use code completion, be sure to update the ``@return`` annotation of your ``getResult`` method if you return a custom result (this will require you to override the ``getResult`` method too)::
+Commands can turn HTTP responses into something more valuable for your application.  After a command is executed, it calls the ``process()`` method of the command.  The AbstractCommand class will automatically create a SimpleXMLElement if the response received by the command has a Content-Type of ``application/xml``.  If you want to provide more valuable results from your commands, you can override the ``process()`` method and return any value you want.  To help developers who use code completion, be sure to update the ``@return`` annotation of your ``getResult()`` method if you return a custom result (this will require you to override the ``getResult()`` method too)::
 
     <?php
 
@@ -280,7 +280,7 @@ Commands can turn HTTP responses into something more valuable for your applicati
         }
     }
 
-There's our implemented command.  The ``build`` method is responsible for creating an HTTP request to send to the web service.  This command will send a request to a web service that uses the ``key`` parameter as part of the path of the request, and adds an ``X-Header`` header value to the request using the ``other_value`` parameter of the command.  Parameters passed to a command can be referenced by calling ``$this->get($parameterName)``.  This command will return an ``AwesomeObject`` when the ``getResult`` method is called on the command.  We are overriding the ``getResult`` method in our command so that developers who use code completion will know what type of object is returned from the command.  You will notice that there are setter methods on the client for setting the keys referenced in the docblock.  These are strongly encouraged to help developers to quickly use your command with code completion.  You can also do fancy stuff to the values provided to setter methods, like creating objects or extra validation.  There's no need to create a setter method for the ``headers`` key, as that is implicitly managed by the AbstractCommand object.
+There's our implemented command.  The ``build()`` method is responsible for creating an HTTP request to send to the web service.  This command will send a request to a web service that uses the ``key`` parameter as part of the path of the request, and adds an ``X-Header`` header value to the request using the ``other_value`` parameter of the command.  Parameters passed to a command can be referenced by calling ``$this->get($parameterName)`` or ``$this[$parameterName]``.  This command will return an ``AwesomeObject`` when the ``getResult()`` method is called on the command.  We are overriding the ``getResult()`` method in our command so that developers who use code completion will know what type of object is returned from the command.  You will notice that there are setter methods on the client for setting the keys referenced in the docblock.  These are strongly encouraged to help developers to quickly use your command with code completion.  You can also do fancy stuff to the values provided to setter methods, like creating objects or extra validation.  There's no need to create a setter method for the ``headers`` key, as that is implicitly managed by the ``AbstractCommand`` object.
 
 Here's how you would execute this command using the client we created::
 
