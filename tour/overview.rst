@@ -4,7 +4,7 @@ Overview
 
 .. highlight:: php
 
-**Guzzle is a PHP 5.3+ framework for consuming web services and building RESTful web service clients.**
+**Guzzle is a PHP 5.3+ framework for HTTP, consuming web services, and building RESTful web service clients.**
 
 Guzzle makes writing web service clients an easy task by providing a simple pattern to follow:
 
