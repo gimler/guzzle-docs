@@ -4,15 +4,7 @@ Overview
 
 .. highlight:: php
 
-**Guzzle is a PHP 5.3+ framework for HTTP, consuming web services, and building RESTful web service clients.**
-
-Guzzle makes writing web service clients an easy task by providing a simple pattern to follow:
-
-#. Extend the default ``Guzzle\Service\Client`` class
-#. Create commands for each API action.
-#. Add the web service client configuration to your services.xml file
-
-Or, more simply, run ``phing -f build/build.xml template`` to create a skeleton template for a new web service client.
+Guzzle is a PHP 5.3+ framework for HTTP and building RESTful web service clients.
 
 Requirements
 ------------
@@ -58,13 +50,12 @@ You will need to add Guzzle to your application's autoloader.  Guzzle ships with
 
 *Substitute '/path/to/' with the full path to your Guzzle installation.*
 
-If you are going to use Guzzle web service clients in your projects (e.g. guzzle-aws), you will need to add them to your main project as git submodules.  See the README of each project for more information on how to install a particular client.  After installing the web service clients, you can build a single phar file containing the Guzzle framework and all of your installed Guzzle web service clients using ``phing -f build/build.xml phar``.  Then you simply include the phar file in your PHP scripts.
+If you are going to use Guzzle web service clients in your projects (e.g. guzzle-aws), you will need to add them to your main project as git submodules.  See the README of each project for more information on how to install a particular client.
+
+After installing the web service clients, you can build a single phar file containing the Guzzle framework and all of your installed Guzzle web service clients using ``phing -f build/build.xml phar``.  Then you simply include the phar file in your PHP scripts.
 
 Installing web service clients
 ------------------------------
-
-Current web service clients
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Guzzle web service clients are distributed separately from the Guzzle framework.  Guzzle officially supports a few web service clients, and hopefully there will be third-party created services coming soon:
 

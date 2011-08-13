@@ -2,8 +2,6 @@
 Guzzle Documentation
 ====================
 
-Guzzle is a PHP 5.3+ framework for HTTP and building RESTful web service clients.
-
 Tour
 ----
 
