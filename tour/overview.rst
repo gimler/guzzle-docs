@@ -9,7 +9,7 @@ Overview
 Guzzle makes writing web service clients an easy task by providing a simple pattern to follow:
 
 #. Extend the default ``Guzzle\Service\Client`` class
-#. Create commands for each API action.  Guzzle uses the `command pattern <http://en.wikipedia.org/wiki/Command_pattern>`_.
+#. Create commands for each API action.
 #. Add the web service client configuration to your services.xml file
 
 Or, more simply, run ``phing -f build/build.xml template`` to create a skeleton template for a new web service client.

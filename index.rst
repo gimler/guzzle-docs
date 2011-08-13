@@ -2,12 +2,10 @@
 Guzzle Documentation
 ====================
 
-Guzzle is a PHP framework for building REST webservice clients.
+Guzzle is a PHP 5.3+ framework for HTTP and building RESTful web service clients.
 
 Tour
 ----
-
-Read the :doc:`tour <tour/index>` to get an overview at what you can do with Guzzle:
 
 .. toctree::
     :hidden:
@@ -21,8 +19,6 @@ Read the :doc:`tour <tour/index>` to get an overview at what you can do with Guz
 
 Guides
 ------
-
-Get more in-depth knowledge about the different aspects of Guzzle:
 
 .. toctree::
     :hidden:
