@@ -21,20 +21,18 @@ Installing Guzzle
 Installing only Guzzle
 ~~~~~~~~~~~~~~~~~~~~~~
 
-If you aren't using any Guzzle web service clients like guzzle-aws or guzzle-unfuddle, then you can just download the `guzzle phar file <http://build.guzzlephp.org/guzzle.phar>`_ and include it in your php scripts::
+If you aren't using any Guzzle web service clients like guzzle-aws or guzzle-unfuddle, then you can just download the pre-built `guzzle phar file <http://build.guzzlephp.org/guzzle.phar>`_ and include it in your php scripts::
 
-    <?php
+    require '/path/to/guzzle.phar';
 
-    require 'guzzle.phar';
+Installing Guzzle from source
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Installing Guzzle and Guzzle web service clients
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Guzzle can be installed by cloning the Guzzle github repository:
+Guzzle can be installed from source by cloning the Guzzle github repository:
 
 .. code-block:: bash
 
-    git clone https://github.com/guzzle/guzzle.git
+    git clone --recursive https://github.com/guzzle/guzzle.git
 
 You will need to add Guzzle to your application's autoloader.  Guzzle ships with a few select classes from other vendors, one of which is the `Symfony2 <http://symfony.com/>`_ universal class loader.  If your application does not already use an autoloader, you can use the Symfony2 autoloader distributed with Guzzle::
 
@@ -48,29 +46,29 @@ You will need to add Guzzle to your application's autoloader.  Guzzle ships with
     ));
     $classLoader->register();
 
-*Substitute '/path/to/' with the full path to your Guzzle installation.*
-
-If you are going to use Guzzle web service clients in your projects (e.g. guzzle-aws), you will need to add them to your main project as git submodules.  See the README of each project for more information on how to install a particular client.
-
-After installing the web service clients, you can build a single phar file containing the Guzzle framework and all of your installed Guzzle web service clients using ``phing -f build/build.xml phar``.  Then you simply include the phar file in your PHP scripts.
-
 Installing web service clients
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you are going to use Guzzle web service clients in your projects (e.g. guzzle-aws), you will need to clone them into your installation of Guzzle.  You can use the phing build script to help with this::
+
+    cd /path/to/guzzle/clone
+
+    # Install/update the default Guzzle web service clients
+    phing -f build/build.xml all-services
+
+    # Install/update a particular Guzzle web service client (if it is not one of the default clients)
+    phing -f build/build.xml service -Drepo=git@github.com:guzzle/guzzle-aws.git -Dpath=./src/Guzzle/Aws
+
+You can build a phar file containing your clone of Guzzle and the cloned web service clients.  The phar file will automatically register an autoloader function to handle loading all Guzzle classes.  You can build the phar file by running the following command::
+
+    # Rebuild the phar file to include these services
+    phing -f build/build.xml phar
+
+Available web service clients
+-----------------------------
 
 Guzzle web service clients are distributed separately from the Guzzle framework.  Guzzle officially supports a few web service clients, and hopefully there will be third-party created services coming soon:
 
 * `Amazon web services (AWS) <https://github.com/guzzle/guzzle-aws>`_ - Amazon S3, SimpleDB, SQS, MWS web service client
 * `Unfuddle <https://github.com/guzzle/guzzle-unfuddle>`_ - Unfuddle web service API client
 * `Cardinal Commerce <https://github.com/guzzle/guzzle-cardinal-commerce>`_ - Cardinal Commerce web service client
-
-When installing a Guzzle web service client, check the service's installation instructions for specific examples on how to install the service.  Services can typically be installed using a git submodule within your Guzzle installation.  Here is an example of installing the AWS web service client:
-
-.. code-block:: bash
-
-    cd /path/to/guzzle
-    git submodule add git://github.com/guzzle/guzzle-aws.git ./src/Guzzle/Aws
-
-Autoloading Services
-~~~~~~~~~~~~~~~~~~~~
-
-Services that are installed within the path of Guzzle will be autoloaded automatically using the autoloader settings configured for the Guzzle library (e.g. /Guzzle/Aws).  If you install a Guzzle service outside of this directory structure, you will need to add the service to the autoloader separately.
