@@ -180,8 +180,6 @@ Using Client objects
 
 Web service clients are the central point of interaction with a web service.  They hold service configuration data and help to ready HTTP requests to be sent to a web service.  Web service clients don't know much about the service itself-- they just execute commands.  Configuration settings can be retrieved from a client by passing a configuration key to the ``getConfig()`` method of a client (e.g. ``$token = $client->getConfig('devpay_product_token')``).
 
-Observers can be attached to a client's EventManager.  Observers attached to a client's EventManager will automatically be attached to all requests created by the client.  Some clients will automatically attach observers to the client inside of the client's factory method.  For example, all of the AWS clients automatically utilize the ExponentialBackoffPlugin to retry failed requests.
-
 Executing commands using a client
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
