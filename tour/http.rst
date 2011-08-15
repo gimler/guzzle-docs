@@ -214,7 +214,7 @@ Here's an example of gzip compressing a text file then sending the file to a URL
 
     $body = EntityBody::factory('/path/to/file.txt');
     $body->compress();
-    $request = $factory->put('http://localhost:8080/uploads', null, $body);
+    $request = RequestFactory::put('http://localhost:8080/uploads', null, $body);
 
     $response = $request->send();
 
@@ -283,7 +283,6 @@ Guzzle is pretty good about managing cURL handles.  A handle will be closed if t
     use Guzzle\Http\Curl\CurlFactory;
 
     $factory = CurlFactory::getInstance();
-
     // Allow 10 idle connections to be managed for mywebsite.com on port 80
     $factory->setMaxIdleForHost('mywebsite.com:80', 10);
 
