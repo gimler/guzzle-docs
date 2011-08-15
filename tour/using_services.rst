@@ -157,8 +157,8 @@ Web service clients can be defined using an array of data.::
         )
     ));
 
-Create a ServiceBuilder
-^^^^^^^^^^^^^^^^^^^^^^^
+Caching parsed data
+^^^^^^^^^^^^^^^^^^^
 
 The interpreted data created from parsing a configuration file (.js, .json, or .xml) can be cached for faster subsequent access.  It is recommended that you cache the parsed configuration data by supplying a CacheAdapter to the ServiceBuilder::factory() method::
 
