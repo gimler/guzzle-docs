@@ -293,8 +293,8 @@ Plugins for common HTTP request behavior
 
 Guzzle provides easy to use request plugins that add behavior to requests based on signal slot event notifications.
 
-Over the wiring logging
-~~~~~~~~~~~~~~~~~~~~~~~
+Over the wire logging
+~~~~~~~~~~~~~~~~~~~~~
 
 Use the ``Guzzle\Http\Plugin\LogPlugin`` to view all data sent over the wire, including entity bodies and redirects::
 
