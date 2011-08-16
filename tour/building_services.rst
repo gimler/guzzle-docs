@@ -1,5 +1,5 @@
 ============================
-Building Web Service Clients
+Building web service clients
 ============================
 
 .. highlight:: php

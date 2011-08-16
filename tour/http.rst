@@ -1,6 +1,6 @@
-===========
-Taming HTTP
-===========
+===================
+HTTP client for PHP
+===================
 
 .. highlight:: php
 
