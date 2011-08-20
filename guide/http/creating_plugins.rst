@@ -2,6 +2,8 @@
 Creating Plugins and Observers
 ==============================
 
+.. highlight:: php
+
 Guzzle is extremely extendable because of the behavioral modifications that can be added to requests, clients, and commands using an event system.  Before and after the majority of actions are taken in the library, an event is emitted with the name of the event and context surrounding the event.  Observers can subscribe to a subject and modify the subject based on the events received.  Guzzle's event system is the backbone of it's plugin architecture.
 
 Overview
@@ -57,11 +59,11 @@ Observers can be attached to any object implementing the ``Guzzle\Common\Event\S
 
 The following is a listing of some of the key objects that can be subscribed to (this is not an exhaustive list).
 
-Guzzle\Http events
-~~~~~~~~~~~~~~~~~~
+``Guzzle\Http`` events
+~~~~~~~~~~~~~~~~~~~~~~
 
-Guzzle\Http\Message\Request
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``Guzzle\Http\Message\Request``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ============================   =====================   ==================================
 Event                          Context                 Description
@@ -82,8 +84,8 @@ request.success                Response                The request succeeded
 ============================   =====================   ==================================
 
 
-Guzzle\Http\Message\EntityEnclosingRequest
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``Guzzle\Http\Message\EntityEnclosingRequest``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ============================   =========   =================================
 Event                          Context     Description
@@ -91,8 +93,8 @@ Event                          Context     Description
 request.prepare_entity_body    null        About to prepare the entity body
 ============================   =========   =================================
 
-Guzzle\Http\Pool\Pool
-^^^^^^^^^^^^^^^^^^^^^
+``Guzzle\Http\Pool\Pool``
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ================   ==================   =======================================
 Event              Context              Description
@@ -107,11 +109,11 @@ polling            null                 Some requests are still polling
 exception          RequestException     A request exception occurred
 ================   ==================   =======================================
 
-Guzzle\Service events
-~~~~~~~~~~~~~~~~~~~~~
+``Guzzle\Service events``
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Guzzle\Service\Client
-^^^^^^^^^^^^^^^^^^^^^
+``Guzzle\Service\Client``
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Any event attached to a client object will automatically be attached to all requests created by the client.
 
@@ -124,8 +126,8 @@ command.create         CommandInterface    A command was created
 request.create         RequestInterface    Created a new request
 ====================   =================   ===============================
 
-Guzzle\Service\ResourceIterator
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``Guzzle\Service\ResourceIterator``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ============  =========  =======================================================
 Event         Context    Description
@@ -134,8 +136,8 @@ before_send   array      About to issue another command to get more results
 after_send    array      Issued another command to get more results
 ============  =========  =======================================================
 
-Guzzle\Service\ResourceIteratorApplyBatched
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``Guzzle\Service\ResourceIteratorApplyBatched``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ============  =========  =======================================================
 Event         Context    Description
