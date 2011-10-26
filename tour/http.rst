@@ -415,7 +415,7 @@ Some web services require a Cookie in order to maintain a session.  The ``Guzzle
 
     use Guzzle\Http\Message\RequestFactory;
     use Guzzle\Http\Plugin\CookiePlugin;
-    use Guzzle\Http\Plugin\CookieJar\ArrayCookieJar;
+    use Guzzle\Http\CookieJar\ArrayCookieJar;
 
     $plugin = new CookiePlugin(new ArrayCookieJar());
     $request = RequestFactory::get('http://www.yahoo.com/');
