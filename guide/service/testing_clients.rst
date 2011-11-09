@@ -8,15 +8,6 @@ Guzzle provides several tools that will enable you to easily unit test your web 
 * Mock responses
 * node.js web server for integration testing
 
-Unit testing remote APIs
-------------------------
-
-One of the benefits of unit testing is the ability to quickly determine if there are errors in your code.  If your unit tests run slowly, then they become tedious and will likely be run less frequently.  Guzzle's philosophy on unit testing web service clients is that no network access should be required to run the unit tests.  This means that responses are served from mock responses or local servers.  By adhering to this principle, tests will run much faster and will not require an external resource to be available.  The problem with this approach is that your mock responses must first be gathered and then subsequently updated each time a change in the remote API is made.
-
-You can still perform real integration testing with a web service by making calls directly to the service.  If you choose to go this route, it is recommended that you add `@group <http://www.phpunit.de/manual/3.6/en/appendixes.annotations.html#appendixes.annotations.group>`_ annotations to your unit tests to specify which tests require network connectivity.  If API  credentials are required, you must add parameters to your phpunit.xml.dst file and extract these parameters in your boostrap.php file.
-
-A good discussion on this topic can be found in Sebastian Bergmann's `Real-World Solutions for Developing High-Quality PHP Frameworks and Applications <http://www.amazon.com/dp/0470872497>`_.
-
 PHPUnit integration
 -------------------
 
@@ -67,10 +58,74 @@ Your web service client should have a Tests/ folder that contains a bootstrap.ph
 
 The above code registers a service builder that can be used throughout your unit tests.  You would then be able to retrieve an instantiated and configured Unfuddle client by calling ``$this->getServiceBuilder()->get('test.unfuddle)``.
 
+Unit testing remote APIs
+------------------------
+
+Mock responses
+~~~~~~~~~~~~~~
+
+One of the benefits of unit testing is the ability to quickly determine if there are errors in your code.  If your unit tests run slowly, then they become tedious and will likely be run less frequently.  Guzzle's philosophy on unit testing web service clients is that no network access should be required to run the unit tests.  This means that responses are served from mock responses or local servers.  By adhering to this principle, tests will run much faster and will not require an external resource to be available.  The problem with this approach is that your mock responses must first be gathered and then subsequently updated each time a change in the remote API is made.
+
+Integration testing over the internet
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can perform integration testing with a web service over the internet by making calls directly to the service.  If the web service you are requesting uses a complex signing algorithm or some other specific implementation, then you may want to include at least one actual network test that can be run specifically through the command line using `PHPUnit group annotations <http://www.phpunit.de/manual/current/en/appendixes.annotations.html#appendixes.annotations.group>`_.
+
+@group internet annotation
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When creating tests that require an internet connection, it is recommended that you add ``@group internet`` annotations to your unit tests to specify which tests require network connectivity.  You can then `modify your phpunit.xml.dst <http://www.phpunit.de/manual/current/en/appendixes.configuration.html>`_ file to exclude the internet group by default:
+
+.. code-block:: xml
+
+    <groups>
+      <exclude>
+        <group>name</group>
+      </exclude>
+    </groups>
+
+You can then `run PHPUnit tests <http://www.phpunit.de/manual/current/en/textui.html>`_ on the internet group by running ``phpunit --group internet``.
+
+API credentials
+^^^^^^^^^^^^^^^
+
+If API  credentials are required to run your integration tests, you must add parameters to your phpunit.xml.dst file and extract these parameters in your boostrap.php file.
+
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <phpunit bootstrap="./Tests/bootstrap.php" colors="true">
+        <php>
+            <server name="GUZZLE" value="/path/to/guzzle" />
+            <server name="API_USER" value="change_me" />
+            <server name="API_PASSWORD" value="****" />
+        </php>
+        <testsuites>
+            <testsuite name="guzzle-service">
+                <directory suffix="Test.php">./Tests</directory>
+            </testsuite>
+        </testsuites>
+        <filter>
+            <whitelist>
+                <directory>./</directory>
+                <exclude>
+                    <directory>./Tests</directory>
+                </exclude>
+            </whitelist>
+        </filter>
+    </phpunit>
+
+You can then extract the ``server`` variables in your bootstrap.php file by grabbing them from the ``$_SERVER`` superglobal: ``$apiUser = $_SERVER['API_USER'];``
+
+Further reading
+^^^^^^^^^^^^^^^
+
+A good discussion on the topic of testing remote APIs can be found in Sebastian Bergmann's `Real-World Solutions for Developing High-Quality PHP Frameworks and Applications <http://www.amazon.com/dp/0470872497>`_.
+
 Mock responses
 --------------
 
-
+Mock responses can be used to test that requests are being generated correctly and responses and handled correctly by your client.
 
 node.js web server for integration testing
 ------------------------------------------
