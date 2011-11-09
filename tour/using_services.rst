@@ -261,7 +261,7 @@ Commands can be sent in parallel using ``Guzzle\Service\Command\CommandSet`` obj
     try {
         $client->execute($set);
         foreach ($set as $command) {
-            echo $command->getName . ': ' . $command->getResponse()->getStatusCode() . "\n";
+            echo $command->getName() . ': ' . $command->getResponse()->getStatusCode() . "\n";
         }
     } catch (PoolRequestException $e) {
         // Exceptions encountered while transferring commands in a Pool will be
