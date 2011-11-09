@@ -335,4 +335,4 @@ The ``$request`` will use the CachePlugin because the CachePlugin was attached t
 Next steps
 ~~~~~~~~~~
 
-Check the documentation of the web service client you are using to see the available commands for the client.  Some clients will mix :doc:`dynamic commands </guide/service/creating_dynamic_commands>` with concrete commands, so might need to check if an XML file is shipped with the client that defines dynamic commands that can be executed on a web service.
+Check the documentation of the web service client you are using to see the available commands for the client.  Some clients will mix :doc:`dynamic commands </guide/service/creating_dynamic_commands>` with concrete commands, so will need to check if an XML file is shipped with the client that defines dynamic commands.
