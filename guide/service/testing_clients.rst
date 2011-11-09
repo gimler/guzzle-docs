@@ -1,6 +1,6 @@
-===========================
-Testing Web Service Clients
-===========================
+================================
+Unit Testing Web Service Clients
+================================
 
 Guzzle provides several tools that will enable you to easily unit test your web service clients.
 
@@ -125,7 +125,20 @@ A good discussion on the topic of testing remote APIs can be found in Sebastian 
 Mock responses
 --------------
 
-Mock responses can be used to test that requests are being generated correctly and responses and handled correctly by your client.
+Mock responses can be used to test if requests are being generated correctly and responses and handled correctly by your client.  Mock responses can be queued up for a client using the ``$this->setMockResponse($client, $filename)`` method of your test class.  Pass the client you are adding mock responses to and a single filename or array of mock response filenames.  This will queue one or more mock responses for your client by creating a simple observer on the client.  Mock response files must be stored in the ``Tests\Command\Mock`` folder of your project.  Mock response files must contain a full HTTP response message:
+
+.. code-block:: none
+
+    HTTP/1.1 200 OK
+    Date: Wed, 25 Nov 2009 12:00:00 GMT
+    Connection: close
+    Server: AmazonS3
+    Content-Type: application/xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <LocationConstraint xmlns="http://s3.amazonaws.com/doc/2006-03-01/">EU</LocationConstraint>
+
+After queueing up mock responses for a client, you can get an array of the requests that were sent by the client that were issued a mock response by calling ``$this->getMockedRequests()``.
 
 node.js web server for integration testing
 ------------------------------------------

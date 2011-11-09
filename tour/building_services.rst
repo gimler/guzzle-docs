@@ -315,28 +315,6 @@ See ``Guzzle\Aws\S3\Model\BucketIterator`` and ``Guzzle\Aws\SimpleDb\Model\Selec
 Unit test your service
 ----------------------
 
-We hope that you unit test every aspect of your Guzzle clients.  Unit testing a Guzzle web service client is not very difficult thanks to some of the freebies you get from the ``Guzzle\Tests`` namespace.  You can set mock responses on your requests, or send requests to the test node.js server that comes with Guzzle.
+Unit testing a Guzzle web service client is not very difficult thanks to some of the freebies you get from the ``Guzzle\Tests`` namespace.  You can set mock responses on your requests, or send requests to the test node.js server that comes with Guzzle.
 
-When unit testing with Guzzle, you should extend the ``Guzzle\Tests\GuzzleTestCase`` class to get access to various helper methods.  You should not actually interact with the real web service when unit testing with Guzzle.  Mock responses can be queued up for a client using the ``$this->setMockResponse($client, $filename)`` method of your test class.  Pass the client you are adding mock responses to and a single filename or array of filenames referencing files stored in the ``Tests\Command\Mock`` folder of your project.  This will set one or more mock responses on the next requests issued by the client.  Mock response files should contain a full HTTP response message:
-
-.. code-block:: none
-
-    HTTP/1.1 200 OK
-    Date: Wed, 25 Nov 2009 12:00:00 GMT
-    Connection: close
-    Server: AmazonS3
-    Content-Type: application/xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <LocationConstraint xmlns="http://s3.amazonaws.com/doc/2006-03-01/">EU</LocationConstraint>
-
-After queueing up mock responses for a client, you can get an array of the requests that were sent by the client that were issued a mock response by calling ``$this->getMockedRequests()``.
-
-There's no need to instantiate clients manually when unit testing.  If you've included a services.xml file in your ``Tests\`` directory that contains test data to use with your client, then you can get the client by calling ``$this->getServiceBuilder()->get('test_client')`` (reference it by whatever name you give your client in the services.xml file).
-
-Package your web service client for release
--------------------------------------------
-
-There you go, you've created an example web service client!  Now you know how to create amazing web service clients using Guzzle.  It's easy, powerful, and dare I say-- fun.
-
-Please send me an email to ``michael [at] guzzlephp.org`` to let me know about the clients you create.  Happy coding!
+You can learn more about unit testing guzzle web service clients by reading the :doc:`Unit testing web service clients </guide/service/testing_clients>` guide.
