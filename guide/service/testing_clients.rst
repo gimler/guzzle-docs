@@ -80,7 +80,7 @@ When creating tests that require an internet connection, it is recommended that 
 
     <groups>
       <exclude>
-        <group>name</group>
+        <group>internet</group>
       </exclude>
     </groups>
 
