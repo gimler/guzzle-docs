@@ -71,14 +71,7 @@ Rename this class to the CamelCase name of the web service you are implementing 
 phpunit.xml.dist
 ~~~~~~~~~~~~~~~~
 
-Different developers will configure their development environment differently.  A phpunit.xml file is required to run PHPUnit tests against your service.  ``phpunit.xml.dist`` provides a template for developers to copy and modify.
-
-A phing build script will be created with your project template that will prompt the user for the path to their installation of Guzzle and make a working copy of phpunit.xml:
-
-.. code-block:: bash
-
-    cd /path/to/client
-    phing
+Different developers will configure their development environment differently.  A phpunit.xml file is required to run PHPUnit tests against your service.  ``phpunit.xml.dist`` provides a template for developers to copy and modify.  One of the settings that must be set in this file is the full path to your installation of the main guzzle framework.
 
 client.xml
 ~~~~~~~~~~
