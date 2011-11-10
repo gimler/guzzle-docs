@@ -49,15 +49,10 @@ You will need to add Guzzle to your application's autoloader.  Guzzle ships with
 Installing web service clients
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you are going to use Guzzle web service clients in your projects (e.g. guzzle-aws), you will need to clone them into your installation of Guzzle.  You can use the phing build script to help with this::
+If you are going to use Guzzle web service clients in your projects (e.g. guzzle-aws), you will need to clone them into your installation of Guzzle into the correct folder (or use a git submodule).  Here's an example of adding guzzle-aws to your project::
 
-    cd /path/to/guzzle/clone
-
-    # Install/update the default Guzzle web service clients
-    phing -f build/build.xml all-services
-
-    # Install/update a particular Guzzle web service client (if it is not one of the default clients)
-    phing -f build/build.xml service -Drepo=git@github.com:guzzle/guzzle-aws.git -Dpath=./src/Guzzle/Aws
+    cd /path/to/guzzle
+    git clone git@github.com:guzzle/guzzle-aws.git ./src/Guzzle/Aws
 
 You can build a phar file containing your clone of Guzzle and the cloned web service clients.  The phar file will automatically register an autoloader function to handle loading all Guzzle classes.  You can build the phar file by running the following command::
 
