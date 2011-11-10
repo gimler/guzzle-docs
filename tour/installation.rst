@@ -1,6 +1,6 @@
-========
-Overview
-========
+============
+Installation
+============
 
 .. highlight:: php
 

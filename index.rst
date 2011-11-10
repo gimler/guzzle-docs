@@ -10,7 +10,7 @@ Tour
 
     tour/index
 
-* :doc:`tour/overview`
+* :doc:`tour/installation`
 * :doc:`tour/http`
 * :doc:`tour/using_services`
 * :doc:`tour/building_services`

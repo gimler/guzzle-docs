@@ -7,7 +7,7 @@ Take a tour of Guzzle:
 .. toctree::
    :maxdepth: 2
 
-   overview
+   installation
    http
    using_services
    building_services
