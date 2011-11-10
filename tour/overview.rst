@@ -59,6 +59,58 @@ You can build a phar file containing your clone of Guzzle and the cloned web ser
     # Rebuild the phar file to include these services
     phing -f build/build.xml phar
 
+Integrations
+------------
+
+Using Guzzle with Symfony
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A `Guzzle Symfony2 bundle <https://github.com/ddeboer/GuzzleBundle>`_ is available on github thanks to `ddeboer <https://github.com/ddeboer>`_
+
+Using Guzzle with Silex
+~~~~~~~~~~~~~~~~~~~~~~~
+
+A `Guzzle Silex service provider <https://github.com/guzzle/guzzle-silex-extension>`_ is available on github.
+
+Registering
+^^^^^^^^^^^
+
+.. code-block:: php
+
+    <?php
+
+    require __DIR__ . '/../silex.phar';
+    require __DIR__ . '/../vendor/Guzzle/GuzzleServiceProvider.php';
+
+    use Silex\Application;
+    use Guzzle\GuzzleServiceProvider;
+
+    $app = new Application();
+
+    $app->register(new GuzzleServiceProvider(), array(
+        'guzzle.services' => '/path/to/services.js',
+        'guzzle.class_path' => '/path/to/guzzle/src'
+    ));
+
+Example Usage
+^^^^^^^^^^^^^
+
+.. code-block:: php
+
+    <?php
+
+    // Get a command from your Amazon S3 client
+    $command = $app['guzzle']['s3']->getCommand('bucket.list_bucket');
+    $command->setBucket('mybucket');
+
+    $objects = $client->execute($command);
+    foreach ($objects as $object) {
+        echo "{$object['key']} {$object['size']}\n";
+    }
+
+    // Using the Guzzle client:
+    $response = $app['guzzle.client']->head('http://www.guzzlephp.org/)->send();
+
 Available web service clients
 -----------------------------
 
