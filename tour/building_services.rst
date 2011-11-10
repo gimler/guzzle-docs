@@ -36,9 +36,9 @@ This phing build target will ask you a series of questions and generate a templa
     Command\
         <Name...>Command.php
     Tests\
+        mock\
+            <Name...>Response
         Command\
-            Mock\
-                <Name...>Response
             <Name...>CommandTest.php
         <Service>ClientTest.php
         bootstrap.php
@@ -71,7 +71,7 @@ Rename this class to the CamelCase name of the web service you are implementing 
 phpunit.xml.dist
 ~~~~~~~~~~~~~~~~
 
-Different developers will configure their development environment differently.  A phpunit.xml file is required to run PHPUnit tests against your service.  ``phpunit.xml.dist`` provides a template for developers to copy and modify.  If your web service client has sub-webservices like the Guzzle AWS client, you will need to set the ``<server name="GUZZLE_SERVICE_MULTI" value="0" />`` value to ``1``.
+Different developers will configure their development environment differently.  A phpunit.xml file is required to run PHPUnit tests against your service.  ``phpunit.xml.dist`` provides a template for developers to copy and modify.
 
 A phing build script will be created with your project template that will prompt the user for the path to their installation of Guzzle and make a working copy of phpunit.xml:
 
