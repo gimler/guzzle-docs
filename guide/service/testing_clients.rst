@@ -147,6 +147,10 @@ Using mock responses is usually enough when testing a web service client.  If yo
 
 Guzzle is based around PHP's libcurl bindings.  cURL sometimes modifies an HTTP request message based on ``CURLOPT_*`` options.  Headers that are added to your request by cURL will not be accounted for if you inject mock responses into your tests.  Additionally, some request entity bodies cannot be loaded by the client before transmitting it to the sever (for example, when using a client as a sort of proxy and streaming content from a remote server).  You might also need to inspect the entity body of a ``mutlipart/form-data`` POST request.
 
+.. note::
+
+    You can skip all of the tests that require the node.js test web server by excluding the ``server`` group: ``phpunit --exclude-group server``
+
 Using the test server
 ~~~~~~~~~~~~~~~~~~~~~
 
