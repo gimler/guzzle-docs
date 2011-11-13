@@ -337,7 +337,9 @@ Guzzle is pretty good about managing cURL handles.  A handle will be closed if t
     // Allow 10 idle connections to be managed for mywebsite.com on port 80
     $factory->setMaxIdleForHost('mywebsite.com:80', 10);
 
-To disable connection reuse entirely, set the max idle time of the CurlFactory to 0: ``$factory->setMaxIdleTime(0);``.
+.. note::
+
+    To disable connection reuse entirely, set the max idle time of the CurlFactory to 0: ``$factory->setMaxIdleTime(0);``.
 
 Plugins for common HTTP request behavior
 ----------------------------------------
@@ -427,7 +429,10 @@ The ``Guzzle\Http\Plugin\ExponentialBackoffPlugin`` automatically retries failed
     $request = $client->get('http://google.com/');
     $request->send();
 
-By default, the ExponentialBackoffPlugin will retry all 500 and 503 responses up to 3 times.  The number of retries and the HTTP status codes that are retried can be configured in the constructor of the plugin.
+
+.. note::
+
+    By default, the ExponentialBackoffPlugin will retry all 500 and 503 responses up to 3 times.  The number of retries and the HTTP status codes that are retried can be configured in the constructor of the plugin.
 
 PHP-based caching forward proxy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
