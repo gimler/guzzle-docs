@@ -24,3 +24,8 @@ Guides
     guide/index.rst
 
 .. include:: guide/contents.rst.inc
+
+API
+---
+
+* `Read the API docs <http://www.guzzlephp.org/api>`_
