@@ -492,7 +492,28 @@ Entity bodies can sometimes be modified over the wire due to a faulty TCP transp
 
 Calculating the MD5 hash of a large entity body or an entity body that was transferred using a Content-Encoding is an expensive operation.  When working in high performance applications, you might consider skipping the MD5 hash validation for entity bodies bigger than a certain size or Content-Encoded entity bodies (see ``Guzzle\Http\Plugin\Md5ValidatorPlugin`` for more information).
 
+History plugin
+~~~~~~~~~~~~~~
+
+The history plugin tracks all of the requests and responses sent through a request or client.  This plugin can be useful for crawling or unit testing.  By default, the history plugin stores up to 10 requests and responses.
+
+.. code-block:: php
+
+    <?php
+
+    use Guzzle\Http\Plugin\HistoryPlugin;
+
+    $history = new HistoryPlugin();
+    $history->setLimit(5);
+
+    $client->getEventManager()->attach($history);
+    $client->get('http://www.yahoo.com/')->send();
+
+    echo $history->getLastRequest();
+    echo $history->getLastResponse();
+    echo count($history);
+
 Wrapping it all up
 ------------------
 
-Phew!  That was a lot of information.  There's more to the ``Guzzle\Http`` namespace than what was described above.  As always, you can poke around the source and take a look at the unit tests for more information.
+There's more to the ``Guzzle\Http`` namespace than what was described above.  As always, you can poke around the source and take a look at the unit tests for more information.
