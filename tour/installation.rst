@@ -59,6 +59,11 @@ You can build a phar file containing your clone of Guzzle and the cloned web ser
     # Rebuild the phar file to include these services
     phing -f build/build.xml phar
 
+Running the unit tests
+~~~~~~~~~~~~~~~~~~~~~~
+
+From the command line, execute the init-test phing build target: ``phing -f build/build.xml init``.  This build target will clone the needed dependencies and create a phpunit.xml file.  You will need to install node.js v0.5.0 or newer in order to test the cURL implementation.
+
 Integrations
 ------------
 

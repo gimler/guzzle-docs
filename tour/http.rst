@@ -324,7 +324,7 @@ A single request failure will not cause the entire pool of requests to fail.  An
 Managed persistent HTTP connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Persistent HTTP connections is an extremely important aspect of the HTTP/1.1 protocol that is often overlooked by PHP web service clients. Persistent connections allows data to be transferred between a client and server without the need to reconnect each time a subsequent request is sent, providing a significant performance boost to applications that need to send many HTTP requests to the same host.  Guzzle implicitly manages persistent connections for all requests across all services.
+Persistent HTTP connections is an extremely important aspect of the HTTP/1.1 protocol that is often overlooked by PHP HTTP clients. Persistent connections allows data to be transferred between a client and server without the need to reconnect each time a subsequent request is sent, providing a significant performance boost to applications that need to send many HTTP requests to the same host.  Guzzle implicitly manages persistent connections for all requests.
 
 HTTP requests and cURL handles are completely separate entities in Guzzle. In order for a request to get a cURL handle to transfer its message to a server, a request retrieves a cURL handle from a cURL handle factory. The default cURL handle factory will maintain a pool of open cURL handles and return an already existent cURL handle (with a persistent HTTP connection) if available, or create a new cURL handle if needed.  Unless you override the curl factory of a request, all requests in Guzzle use the default ``Guzzle\Http\Curl\CurlFactory``.
 
