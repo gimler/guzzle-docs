@@ -298,20 +298,19 @@ Send HTTP requests in parallel
 
 Sending many HTTP requests serially (one at a time) can cause an unnecessary delay in a script's execution. Each request must complete before a subsequent request can be sent. By sending requests in parallel, a pool of HTTP requests can complete at the speed of the slowest request in the pool, significantly reducing the amount of time needed to execute multiple HTTP requests. Guzzle provides a wrapper for the curl_multi functions in PHP.
 
-Here's an example of sending three requests in parallel using a Pool object::
+Here's an example of sending three requests in parallel using a client object::
 
     <?php
 
-    use Guzzle\Http\Pool\PoolRequestException,
-        Guzzle\Http\Pool\Pool;
-
-    $pool = new Pool();
-    $pool->add($client->get('http://www.google.com/'));
-    $pool->add($client->head('http://www.google.com/'));
-    $pool->add($client->get('https://www.github.com/'));
+    use Guzzle\Service\Client;
+    use Guzzle\Http\Pool\PoolRequestException;
 
     try {
-        $pool->send();
+        $responses = $client->batch(array(
+            $client->get('http://www.google.com/'),
+            $client->head('http://www.google.com/'),
+            $client->get('https://www.github.com/')
+        ));
     } catch (PoolRequestException $e) {
         echo "The following requests encountered an exception: \n";
         foreach ($e as $exception) {
