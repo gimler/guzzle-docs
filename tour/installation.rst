@@ -21,7 +21,7 @@ Installing Guzzle
 Installing only Guzzle
 ~~~~~~~~~~~~~~~~~~~~~~
 
-If you aren't using any Guzzle web service clients like guzzle-aws or guzzle-unfuddle, then you can just download the pre-built `guzzle phar file <http://build.guzzlephp.org/guzzle.phar>`_ and include it in your php scripts::
+If you aren't using any Guzzle web service clients like guzzle-aws or guzzle-unfuddle, then you can just download the pre-built `guzzle phar file <http://www.guzzlephp.org/guzzle.phar>`_ and include it in your php scripts::
 
     require '/path/to/guzzle.phar';
 
