@@ -9,7 +9,7 @@ Guzzle's awesome HTTP support provides the raw materials needed to build robust 
 Command based web service clients
 ---------------------------------
 
-Command based web service clients help to hide the underlying implementation of an API by following the `command pattern <http://en.wikipedia.org/wiki/Command_pattern>`_ and give a concrete class to each action that can be taken on a web service.
+Command based web service clients help to hide the underlying implementation of an API by following the `command pattern <http://en.wikipedia.org/wiki/Command_pattern>`_ and giving a concrete class to each action that can be taken on a web service.
 
 Instantiating web service clients using a ServiceBuilder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -34,7 +34,7 @@ Here's an example of retrieving an Unfuddle client from your ServiceBuilder::
 Sourcing data from XML
 ^^^^^^^^^^^^^^^^^^^^^^
 
-A ServiceBuilder can get information from an XML file or a SimpleXMLElement.  The XML file includes ``<client>`` elements that describe each web service client you will use.  Parameters need to be specified in each ``<client>`` element to tell a ``Guzzle\Service\Builder\ServiceBuilder`` object how to build the web service client.  Clients are given names which are handy for using multiple accounts for the same service or creating development clients vs. production clients.  Here's an example of a services.xml that uses several `Amazon Web Services <http://aws.amazon.com/>`_ clients and the `Unfuddle <http://www.unfuddle.com/>`_ web service:
+A ServiceBuilder can get information from an XML file or a SimpleXMLElement.  The XML file includes ``<client>`` elements that describe each web service client you will use.  Parameters need to be specified in each ``<client>`` element to tell a ``Guzzle\Service\ServiceBuilder`` object how to build the web service client.  Clients are given names which are handy for using multiple accounts for the same service or creating development clients vs. production clients.  Here's an example of a services.xml that uses several `Amazon Web Services <http://aws.amazon.com/>`_ clients and the `Unfuddle <http://www.unfuddle.com/>`_ web service:
 
 .. code-block:: xml
 
@@ -103,19 +103,21 @@ The interpreted data created from parsing a configuration file (.js, .json, or .
 
     use Doctrine\Common\Cache\ApcCache;
     use Guzzle\Common\CacheAdapter\DoctrineCacheAdapter;
-    use Guzzle\Service\Builder\ServiceBuilder;
+    use Guzzle\Service\ServiceBuilder;
 
     $cacheAdapter = new DoctrineCacheAdapter(new ApcCache());
     $builder = ServiceBuilder::factory('/path/to/services.xml', $cacheAdapter);
 
 ..
 
+.. note::
+
     An instantiated ServiceBuilder should now be used throughout the  execution of your script (possibly using a `registry      <http://martinfowler.com/eaaCatalog/registry.html>`_ or `multiton pattern <http://en.wikipedia.org/wiki/Multiton_pattern>`_).
 
 Using Client objects
 --------------------
 
-Web service clients are the central point of interaction with a web service.  They hold service configuration data and help to ready HTTP requests to be sent to a web service.  Web service clients don't know much about the service itself-- they just execute commands.  Configuration settings can be retrieved from a client by passing a configuration key to the ``getConfig()`` method of a client (e.g. ``$token = $client->getConfig('devpay_product_token')``).
+Web service clients are the central point of interaction with a web service.  They hold service configuration data and help to ready HTTP requests to be sent to a web service.  Web service clients don't know much about the service itself-- they just create requests and execute commands.  Configuration settings can be retrieved from a client by passing a configuration key to the ``getConfig()`` method of a client (e.g. ``$token = $client->getConfig('devpay_product_token')``).
 
 Executing commands using a client
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -182,14 +184,10 @@ Commands can be sent in parallel using ``Guzzle\Service\Command\CommandSet`` obj
     <?php
 
     use Guzzle\Http\Pool\PoolRequestException;
-    use Guzzle\Service\Command\CommandSet;
-    use Guzzle\Service\Command\CommandSetException;
 
-    // Get an Amazon SimpleDB client from the ServiceBuilder
     $client = $serviceBuilder['simple_db'];
 
-    // Create a CommandSet that will contain 3 commands
-    $set = new CommandSet(array(
+    $set = array(
         $client->getCommand('get_attributes', array(
             'domain' => 'test',
             'item_name' => 'item1'
@@ -201,7 +199,7 @@ Commands can be sent in parallel using ``Guzzle\Service\Command\CommandSet`` obj
         $client->getCommand('delete_domain', array(
             'domain' => 'test_2'
         ))
-    ));
+    );
 
     try {
         $client->execute($set);
