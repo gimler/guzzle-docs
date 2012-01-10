@@ -9,25 +9,25 @@ Building web service clients using commands is better than creating requests man
     #. Better choice for maintainability, features, and ease of use.
     #. Best practices are inherently implemented for the end-developer.
     #. Changes can be made to the underlying request and response processing without breaking the interface.
-    #. Can create :doc:`dynamic commands </guide/service/creating_dynamic_commands>` based on an XML service description.
+    #. Can create :doc:`dynamic commands </guide/service/creating_dynamic_commands>` based on a service description.
 
 Simple web service clients make the assumption that the end-developer has an intricate understanding of how to send requests to a web service and how that web service will respond.  If you want to build a reusable RESTful web service client for an application you plan on maintaining, then creating a simple client might not cut it.  Simple clients might work for extremely simple web services (like `Yahoo weather <http://developer.yahoo.com/weather/>`_ for example) or quickly prototyping, but when you're dealing with a huge web service with a ton of options (e.g. Amazon S3), then you're going to want to build a robust web service client that executes commands.
 
 A command-based web service client that abstracts away the HTTP request and response makes a client more future-proof; if the API you are interacting with changes (for example, adds a required field), then you would only have to update the command in one place rather than every single file in your project that interacts with the web service.  Guzzle uses the `command pattern <http://en.wikipedia.org/wiki/Command_pattern>`_ for building requests and processing responses.  Abstracting the underlying implementation helps new developers to quickly send requests to an API using any of the best-practices coded into the command itself, rather than assuming that every developer on your team has an intricate understanding of the web service.
 
-Commands can also be created for developers dynamically using an :doc:`XML service description </guide/service/creating_dynamic_commands>`.
+Commands can also be created for developers dynamically using a :doc:`service description </guide/service/creating_dynamic_commands>`.
 
 The following document will describe how to build a command-based web service client for Guzzle.
 
 Setting up
 ----------
 
-The first thing you will need to do is create the directory structure of your project.  You can quickly create the required directory structure of your project by running a phing build target from your git clone of https://github.com/guzzle/guzzle.git:
+The first thing you will need to do is create the directory structure of your project.  You can quickly create the required directory structure of your project by cloning the `guzzle client template <https://github.com/guzzle/guzzle-client-template>`_ and running the phing build script.
 
 .. code-block:: bash
 
-    cd /path/to/guzzle/build
-    phing template
+    $ cd /path/to/guzzle/build
+    $ phing template
 
 This phing build target will ask you a series of questions and generate a template for your web service client at a requested path.  The directory structure should mirror the following:
 
@@ -42,14 +42,9 @@ This phing build target will ask you a series of questions and generate a templa
             <Name...>CommandTest.php
         <Service>ClientTest.php
         bootstrap.php
-        services.xml
-    .gitignore
     <Service>Client.php
     phpunit.xml.dist
-    LICENSE
-    README.rst
-    build.xml
-    client.xml
+    composer.json
 
 After running the phing build target to generate the project's skeleton, you will need to modify the Client.php file by updating the factory method, adding a constructor if needed, and adding any class properties.
 
@@ -61,44 +56,38 @@ Place all of the commands for your web service in this folder.
 Tests/
 ~~~~~~
 
-We strongly encourage you to thoroughly unit test you services.  Place your ``bootstrap.php`` file and services.xml file in this folder.  The boostrap.php file is responsible for setting up PHPUnit tests.  The services.xml file contains the client configurations needed to instantiate your client using the ``Guzzle\Service\ServiceBuilder``.
+Place your ``bootstrap.php`` file in this folder.  The boostrap.php file is responsible for setting up PHPUnit tests.
 
 Client.php
-~~~~~~~~~~~
+~~~~~~~~~~
 
 Rename this class to the CamelCase name of the web service you are implementing followed by ``Client``.  Use strict CamelCasing (e.g. Xml is correct, XML is not).  A good client name would be something like ``FooBarClient.php``.
 
 phpunit.xml.dist
 ~~~~~~~~~~~~~~~~
 
-Different developers will configure their development environment differently.  A phpunit.xml file is required to run PHPUnit tests against your service.  ``phpunit.xml.dist`` provides a template for developers to copy and modify.  One of the settings that must be set in this file is the full path to your installation of the main guzzle framework.
-
-client.xml
-~~~~~~~~~~
-
-This is an optional XML file that describes how dynamic commands should be sent from your client.  Dynamic commands are helpful for quickly building simple commands that interact with a web service.
+Different developers will configure their development environment differently.  A phpunit.xml file is required to run PHPUnit tests against your service.  ``phpunit.xml.dist`` provides a template for developers to copy and modify.
 
 Create a client
 ---------------
 
 Now that the directory structure is in place, you can start creating your web service client.  Rename Client.php to the CamelCase name of the web service you are interacting with.  Next you will need to create your client's constructor.  Your client's constructor can require any number of arguments that your client needs.  In order for a ServiceBuilder to create your client using a parameterized array, you'll need to implement a ``factory()`` method that maps an array of parameters into an instantiated client object.  Any class composition should be handled in your client's factory method.
 
-**Your client will not work with a service builder if you do not create a factory method.**
+.. note::
 
-Here is the start of a custom web service client.  First we will extend the ``Guzzle\Service\Client`` class.  Next we will create a constructor that accepts several web service specific arguments.  After creating your constructor, you must create a factory method that accepts an array of configuration data.  The factory method accepts parameters, adds default parameters, validates that required parameters are present, creates a new client, attaches any observers needed for the client, and returns the client object::
+    Your client will not work with a service builder if you do not create a factory method.
+
+Let's start creating a custom web service client.  First we will extend the ``Guzzle\Service\Client`` class.  Next we will create a constructor that accepts several web service specific arguments.  After creating your constructor, you must create a factory method that accepts an array of configuration data.  The factory method accepts parameters, adds default parameters, validates that required parameters are present, creates a new client, attaches any observers needed for the client, and returns the client object::
 
     <?php
 
     namespace Guzzle\MyService;
 
-    use Guzzle\Common\Inspector;
-    use Guzzle\Http\Message\RequestInterface;
+    use Guzzle\Service\Inspector;
     use Guzzle\Service\Client;
 
     /**
      * My example web service client
-     *
-     * @author My name <my_email@domain.com>
      */
     class MyServiceClient extends Client
     {
@@ -157,14 +146,14 @@ Here is the start of a custom web service client.  First we will extend the ``Gu
         }
     }
 
-The ``Inspector::prepareConfig`` method is responsible for adding default parameters to a configuration object and ensuring that required parameters are in the configuration.   The code present in the example factory method will be very similar to the code your will need in your client's factory method.  Any object composition required to build the client should be added in the factory method (for example, attaching event observers to the client based on configuration settings).
+The ``Inspector::prepareConfig`` method is responsible for adding default parameters to a configuration object and ensuring that required parameters are in the configuration.   The factory method in the above example will be very similar to the code you will need in your client's factory method.  Any object composition required to build the client should be added in the factory method (for example, attaching event observers to the client based on configuration settings).
 
 Miscellaneous helper methods for your web service can also be put in the client.  For example, the Amazon S3 client has methods to create a signed URL.
 
 Create commands
 ---------------
 
-Commands can be created in one of two ways: create a concrete command class that extends ``Guzzle\Service\Command\AbstractCommand`` or :doc:`create a dynamic command based on an XML service description </guide/service/creating_dynamic_commands>`.  We will describe how to create concrete commands below.
+Commands can be created in one of two ways: create a concrete command class that extends ``Guzzle\Service\Command\AbstractCommand`` or :doc:`create a dynamic command based on a service description </guide/service/creating_dynamic_commands>`.  We will describe how to create concrete commands below.
 
 Commands help to hide complexity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -214,6 +203,7 @@ Attribute        Description                                                    
 ``static``       A value that cannot be changed.                                    ``@guzzle key static="this cannot be changed"``
 ``prepend``      Text to prepend to the value if the value is set.                  ``@guzzle key prepend="this_is_added_before."``
 ``append``       Text to append to the value if the value is set.                   ``@guzzle key append=".this_is_added_after"``
+``filter``       CSV list of functions or static functions that modifies a string   ``@guzzle key filter="strtoupper,strrev"``
 ===============  =================================================================  =============================================================
 
 When a command is being prepared for execution, the docblock annotations will be validated against the arguments present on the command.  Any default values will be added to the arguments, and if any required arguments are missing, an exception will be thrown.
@@ -308,6 +298,6 @@ See ``Guzzle\Aws\S3\Model\BucketIterator`` and ``Guzzle\Aws\SimpleDb\Model\Selec
 Unit test your service
 ----------------------
 
-Unit testing a Guzzle web service client is not very difficult thanks to some of the freebies you get from the ``Guzzle\Tests`` namespace.  You can set mock responses on your requests, or send requests to the test node.js server that comes with Guzzle.
+Unit testing a Guzzle web service client is not very difficult thanks to some of the freebies you get from the ``Guzzle\Tests`` namespace.  You can set mock responses on your requests or send requests to the test node.js server that comes with Guzzle.
 
 You can learn more about unit testing guzzle web service clients by reading the :doc:`Unit testing web service clients </guide/service/testing_clients>` guide.

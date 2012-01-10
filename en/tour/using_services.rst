@@ -14,7 +14,7 @@ Command based web service clients help to hide the underlying implementation of 
 Instantiating web service clients using a ServiceBuilder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The best way to instantiate Guzzle web service clients is to let Guzzle handle building the clients for you using a ServiceBuilder.       A ServiceBuilder is responsible for creating concrete client objects based on configuration settings and helps to manage credentials  for different environments.
+The best way to instantiate Guzzle web service clients is to let Guzzle handle building the clients for you using a ServiceBuilder.  A ServiceBuilder is responsible for creating concrete client objects based on configuration settings and helps to manage credentials for different environments.
 
 A ServiceBuilder can source information from an array, an XML file, SimpleXMLElement, or JSON file::
 
@@ -94,25 +94,47 @@ Web service clients can be defined using an array of data.::
         )
     ));
 
-Caching parsed data
-^^^^^^^^^^^^^^^^^^^
+Sourcing from a JSON document
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The interpreted data created from parsing a configuration file (.js, .json, or .xml) can be cached for faster subsequent access.  It is recommended that you cache the parsed configuration data by supplying a CacheAdapter to the ServiceBuilder::factory() method::
+The above array could be represented as a JSON array::
 
-    <?php
+    {
+        "aws": {
+            "access_key": "xyz",
+            "secret": "abc"
+        },
+        "s3": {
+            "class": "Guzzle\\Aws\\S3\\S3Client",
+            "extends": "aws",
+            "params": {
+                "subdomain": "michael"
+            }
+        },
+        "unfuddle": {
+            "class": "Guzzle\\Unfuddle\\UnfuddleClient",
+            "params": {
+                "username": "test-user",
+                "password": "test-password",
+                "subdomain": "test"
+            }
+        }
+    }
 
-    use Doctrine\Common\Cache\ApcCache;
-    use Guzzle\Common\CacheAdapter\DoctrineCacheAdapter;
-    use Guzzle\Service\ServiceBuilder;
+Referencing other clients in parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    $cacheAdapter = new DoctrineCacheAdapter(new ApcCache());
-    $builder = ServiceBuilder::factory('/path/to/services.xml', $cacheAdapter);
+If one of your clients depends on another client as one of its parameters, you can reference that client by name by enclosing the client's reference key in ``{{ }}``::
 
-..
-
-.. note::
-
-    An instantiated ServiceBuilder should now be used throughout the  execution of your script (possibly using a `registry      <http://martinfowler.com/eaaCatalog/registry.html>`_ or `multiton pattern <http://en.wikipedia.org/wiki/Multiton_pattern>`_).
+    {
+        "token": {
+            "access_key": "xyz"
+        },
+        "client": {
+            "token_client": "{{token}}",
+            "version": "1.0"
+        }
+    }
 
 Using Client objects
 --------------------
@@ -174,6 +196,7 @@ The ListBucket command above returns a ``Guzzle\Aws\S3\Model\BucketIterator`` wh
 You can take some shortcuts in your code by passing key-value pair arguments to a command::
 
     <?php
+
     $objects = $client->getCommand('bucket.list_bucket', array('bucket' => 'my_bucket'))->execute();
 
 Executing commands in parallel using CommandSets
@@ -183,11 +206,8 @@ Commands can be sent in parallel using ``Guzzle\Service\Command\CommandSet`` obj
 
     <?php
 
-    use Guzzle\Http\Pool\PoolRequestException;
-
     $client = $serviceBuilder['simple_db'];
-
-    $set = array(
+    $client->execute(array(
         $client->getCommand('get_attributes', array(
             'domain' => 'test',
             'item_name' => 'item1'
@@ -199,21 +219,9 @@ Commands can be sent in parallel using ``Guzzle\Service\Command\CommandSet`` obj
         $client->getCommand('delete_domain', array(
             'domain' => 'test_2'
         ))
-    );
-
-    try {
-        $client->execute($set);
-        foreach ($set as $command) {
-            echo $command->getName() . ': ' . $command->getResponse()->getStatusCode() . "\n";
-        }
-    } catch (PoolRequestException $e) {
-        // Exceptions encountered while transferring commands in a Pool will be
-        // aggregated into one iterable exception
-        foreach ($e as $exception) {
-            echo $exception->getMessage();
-        }
-    } catch (\Exception $e) {
-        echo $e->getMessage();
+    ));
+    foreach ($set as $command) {
+        echo $command->getName() . ': ' . $command->getResponse()->getStatusCode() . "\n";
     }
 
 Guzzle doesn't require that all of the commands in a CommandSet originate from the same client.  This allows you to write extremely efficient code when you need to send several requests to multiple services::
@@ -248,15 +256,10 @@ Guzzle doesn't require that all of the commands in a CommandSet originate from t
         }
     }
 
-Non-Batchable commands
-^^^^^^^^^^^^^^^^^^^^^^
-
-Some commands cannot be sent in parallel (i.e. ``Guzzle\Aws\S3\Command\Bucket\ClearBucket``).  These types of commands have the canBatch attribute on them set to FALSE and cannot be sent in parallel using a CommandSet.  When a CommandSet contains both batchable and non-batchable commands, the CommandSet will first execute the non-batchable commands serially followed by the batchable commands in parallel.
-
 Adding observers to Client objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Any observer attached to the ``EventManager`` of a ``Client`` object will automatically be attached to all request objects created by the client.  This allows you to attach, for example, an ExponentialBackoffPlugin to a client object, and from that point on, every request sent through that client will utilize the ExponentialBackoffPlugin.  Plugins that are required for services are usually attached to a client in the client's factory method.  For example, all AWS clients will use the ExponentialBackoffPlugin.  In this case, you will not need to attach it again::
+Any observer attached to the ``EventDispatcher`` of a ``Client`` object will automatically be attached to all request objects created by the client.  This allows you to attach, for example, an ExponentialBackoffPlugin to a client object, and from that point on, every request sent through that client will utilize the ExponentialBackoffPlugin.  Plugins that are required for services are usually attached to a client in the client's factory method.  For example, all AWS clients will use the ExponentialBackoffPlugin.  In this case, you will not need to attach it again::
 
     <?php
 
@@ -267,7 +270,7 @@ Any observer attached to the ``EventManager`` of a ``Client`` object will automa
     $client = $serviceBuilder->get('s3');
 
     // Attach a CachePlugin to the client
-    $client->getEventManager()->attach(
+    $client->getEventDispatcher()->addSubscriber(
         new CachePlugin(new DoctrineCacheAdapter(new ArrayCache()), true)
     );
 
@@ -278,4 +281,4 @@ The ``$request`` will use the CachePlugin because the CachePlugin was attached t
 Next steps
 ~~~~~~~~~~
 
-Check the documentation of the web service client you are using to see the available commands for the client.  Some clients will mix :doc:`dynamic commands </guide/service/creating_dynamic_commands>` with concrete commands, so will need to check if an XML file is shipped with the client that defines dynamic commands.
+Check the documentation of the web service client you are using to see the available commands for the client.  Some clients will mix :doc:`dynamic commands </guide/service/creating_dynamic_commands>` with concrete commands, so will need to check if an XML or JSON file is shipped with the client that defines dynamic commands.

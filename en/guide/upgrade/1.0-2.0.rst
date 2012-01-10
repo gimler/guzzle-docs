@@ -1,0 +1,56 @@
+Upgrading from Guzzle 1.x to Guzzle 2.0
+=======================================
+
+Guzzle 2.0 has been released.  This release brings a framework that is leaps and bounds better than its predecessor, but it does introduce some breaking changes.
+
+.. note::
+
+    If you are using Guzzle 1.0 in product and aren't ready to migrate yet, you can always checkout Guzzle using the 1.0.4 tag
+    ``git clone git://github.com/guzzle/guzzle.git && git checkout v1.0.4``
+
+General
+-------
+
+* Guzzle now uses composer for dependency management and no longer uses git submodules
+
+Common
+------
+
+* ``Guzzle\Common\Inspector`` was moved to ``Guzzle\Service\Inspector``
+* ``Guzzle\Common\Inflector`` was moved to ``Guzzle\Common\Inflector``
+* Accepting ZF1 or ZF2 cache in ZendCacheAdapter
+
+HTTP
+----
+
+* Dropped the code-level persistent connection handling in favor of utilizing curl multi's connect cache.  Every request is now by default passed through the same curl multi handle, so you will see improved support for persistent connections when sending requests to the same host serially or in parallel.
+* Removed the ability to determine the Content-Type of an EntityBody based on the file extension and now simply relying on finfo
+* Removing ``Guzzle\Http\Pool`` and now using ``Guzzle\Http\Curl\CurlMulti``
+* The helper methods from ``Guzzle\Http\Message\RequestFactory`` have been removed to prevent confusion and encourage developers to use ``Guzzle\Http\Client`` to create requests.
+* A client object implementation has been added to the ``Guzzle\Http`` namespace for developers who do not need commands or service descriptions.
+* Removed custom rawurlencode function from ``Guzzle\Http\QueryString`` because PHP 5.3 now properly deals with tilde characters.
+* Clients can now send one or more requests in an array using the ``send()`` method, so the ``batch()`` method was removed.
+* ``Guzzle\Http\Message\AbstractMessage::hasHeader()`` now returns true if the header is found using exact matching.  If the header is found using a regex or case-insensitive match, then it will return the name of the found header.
+
+Events
+~~~~~~
+
+* Guzzle now uses the `Symfony2 EventDispatcher <https://github.com/symfony/event-dispatcher>`_ component to handle its event system.
+* The naming conventions used for emitting events has been cleaned up a bit, so some of the previous events being emitted have been renamed or removed.
+
+Service
+-------
+
+* Service description builders are no longer instantiated and just use a static build() method to create ServiceDescriptions
+* Using ``{{}}`` instead of ``$.`` to reference other services as a dependency for another service
+* Removing caching arguments from ServiceBuilder because the data being cached is extremely fast to generate. Added a method to serialize the ServiceDescription in case a ServiceDescription needs to be cached in at the  application level.
+
+
+Service description Filters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Guzzle now uses the `Symfony2 Validator <https://github.com/symfony/Validator>`_ component to handle validating that values in a service description satisfy any constraints.
+
+.. note::
+
+    Please let us know if you see something missing from this document.  I think this covers most of the major updates.

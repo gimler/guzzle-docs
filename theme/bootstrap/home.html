@@ -1,0 +1,123 @@
+<div class="content">
+  <div class="hero-unit">
+    <img src="{{ pathto('_static/guzzle.png', 1) }}" alt="guzzle" width="199" height="260" />
+    <h1>Guzzle is HTTP for PHP</h1>
+    <p>Guzzle is a PHP HTTP client &amp; framework for building RESTful web service clients.</p>
+    <ul class="unstyled">
+        <li>Provides all the power of cURL with a simple interface.</li>
+        <li>Built from the ground up with plugins in mind by utilizing filters and events.</li>
+        <li>Built using TDD and unit-tested with PHPUnit.</li>
+        <li>Truly take advantage of HTTP/1.1 with persistent connections and parallel requests.</li>
+        <li>Includes a custom node.js webserver to test your clients.</li>
+    </ul>
+    <div class="buttons">
+      <a class="btn primary large" href="https://github.com/downloads/guzzle/guzzle/guzzle.phar">Download Phar</a> &nbsp;
+      <a class="btn secondary large" href="https://github.com/guzzle/guzzle">Guzzle on github</a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="span5">
+        <h2>About</h2>
+        <p>Guzzle is a game changer in the world of PHP HTTP clients. Guzzle allows you to truly reap the benefits of the HTTP/1.1 spec. No other library makes persistent connection management or sending requests in parallel easier.</p>
+        <p>In addition to taking the pain out of HTTP, Guzzle provides a lightweight framework for creating web service clients. Most web service clients follow a specific pattern: create a client class, create methods for each action, create and execute a cURL handle, parse the response, implement error handling, and return the result. Guzzle takes the redundancy out of this process and gives you the tools you need to quickly build a web service client.</p>
+        <p>Start <strong>truly</strong> consuming HTTP with Guzzle.</p>
+    </div>
+
+    <div class="span11">
+      <h2>Installation</h2>
+      <p><span class="label">default</span> Just download the <a href="/guzzle.phar">guzzle phar file</a>
+        and include it in your PHP scripts:</p>
+      <pre class="prettyprint linenums">&lt;?php
+require_once '/path/to/guzzle.phar';
+$client = new Guzzle\Service\Client('http://test.com/');
+$response = $client->get('/resource.xml')->send();</pre>
+      <p><span class="label notice">advanced</span> If you are going to use other Guzzle web service clients in your projects (e.g. guzzle-aws) and you wish to use a
+        single phar file, you'll need to run the following commands from the directory you wish to install Guzzle:</p>
+      <pre>git clone --recursive https://github.com/guzzle/guzzle.git
+git clone git@github.com:guzzle/guzzle-aws.git guzzle/src/Guzzle/Aws
+phing -f guzzle/build/build.xml phar</pre>
+      <p><a class="btn" href="{{ pathto('tour/installation') }}">View installation documentation</a></p>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="row">
+
+    <div class="span5">
+      <h2>Features</h2>
+      <ul>
+        <li>Supports GET, HEAD, POST, DELETE, PUT, and OPTIONS</li>
+        <li>Allows full access to request and response headers</li>
+        <li>Persistent connections are implicitly managed by Guzzle, resulting in huge performance benefits</li>
+        <li>Send requests in parallel</li>
+        <li>Cookie sessions can be maintained between requests using the CookiePlugin</li>
+        <li>Allows custom entity bodies to be sent in PUT and POST requests, including sending data from a PHP stream</li>
+        <li>Responses can be cached and served from cache using the caching reverse proxy plugin</li>
+        <li>Failed requests can be retried using truncated exponential backoff</li>
+        <li>Entity bodies can be validated automatically using Content-MD5 headers</li>
+        <li>All data sent over the wire can be logged using the LogPlugin</li>
+        <li>Automatically requests compressed data and automatically decompresses data</li>
+        <li>Subject/Observer signal slot system for unobtrusively modifying request behavior</li>
+        <li>Supports all of the features of libcurl including authentication, redirects, SSL, proxies, etc</li>
+        <li>Web service client framework for building future-proof interfaces to web services</li>
+      </ul>
+      <h2>Integrate</h2>
+      <h3>Symfony2</h3>
+      <p><a href="https://github.com/ddeboer/GuzzleBundle">GuzzleBundle</a> for Symfony2</p>
+      <h3>Silex</h3>
+      <p><a href="https://github.com/guzzle/guzzle-silex-extension">Guzzle Service Provider</a> for Silex</p>
+    </div>
+
+    <div class="span11">
+      <h2>HTTP basics</h2>
+      <pre class="prettyprint linenums">&lt;?php
+use Guzzle\Service\Client;
+
+$client = new Client('http://www.example.com/api/v1/key/{{key}}', array(
+    'key' => '***'
+));
+
+// Issue a path using a relative URL to the client's base URL
+// Sends to http://www.example.com/api/v1/key/***/users
+$request = $client->get('users');
+$response = $request->send();
+
+// Relative URL that overwrites the path of the base URL
+$request = $client->get('/test/123.php?a=b');
+
+// Issue a head request on the base URL
+$response = $client->head()->send();
+$response = $client->delete('users/123')->send();
+
+// Send a PUT request with custom headers
+$response = $client->put('upload/text', array(
+    'X-Header' => 'My Header'
+), 'body of the request')->send();
+
+// Send a PUT request using the contents of a PHP stream as the body
+// Send using an absolute URL (overrides the base URL)
+$response = $client->put('http://www.example.com/upload', array(
+    'X-Header' => 'My Header'
+), fopen('http://www.test.com/', 'r'));
+
+// Create a POST request with a file upload (notice the @ symbol):
+$request = $client->post('http://localhost:8983/solr/update', null, array (
+    'custom_field' => 'my value',
+    'file' => '@/path/to/documents.xml'
+));
+
+// Create a POST request and add the POST files manually
+$request = $client->post('http://localhost:8983/solr/update')
+    ->addPostFiles(array(
+        'file' => '/path/to/documents.xml'
+    ));
+
+// Responses are objects
+echo $response->getStatusCode() . ' ' . $response->getReasonPhrase() . "\n";
+// Requests and responses can be cast to a string to show the raw HTTP message
+echo $request . "\n\n" . $response;
+    </div>
+  </div>
+</div>

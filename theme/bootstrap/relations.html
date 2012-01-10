@@ -1,0 +1,10 @@
+{%- if prev or next %}
+<div class="breadcrumb" style="margin: 24px 0; color:#999; text-align: center;">
+  {%- if prev and prev.title != '&lt;no title&gt;' %}
+  <a class="btn info" href="{{ prev.link|e }}" title="{{ _('previous chapter') }}">{{ "&laquo;"|safe }} {{ prev.title }}</a>
+  {%- endif %}
+  {%- if next %}
+  <a class="btn info" href="{{ next.link|e }}" title="{{ _('next chapter') }}">{{ next.title }} {{ "&raquo;"|safe }}</a>
+  {%- endif %}
+</div>
+{%- endif %}
