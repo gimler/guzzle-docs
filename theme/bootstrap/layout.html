@@ -30,7 +30,9 @@
 {% endmacro %}
 
 {%- block extrahead %}
-
+{% if ga %}
+<script type="text/javascript">var _gaq = []; _gaq.push(['_setAccount', 'UA-22752917-1'], ['_trackPageview']);</script>
+{% endif %}
 <script type="text/javascript">
 (function () {
   /**
@@ -95,16 +97,20 @@
 {%- block relbar2 %}{% endblock %}
 
 {%- block content %}
-<div class="container{%- if pagename != 'index' %}-fluid{% endif %}">
+<div class="container{%- if pagename != 'index' and pagename != 'search' %}-fluid{% endif %}">
    {% if pagename == 'index' %}
      {% block relbar1 %}{% endblock %}
      {% include "home.html" %}
    {% else %}
-     {% include "docs-left.html" %}
+     {% if pagename != 'search' %}
+       {% include "docs-left.html" %}
+     {% endif %}
      <div class="content">
        {% block body %} {% endblock %}
-       {% include "relations.html" %}
-       {% include "comments.html" %}
+       {% if pagename != 'search' %}
+         {% include "relations.html" %}
+         {% include "comments.html" %}
+       {% endif %}
      </div>
    {% endif %}
 </div>
@@ -123,5 +129,14 @@
     {%- endif %}
     </p>
   </div>
+  {% if ga %}
+  <script type="text/javascript">
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  {% endif %}
 </footer>
 {%- endblock %}
