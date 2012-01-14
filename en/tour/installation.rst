@@ -21,9 +21,9 @@ Installing Guzzle
 Adding Guzzle to a project using PHAR
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Guzzle is distributed using a PHAR file that compresses all of the required classes into a single file.  In order to simplify installing Guzzle, `Monolog <https://github.com/seldaek/monolog>`_, `Doctrine Common <https://github.com/doctrine/common>`_ Cache layer, `Symfony2's Validator <https://github.com/symfony/Validator>`_, and `Symfony2's EventDispatcher <https://github.com/symfony/EventDispatcher>`_ are included.  Including the Guzzle phar file in your application will automatically configure autoloading so everything should just work.  You can download the Guzzle phar file from http://www.guzzle.php.org/guzzle.phar::
+Guzzle is distributed using a PHAR file that compresses all of the required classes into a single file.  In order to simplify installing Guzzle, `Monolog <https://github.com/seldaek/monolog>`_, `Doctrine Common <https://github.com/doctrine/common>`_ Cache layer, `Symfony2's Validator <https://github.com/symfony/Validator>`_, and `Symfony2's EventDispatcher <https://github.com/symfony/EventDispatcher>`_ are included.  Including the Guzzle phar file in your application will automatically configure autoloading so everything should just work.  You can download the Guzzle phar file from https://github.com/downloads/guzzle/guzzle/guzzle.phar::
 
-    $ wget --quiet http://www.guzzlephp.org/guzzle.phar
+    $ wget --quiet https://github.com/downloads/guzzle/guzzle/guzzle.phar
 
 And include it in your scripts::
 
