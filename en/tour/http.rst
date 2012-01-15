@@ -522,6 +522,39 @@ If your web service client requires basic authorization, then you can use the Ba
         echo $person->email . "\n";
     }
 
+Batch Queue Plugin
+~~~~~~~~~~~~~~~~~~
+
+Send a large number of requests using the batch queue plugin.  Any request created by a client will automatically be tracked and queued by the BatchQueuePlugin. In the constructor of the plugin, you can specify the maximum amount of requests to keep in queue before implicitly flushing, or set 0 to never automatically flush.
+
+.. code-block:: php
+
+    <?php
+
+    use Guzzle\Http\Client;
+    use Guzzle\Http\Plugin\BatchQueuePlugin;
+
+    $client = new Client('http://www.test.com/');
+
+    // Here we are saying that if 10 or more requests are in the batch queue,
+    // then it must automatically flush the queue and send the requests.
+    $batchPlugin = new BatchQueuePlugin(10);
+
+    // Add the batch plugin to the client object
+    $client->getEventDispatcher()->addSubscriber($batchPlugin);
+
+    // Queue up some requests on the BatchQueuePlugin
+    $request1 = $client->get('/');
+    $request2 = $client->get('/');
+    $request3 = $client->get('/');
+
+    // If the batch plugin is handy, you can call the flush method directly
+    $batchPlugin->flush();
+
+    // If you no longer have the batch plugin handy, you can emit the 'flush' event
+    // from the client
+    $client->dispatch('flush');
+
 Wrapping it all up
 ------------------
 
