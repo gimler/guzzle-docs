@@ -303,6 +303,19 @@ Most of the functionality implemented in the libcurl bindings has been simplifie
 
     $request->getCurlOptions()->set(CURLOPT_SSL_VERIFYHOST, true);
 
+You can add cURL options to every request sent from your client by adding configuration options to the client that are prefixed with "curl.".  Clients will automatically map cURL constants for keys and values to their correct PHP value.
+
+.. code-block:: php
+
+    <?php
+
+    $client = new Guzzle\Http\Client('https://example.com/', array(
+        'curl.CURLOPT_SSL_VERIFYHOST' => false,
+        'curl.CURLOPT_SSL_VERIFYPEER' => false,
+        'curl.CURLOPT_PROXY'          => 'proxy.mydomain.com:8080',
+        'curl.CURLOPT_PROXYTYPE'      => 'CURLPROXY_HTTP'
+    ));
+
 Plugins for common HTTP request behavior
 ----------------------------------------
 
