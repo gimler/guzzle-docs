@@ -73,7 +73,8 @@ If you attach this service description to a client, you would be able to execute
 
     use Guzzle\Service\Description\XmlDescriptionBuilder;
 
-    $builder = XmlDescriptionBuilder::build('/path/to/client.xml');
+    $description = XmlDescriptionBuilder::build('/path/to/client.xml');
+    $client->setDescription($description);
 
     $command = $client->getCommand('delete_comment', array(
         'id' => 123
