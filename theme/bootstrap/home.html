@@ -26,18 +26,19 @@
 
     <div class="span11">
       <h2>Installation</h2>
-      <p><span class="label">default</span> Just download the <a href="/guzzle.phar">guzzle phar file</a>
+      <p>Just download the <a href="https://github.com/downloads/guzzle/guzzle/guzzle.phar">guzzle phar file</a>
         and include it in your PHP scripts:</p>
       <pre class="prettyprint linenums">&lt;?php
 require_once '/path/to/guzzle.phar';
 $client = new Guzzle\Service\Client('http://test.com/');
 $response = $client->get('/resource.xml')->send();</pre>
-      <p><span class="label notice">advanced</span> If you are going to use other Guzzle web service clients in your projects (e.g. guzzle-aws) and you wish to use a
-        single phar file, you'll need to run the following commands from the directory you wish to install Guzzle:</p>
-      <pre>git clone --recursive https://github.com/guzzle/guzzle.git
-git clone git@github.com:guzzle/guzzle-aws.git guzzle/src/Guzzle/Aws
-phing -f guzzle/build/build.xml phar</pre>
-      <p><a class="btn" href="{{ pathto('tour/installation') }}">View installation documentation</a></p>
+      <p>You can also install guzzle using <a href="http://packagist.org/about-composer">composer</a> by creating a composer.json file in your project root:</p>
+      <pre>{
+  "require": {
+    "guzzle/guzzle": ">=2.0.1"
+  }
+}</pre>
+      <p><a class="btn" href="{{ pathto('tour/installation') }}">Read more about installing Guzzle</a></p>
     </div>
   </div>
 
