@@ -183,12 +183,12 @@ Throwing an exception when a 4xx or 5xx response is encountered is the default b
 
 The default onComplete method is passed to any custom onComplete method.  This is useful if you wish to override only certain responses and still utilize the default onComplete method.  Returning a ``Guzzle\Http\Message\Response`` object in your onComplete callback will override the response object set on the original request.  This would allow you to retry failed requests without complicating the code that uses the client.  This might be useful for sending requests to a web service that has expiring auth tokens.  When a response shows that your token has expired, you can get a new token, retry the request with the new token, and return the successful response to the user.
 
-Here's an example of retrying a request using updated authorization credentials when a 412 response is received, overriding the response of the original request with the new response, and still calling the default onComplete method when other response status codes are encountered::
+Here's an example of retrying a request using updated authorization credentials when a 401 response is received, overriding the response of the original request with the new response, and still calling the default onComplete method when other response status codes are encountered::
 
     <?php
 
     $request = $client->get('http://test.com/')->setOnComplete(function($request, $response, $default) {
-        if ($response->getStatusCode() == 412) {
+        if ($response->getStatusCode() == 401) {
             $newRequest = $request->clone();
             $newRequest->setHeader('X-Auth-Header', MyApplication::getNewAuthToken());
             $newResponse = $newRequest->send();
