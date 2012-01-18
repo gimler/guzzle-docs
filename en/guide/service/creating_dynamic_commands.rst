@@ -224,6 +224,27 @@ When an end-developer creates this command, they will need to pass a value that 
         </command>
     </client>
 
+Sending PUT and POST requests
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Service descriptions allow for a flexible way to send PUT and POST requests where the entity body of the request needs to be in a specific format.  You may have noticed that the PUT/POST commands in the example XML service description force the end-developer to build an XML entity body from scratch.  A better way of implementing these entity enclosing requests would be to allow the end-developers set body parameters using a SimpleXMLElement object.  This can be achieved by using the "type" parameter type and specifying a class:
+
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <command name="create_user" method="POST" path="/users">
+        <param name="data" type="type:SimpleXMLElement" location="body" />
+    </command>
+
+If you are sending JSON data, you should consider allowing end-developers to set body parameters using an array.  You can then convert an array to a JSON string by using the ``filter`` attribute of a parameter:
+
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <command name="create_user" method="POST" path="/users">
+        <param name="data" type="type:array" filter="json_encode" location="body" />
+    </command>
+
 Including other service descriptions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -306,33 +327,10 @@ Use Dynamic and Concrete Commands
 
 Concrete commands are much better suited for interacting with complex web services or dealing with custom entity bodies that must be generated based on command parameters.  Never fear-- web service clients can utilize both concrete and dynamic commands.  When retrieving a command by name (``$command = $client->getCommand('command_name')``), the client will first check if it has a service description and if the service descriptions has a command defined by the name of 'command_name.'  If the client has a dynamic command named 'command_name', then a dynamic command will be created and returned.  If the client does not have a service description or its service description does not have a command defined by that name, it will see if a concrete command class maps to that name.  If it does, it will create the concrete command class and return it.  Whether or not the command is a concrete command or dynamic command doesn't matter to the end-developer as long as the developer can execute the command and get back a valuable response.
 
-Caveats with service descriptions
----------------------------------
+Response processing
+-------------------
 
-No code completion
-~~~~~~~~~~~~~~~~~~
+Dynamic commands can't perform any type of response processing to create more valuable command results.  This means, for example, that the result of a command to retrieve a user will return a ``\SimpleXMLElement``, not a ``User`` object.
 
-Dynamic commands cannot be directly instantiated and don't have setter methods to easily build up a command.  This means that you won't get code completion.
+Have an idea for how to make this better?  Let us know!
 
-No custom response processing
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Dynamic commands can't perform any type of response processing to create more valuable command results.  This means, for example, that the result of a command to retrieve a user will return a ``\SimpleXMLElement``, not a ``User`` object.  Have an idea for how to make this better?  Let us know!
-
-Weak support for custom entity bodies
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-XML service descriptions are great for creating relatively simple commands, but you may have noticed that the PUT/POST commands in the example XML service description force the end-developer to build an XML entity body from scratch to send with those requests.  This is fine for relatively simple clients, but a better way of implementing these entity enclosing requests might be to create models for the bodies of the commands and force end-developers to set the data parameter using a model by specifying the class in the parameter's type attribute:
-
-.. code-block:: xml
-
-    <!-- ... -->
-    <command name="create_user" method="POST" path="/users">
-        <doc>Create a user</doc>
-        <param name="data" type="class:Guzzle\Service\MyService\Model\User" location="body" doc="User model" />
-    </command>
-    <command name="create_comment" method="POST" path="/comments">
-        <doc>Create a comment</doc>
-        <param name="data" type="class:Guzzle\Service\MyService\Model\Comment" location="body" doc="Comment model" />
-    </command>
-    <!-- ... -->
