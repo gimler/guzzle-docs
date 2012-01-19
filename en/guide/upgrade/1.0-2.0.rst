@@ -7,7 +7,7 @@ Guzzle 2.0 has been released.  This release brings a framework that is leaps and
 
     If you are using Guzzle 1.0 in product and aren't ready to migrate yet, you can always checkout Guzzle using the 1.0.4 tag
     ``git clone git://github.com/guzzle/guzzle.git && git checkout v1.0.4``
-    
+
 Full changelog of `commit <https://github.com/guzzle/guzzle/commit/4c46e7701530f45e7893d03537b05073a3ea639e>`_:
 
 .. code-block:: none
@@ -59,7 +59,7 @@ Common
 ------
 
 * ``Guzzle\Common\Inspector`` was moved to ``Guzzle\Service\Inspector``
-* ``Guzzle\Common\Inflector`` was moved to ``Guzzle\Common\Inflector``
+* ``Guzzle\Common\Inflector`` was moved to ``Guzzle\Service\Inflector``
 * Accepting ZF1 or ZF2 cache in ZendCacheAdapter
 
 HTTP
