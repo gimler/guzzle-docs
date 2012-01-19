@@ -9,7 +9,7 @@
  * Date: Sun Nov 20 21:42:29 PST 2011
  */
 /* Reset.less
- * Props to Eric Meyer (meyerweb.com) for his CSS reset file. We're using an adapted version here	that cuts out some of the reset HTML elements we will never need here (i.e., dfn, samp, etc).
+ * Props to Eric Meyer (meyerweb.com) for his CSS reset file. We're using an adapted version here   that cuts out some of the reset HTML elements we will never need here (i.e., dfn, samp, etc).
  * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 html, body {
   margin: 0;
@@ -427,6 +427,9 @@ h1 small {
 h2 {
   font-size: 24px;
   line-height: 36px;
+  margin-bottom: 24px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #eee;
 }
 h2 small {
   font-size: 14px;
@@ -435,7 +438,7 @@ h3,
 h4,
 h5,
 h6 {
-  line-height: 36px;
+  line-height: 50px;
 }
 h3 {
   font-size: 18px;

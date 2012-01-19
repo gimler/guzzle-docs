@@ -94,7 +94,7 @@ exclude_patterns = ['build']
 #show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'tango'
+pygments_style = 'colorful'
 
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
