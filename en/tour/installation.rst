@@ -29,6 +29,8 @@ And include it in your scripts::
 
     require '/path/to/guzzle.phar';
 
+If you already have your own autoloader and don't want to install the extra libraries, you can install the minimal PHAR distribution of Guzzle at https://github.com/downloads/guzzle/guzzle/guzzle-min.phar.
+
 Adding Guzzle to a project using Composer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -36,7 +38,7 @@ Create composer.json file in the project root::
 
     {
         "require": {
-            "guzzle/guzzle": ">=2.0.0"
+            "guzzle/guzzle": "*"
         }
     }
 

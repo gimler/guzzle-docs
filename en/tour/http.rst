@@ -155,7 +155,7 @@ Guzzle helps to make it extremely easy to send POST requests.  POST requests wil
             'file' => '/path/to/file.xml'
         ));
 
-This can be achieved more succinctly-- ``Client::post()`` accepts three arguments: the URL, optional headers, and the post fields.  To send files in the POST request, prepend the ``@`` symbol to the array value (just like you would if you were using the PHP ``curl_set_opt`` function)::
+This can be achieved more succinctly-- ``Client::post()`` accepts three arguments: the URL, optional headers, and the post fields.  To send files in the POST request, prepend the ``@`` symbol to the array value (just like you would if you were using the PHP ``curl_setopt`` function)::
 
     <?php
 
@@ -229,14 +229,14 @@ Connection problems and cURL specific errors can also occur when transferring re
     * Couldn't resolve host 'www.nonexistenthost.com'
     * Closing connection #0
 
-A Guzzle\Common\ExceptionCollection exception is thrown when a cURL specific error occurs while transferring multiple requests in parallel.  You can then iterate over all of the exceptions encountered during the transfer.
+A ``Guzzle\Common\ExceptionCollection`` exception is thrown when a cURL specific error occurs while transferring multiple requests in parallel.  You can then iterate over all of the exceptions encountered during the transfer.
 
 Entity Bodies
 ^^^^^^^^^^^^^
 
 `Entity body <http://www.w3.org/Protocols/rfc2616/rfc2616-sec7.html>`_ is the term used for the body of an HTTP message.  The entity body of requests and responses is inherently a `PHP stream <http://php.net/manual/en/book.stream.php>`_ in Guzzle.  The body of the request can be either a string or a PHP stream which are converted into a ``Guzzle\Http\EntityBody`` object using its factory method.  When using a string, the entity body is stored in a `temp PHP stream <http://www.php.net/manual/en/wrappers.php.php>`_.  The use of temp PHP streams helps to protect your application from running out of memory when sending or receiving large entity bodies in your messages.  When more than 2MB of data is stored in a temp stream, it automatically stores the data on disk rather than in memory.
 
-EntityBody objects provide a great deal of functionality: compression, decompression, calculate the Content-MD5, calculate the Content-Length (when the resource is repeatable), chunked reading, guessing the Content-Type, and more.  Guzzle doesn't need to load an entire entity body into a string when sending or retrieving data; entity bodies are streamed when being uploaded and downloaded.
+EntityBody objects provide a great deal of functionality: compression, decompression, calculate the Content-MD5, calculate the Content-Length (when the resource is repeatable), guessing the Content-Type, and more.  Guzzle doesn't need to load an entire entity body into a string when sending or retrieving data; entity bodies are streamed when being uploaded and downloaded.
 
 Here's an example of gzip compressing a text file then sending the file to a URL::
 
@@ -248,7 +248,7 @@ Here's an example of gzip compressing a text file then sending the file to a URL
     $body->compress();
     $response = $client->put('http://localhost:8080/uploads', null, $body)->send();
 
-The body of the request can be specified in the ``Client::put()`` method, or, you can specify the body of the request by calling the ``setBody()`` method of any ``EntityEnclosingRequestInterface`` object.
+The body of the request can be specified in the ``Client::put()`` or ``Client::post()``  method, or, you can specify the body of the request by calling the ``setBody()`` method of any ``Guzzle\Http\Message\EntityEnclosingRequestInterface`` object.  If you need the response entity body of a request to use a destination other than a temporary stream (e.g. FTP, HTTP, a specific file, an open stream), you can set the entity body object that will be used to hold the response body by calling ``setResponseBody()`` on any request object.
 
 Responses
 ~~~~~~~~~
@@ -297,7 +297,7 @@ Managed persistent HTTP connections
 
 Persistent HTTP connections are an extremely important aspect of the HTTP/1.1 protocol that is often overlooked by PHP HTTP clients. Persistent connections allows data to be transferred between a client and server without the need to reconnect each time a subsequent request is sent, providing a significant performance boost to applications that need to send many HTTP requests to the same host.  Guzzle implicitly manages persistent connections for all requests.
 
-All HTTP requests sent through Guzzle are sent using the same cURL multi handle.  cURL will maintain a cache of persistent connections on a multi handle.  As long as you use the default Guzzle\Http\Curl\CurlMulti object, you will benefit from persistent connections.  More information about cURL's internal design and persistent connection handling can be found at http://curl.haxx.se/dev/internals.html.
+All HTTP requests sent through Guzzle are sent using the same cURL multi handle.  cURL will maintain a cache of persistent connections on a multi handle.  As long as you do not override the default ``Guzzle\Http\Curl\CurlMulti`` object in your clients, you will benefit from application-wide persistent connections.  More information about cURL's internal design and persistent connection handling can be found at http://curl.haxx.se/dev/internals.html.
 
 Low level cURL access
 ~~~~~~~~~~~~~~~~~~~~~
@@ -573,7 +573,7 @@ Send a large number of requests using the batch queue plugin.  Any request creat
     // from the client
     $client->dispatch('flush');
 
-Wrapping it all up
-------------------
+Third-party plugins
+~~~~~~~~~~~~~~~~~~~
 
-There's more to the ``Guzzle\Http`` namespace than what was described above.  As always, you can poke around the source and take a look at the unit tests for more information.
+* `WSSE Authentication plugin <https://github.com/davedevelopment/guzzle-wsse-auth-plugin>`_
