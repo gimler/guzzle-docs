@@ -213,7 +213,7 @@ As a general rule, most of the options for a command should essentially translat
 Commands can turn HTTP responses into something more valuable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Commands can turn HTTP responses into something more valuable for your application.  After a command is executed, it calls the ``process()`` method of the command.  The AbstractCommand class will automatically create a SimpleXMLElement if the response received by the command has a Content-Type of ``application/xml``.  If you want to provide more valuable results from your commands, you can override the ``process()`` method and return any value you want.  To help developers who use code completion, be sure to update the ``@return`` annotation of your ``getResult()`` method if you return a custom result (this will require you to override the ``getResult()`` method too)::
+Commands can turn HTTP responses into something more valuable for your application.  After a command is executed, it calls the ``process()`` method of the command.  The AbstractCommand class will automatically set the result of the command to SimpleXMLElement if the response received by the command has a Content-Type of ``application/xml`` or an array if the Content-Type is ``application/json``.  If you want to provide more valuable results from your commands, you can override the ``process()`` method and return any value you want.  To help developers who use code completion, be sure to update the ``@return`` annotation of your ``getResult()`` method if you return a custom result (this will require you to override the ``getResult()`` method too)::
 
     <?php
 

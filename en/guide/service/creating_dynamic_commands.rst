@@ -330,7 +330,7 @@ Concrete commands are much better suited for interacting with complex web servic
 Response processing
 -------------------
 
-Dynamic commands can't perform any type of response processing to create more valuable command results.  This means, for example, that the result of a command to retrieve a user will return a ``\SimpleXMLElement``, not a ``User`` object.
+The default behavior of a command is to automatically set the result of a command to a SimpleXMLElement if the response received by the command has a Content-Type of ``application/xml`` or an array if the Content-Type is ``application/json``.  There currently is no support to perform any type of response processing to create, for example, a User object from a an XML response.
 
-Have an idea for how to make this better?  Let us know!
+Have a suggestion on how we could make this better?  Let us know!
 
