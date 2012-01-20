@@ -70,9 +70,9 @@ div.documentwrapper {
 {%- endblock %}
 
 .prettyprint, .highlight pre {
-    background-color: #FAFAFA;
+    background-color: #121212;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     padding: 9px;
 }
 .highlight .hll { background-color: #ffffcc }
