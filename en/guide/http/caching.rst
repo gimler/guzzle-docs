@@ -68,7 +68,7 @@ You can specify cache settings for every request created by a client by adding c
 
     $client = new Guzzle\Http\Client('http://www.test.com', array(
         'cache.override_ttl' => 3600,
-        'cacche.revalidate' => 'never'
+        'cache.revalidate' => 'never'
     ));
 
     echo $client->get('/')->getParams()->get('cache.override_ttl');
