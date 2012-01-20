@@ -326,6 +326,10 @@ Plugins for common HTTP request behavior
 
 Guzzle provides easy to use request plugins that add behavior to requests based on signal slot event notifications.
 
+.. note::
+
+    Any event subscriber attached to the ``EventDispatcher`` of a ``Client`` object will automatically be attached to all request objects created by the client.  This allows you to attach, for example, a  HistoryPlugin to a client object, and from that point on, every request sent through that client will utilize the HistoryPlugin.
+
 Over the wire logging
 ~~~~~~~~~~~~~~~~~~~~~
 

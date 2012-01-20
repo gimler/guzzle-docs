@@ -47,13 +47,13 @@ A ServiceBuilder can get information from an XML file or a SimpleXMLElement.  Th
                 <param name="secret_key" value="abcd" />
             </client>
             <!-- Amazon S3 client that extends the abstract client -->
-            <client name="s3" classs="Guzzle.Aws.S3.S3Client" extends="abstract.aws">
+            <client name="s3" classs="Guzzle\Aws\S3\S3Client" extends="abstract.aws">
                 <param name="devpay_product_token" value="XYZ" />
                 <param name="devpay_user_token" value="123" />
             </client>
-            <client name="simple_db" class="Guzzle.Aws.SimpleDb.SimpleDbClient" extends="abstract.aws" />
+            <client name="simple_db" class="Guzzle\Aws\SimpleDb\SimpleDbClient" extends="abstract.aws" />
             <client name="sqs" class="Guzzle.Aws.Sqs.SqsClient" extends="abstract.aws" />
-            <!-- Unfuddle client -->
+            <!-- Unfuddle client ( "." in class names are converted to "\" )-->
             <client name="unfuddle" class="Guzzle.Unfuddle.UnfuddleClient">
                 <param name="username" value="test-user" />
                 <param name="password" value="my-password" />
@@ -191,7 +191,7 @@ The GetObject command just returns the HTTP response object when it is executed.
     echo $command->getRequest();
     echo $command->getResponse();
 
-The ListBucket command above returns a ``Guzzle\Aws\S3\Model\BucketIterator`` which will iterate over the entire contents of a bucket.  Note: Don't use this command blindly-- unless you specify a limit, it will iterate over every page of results from AWS, which could be a large number of requests.
+The ListBucket command above returns a ``Guzzle\Aws\S3\Model\BucketIterator`` which will iterate over the entire contents of a bucket.
 
 You can take some shortcuts in your code by passing key-value pair arguments to a command::
 
@@ -255,28 +255,6 @@ Guzzle doesn't require that all of the commands in a CommandSet originate from t
                 break;
         }
     }
-
-Adding observers to Client objects
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Any observer attached to the ``EventDispatcher`` of a ``Client`` object will automatically be attached to all request objects created by the client.  This allows you to attach, for example, an ExponentialBackoffPlugin to a client object, and from that point on, every request sent through that client will utilize the ExponentialBackoffPlugin.  Plugins that are required for services are usually attached to a client in the client's factory method.  For example, all AWS clients will use the ExponentialBackoffPlugin.  In this case, you will not need to attach it again::
-
-    <?php
-
-    use Doctrine\Common\Cache\ArrayCache;
-    use Guzzle\Common\Cache\DoctrineCacheAdapter;
-    use Guzzle\Http\Plugin\CachePlugin;
-
-    $client = $serviceBuilder->get('s3');
-
-    // Attach a CachePlugin to the client
-    $client->getEventDispatcher()->addSubscriber(
-        new CachePlugin(new DoctrineCacheAdapter(new ArrayCache()), true)
-    );
-
-    $request = $client->get();
-
-The ``$request`` will use the CachePlugin because the CachePlugin was attached to the Client.
 
 Next steps
 ~~~~~~~~~~

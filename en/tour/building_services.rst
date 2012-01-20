@@ -6,10 +6,10 @@ Building web service clients
 
 Building web service clients using commands is better than creating requests manually.
 
-    #. Better choice for maintainability, features, and ease of use.
-    #. Best practices are inherently implemented for the end-developer.
-    #. Changes can be made to the underlying request and response processing without breaking the interface.
-    #. Can create :doc:`dynamic commands </guide/service/creating_dynamic_commands>` based on a service description.
+#. Better choice for maintainability, features, and ease of use.
+#. Best practices are inherently implemented for the end-developer.
+#. Changes can be made to the underlying request and response processing without breaking the interface.
+#. Can create :doc:`dynamic commands </guide/service/creating_dynamic_commands>` based on a service description.
 
 Simple web service clients make the assumption that the end-developer has an intricate understanding of how to send requests to a web service and how that web service will respond.  If you want to build a reusable RESTful web service client for an application you plan on maintaining, then creating a simple client might not cut it.  Simple clients might work for extremely simple web services (like `Yahoo weather <http://developer.yahoo.com/weather/>`_ for example) or quickly prototyping, but when you're dealing with a huge web service with a ton of options (e.g. Amazon S3), then you're going to want to build a robust web service client that executes commands.
 
@@ -26,8 +26,8 @@ The first thing you will need to do is create the directory structure of your pr
 
 .. code-block:: bash
 
-    $ cd /path/to/guzzle/build
-    $ phing template
+    $ cd /path/to/guzzle-client-template
+    $ phing
 
 This phing build target will ask you a series of questions and generate a template for your web service client at a requested path.  The directory structure should mirror the following:
 
