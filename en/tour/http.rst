@@ -442,6 +442,8 @@ Guzzle can leverage HTTP's caching specifications using the ``Guzzle\Http\Plugin
 
 Guzzle doesn't try to reinvent the wheel when it comes to caching or logging.  Plenty of other frameworks have excellent solutions in place that you are probably already using in your applications.  Guzzle uses adapters for caching and logging.  Guzzle currently supports log adapters for the Zend Framework 1.0/2.0 and Monolog, and cache adapters for `Doctrine 2.0 <http://www.doctrine-project.org/>`_ and the Zend Framework 1.0/2.0.
 
+See :doc:`Caching </guide/http/caching>` for more information on the caching plugin.
+
 Cookie session plugin
 ~~~~~~~~~~~~~~~~~~~~~
 
