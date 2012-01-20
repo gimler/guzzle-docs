@@ -164,6 +164,16 @@ This can be achieved more succinctly-- ``Client::post()`` accepts three argument
         'file' => '@/path/to/file.xml'
     ));
 
+**Always** sanitize user supplied data when sending POST requests::
+
+    <?php
+
+    // Prevent users from accessing sensitive files by sanitizing input
+    $_POST = array('firstname' => '@/etc/passwd');
+    $request = $client->post('http://www.example.com', null, array (
+        'firstname' => str_replace('@', '', $_POST['firstname'])
+    ));
+
 Dealing with errors
 ^^^^^^^^^^^^^^^^^^^
 
