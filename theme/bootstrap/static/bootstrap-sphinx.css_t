@@ -32,15 +32,26 @@ body {
   margin-right: 24px;
 }
 
-/*
-.topbar {
-  font-size: 20px;
+.topbar-inner, .topbar .fill {
+    background-color: #222;
+    background-color: #222222;
+    background-repeat: repeat-x;
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#444444), to(#111111));
+    background-image: -moz-linear-gradient(top, #444444, #111111);
+    background-image: -ms-linear-gradient(top, #444444, #111111);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #444444), color-stop(100%, #111111));
+    background-image: -webkit-linear-gradient(top, #444444, #111111);
+    background-image: -o-linear-gradient(top, #444444, #111111);
+    background-image: linear-gradient(top, #444444, #111111);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#444444', endColorstr='#111111', GradientType=0);
+    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 }
 
-.topbar .dropdown li {
-  font-size: 13px;
+.topbar {
+  font-size: 15px;
 }
-*/
 
 .topbar .brand {
   padding: 5px 7px !important;
