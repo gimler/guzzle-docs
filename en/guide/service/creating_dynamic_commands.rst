@@ -121,6 +121,10 @@ Dynamic commands are commands that build HTTP requests completely based on the c
 |           | settings specified in the chile command will override settings from  |
 |           | inherited from the parent.                                           |
 +-----------+----------------------------------------------------------------------+
+|  class    | Optional.  Specify a ``concrete command`` class that will be         |
+|           | instantiated when the command is created.  This is useful for        |
+|           | implementing complex response processing                             |
++-----------+----------------------------------------------------------------------+
 
 .. code-block:: xml
 
@@ -176,23 +180,6 @@ The **location** attribute can be one of the following values:
 +---------+------------------------------------------------------------------------------------------------+
 | data    | This is the default location of parameters that do not contain a location attribute            |
 +---------+------------------------------------------------------------------------------------------------+
-
-Concrete commands
-^^^^^^^^^^^^^^^^^
-
-Concrete commands pass the values specified in ``<param>`` nodes to concrete command objects.  This is useful if you want to create an abstracted concrete command that accepts a collection of parameters that it uses to build a request but still allows for custom response processing so that the command can return a valuable result.  Concrete commands require a ``class`` attribute that references the class name to instantiate when the command is created.  The class attribute can use the PHP namespace separator or periods for namespace separators (e.g. both ``Guzzle.Service.Command.ClosureCommand`` and ``Guzzle\Service\Command\ClosureCommand`` are acceptable). Concrete command nodes don't use a ``method`` or ``path`` attribute; however, these parameters can be specified as ``<param>`` nodes which will be passed to the concrete command as parameters.
-
-.. code-block:: xml
-
-    <command name="my_concrete_command" class="Guzzle.Service.MyService.Command.DefaultDynamicCommand">
-        <doc>Execute a command on the web service using a concrete class</doc>
-        <param name="path" type="string" doc="Path of request" />
-        <param name="method" type="enum:GET,HEAD,DELETE,POST,PUT,OPTIONS" doc="HTTP method. One of GET, HEAD, DELETE, PUT, POST, or OPTIONS" />
-        <param name="other_data" type="string" doc="Give me something" />
-        <param name="static_setting" static="dynamic" doc="This setting cannot be changed cause it is static" />
-    </command>
-
-This example command will instantiate a ``Guzzle\Service\MyService\Command\DefaultDynamicCommand`` when it is executed from a client (e.g. ``$client->getCommand('my_concrete_command')->execute()``).  The instantiated command will receive the ``<param>`` node values as a ``Guzzle\Common\Collection`` object that it can use to build an HTTP request.
 
 Use custom ``<types>`` for data validation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -325,12 +312,18 @@ Commands will follow this format:
 Use Dynamic and Concrete Commands
 ---------------------------------
 
-Concrete commands are much better suited for interacting with complex web services or dealing with custom entity bodies that must be generated based on command parameters.  Never fear-- web service clients can utilize both concrete and dynamic commands.  When retrieving a command by name (``$command = $client->getCommand('command_name')``), the client will first check if it has a service description and if the service descriptions has a command defined by the name of 'command_name.'  If the client has a dynamic command named 'command_name', then a dynamic command will be created and returned.  If the client does not have a service description or its service description does not have a command defined by that name, it will see if a concrete command class maps to that name.  If it does, it will create the concrete command class and return it.  Whether or not the command is a concrete command or dynamic command doesn't matter to the end-developer as long as the developer can execute the command and get back a valuable response.
+Web service clients can utilize both _concrete_ and _dynamic_ commands.  When retrieving a command by name (``$command = $client->getCommand('command_name')``), the client will first check if it has a service description and if the service descriptions has a command defined by the name of 'command_name.'  If the client has a dynamic command named 'command_name', then a dynamic command will be created and returned.  If the client does not have a service description or its service description does not have a command defined by that name, it will see if a concrete command class maps to that name.  If it does, it will create the concrete command class and return it.  Whether or not the command is a concrete command or dynamic command doesn't matter to the end-developer as long as the developer can execute the command and get back a valuable response.
+
+Concrete commands
+~~~~~~~~~~~~~~~~~
+
+Concrete commands pass the values specified in ``<param>`` nodes to concrete command objects.  This is useful if you want to create an abstracted concrete command that accepts a collection of parameters that it uses to build a request but still allows for custom response processing so that the command can return a valuable result.  Concrete commands require a ``class`` attribute that references the class name to instantiate when the command is created.  The class attribute can use the PHP namespace separator or periods for namespace separators (e.g. both ``Guzzle.Service.Command.ClosureCommand`` and ``Guzzle\Service\Command\ClosureCommand`` are acceptable). Concrete command nodes don't use a ``method`` or ``path`` attribute; however, these parameters can be specified as ``<param>`` nodes which will be passed to the concrete command as parameters.
+
+This example command will instantiate a ``Guzzle\Service\MyService\Command\DefaultDynamicCommand`` when it is executed from a client (e.g. ``$client->getCommand('my_concrete_command')->execute()``).  The instantiated command will receive the ``<param>`` node values as a ``Guzzle\Common\Collection`` object that it can use to build an HTTP request.
 
 Response processing
--------------------
+~~~~~~~~~~~~~~~~~~~
 
-The default behavior of a command is to automatically set the result of a command to a SimpleXMLElement if the response received by the command has a Content-Type of ``application/xml`` or an array if the Content-Type is ``application/json``.  There currently is no support to perform any type of response processing to create, for example, a User object from a an XML response.
+The default behavior of a command is to automatically set the result of a command to a SimpleXMLElement if the response received by the command has a Content-Type of ``application/xml`` or an array if the Content-Type is ``application/json``.
 
-Have a suggestion on how we could make this better?  Let us know!
-
+You can extend ``Guzzle\Service\Command\DynamicCommand`` and implement a custom ``process()`` method to leverage dynamically generated commands while still providing customized results to commands.  For example, you can use a ``get_user`` concrete command that generates an HTTP request based on a service description, but validates the HTTP response and sets the result of the command to an easy to use ``User`` object.
