@@ -56,6 +56,14 @@ Guzzle can be installed from source by cloning the Guzzle github repository and 
     $ wget --quiet http://getcomposer.org/composer.phar
     $ php composer.phar install --install-suggests
 
+Installing using PEAR
+~~~~~~~~~~~~~~~~~~~~~
+
+Guzzle can be installed through PEAR::
+
+    pear channel-discover guzzlephp.org/pear
+    pear install guzzle/guzzle
+
 Using your own autoloader
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
