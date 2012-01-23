@@ -21,15 +21,15 @@ Installing Guzzle
 Adding Guzzle to a project using PHAR
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Guzzle is distributed using a PHAR file that compresses all of the required classes into a single file.  In order to simplify installing Guzzle, `Monolog <https://github.com/seldaek/monolog>`_, `Doctrine Common <https://github.com/doctrine/common>`_ Cache layer, `Symfony2's Validator <https://github.com/symfony/Validator>`_, and `Symfony2's EventDispatcher <https://github.com/symfony/EventDispatcher>`_ are included.  Including the Guzzle phar file in your application will automatically configure autoloading so everything should just work.  You can download the Guzzle phar file from https://github.com/downloads/guzzle/guzzle/guzzle.phar::
+Guzzle is distributed using a PHAR file that compresses all of the required classes into a single file.  In order to simplify installing Guzzle, `Monolog <https://github.com/seldaek/monolog>`_, `Doctrine Common <https://github.com/doctrine/common>`_ Cache layer, `Symfony2's Validator <https://github.com/symfony/Validator>`_, and `Symfony2's EventDispatcher <https://github.com/symfony/EventDispatcher>`_ are included.  Including the Guzzle phar file in your application will automatically configure autoloading so everything should just work.  You can download the Guzzle phar file from http://guzzlephp.org/guzzle.phar::
 
-    $ wget --quiet https://github.com/downloads/guzzle/guzzle/guzzle.phar
+    $ wget --quiet http://d.guzzlephp.org/guzzle-phar
 
 And include it in your scripts::
 
     require '/path/to/guzzle.phar';
 
-If you already have your own autoloader and don't want to install the extra libraries, you can install the minimal PHAR distribution of Guzzle at https://github.com/downloads/guzzle/guzzle/guzzle-min.phar.
+If you already have your own autoloader and don't want to install the extra libraries, you can install the minimal PHAR distribution of Guzzle at http://guzzlephp.org/guzzle-min.phar.
 
 Adding Guzzle to a project using Composer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
