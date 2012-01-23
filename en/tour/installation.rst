@@ -65,7 +65,7 @@ Guzzle can be installed through PEAR::
     pear install guzzle/guzzle
 
 Using your own autoloader
-^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You will need to add Guzzle and Guzzle's dependencies to your application's autoloader.  If your application does not already use an autoloader, you can use the `Symfony2 ClassLoader <https://github.com/symfony/ClassLoader>`_ component::
 
@@ -80,7 +80,7 @@ You will need to add Guzzle and Guzzle's dependencies to your application's auto
     $classLoader->register();
 
 Running the unit tests
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 Guzzle is unit tested using PHPUnit.  You will need to create your own phpunit.xml file in order to run the unit tests.  You can customize this file to suit your testing needs::
 
