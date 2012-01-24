@@ -198,7 +198,8 @@ Here's an example of retrying a request using updated authorization credentials 
 
     <?php
 
-    $request = $client->getEventDispatcher()->addListener('request.error', function(Event $event) {
+    // Add custom error handling to any request created by this client
+    $client->getEventDispatcher()->addListener('request.error', function(Event $event) {
 
         if ($event['response']->getStatusCode() == 401) {
 
