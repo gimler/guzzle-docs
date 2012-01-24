@@ -175,7 +175,10 @@ This can be achieved more succinctly-- ``Client::post()`` accepts three argument
     ));
 
 Dealing with errors
-^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~
+
+Exceptions
+^^^^^^^^^^
 
 Requests that receive a 4xx or 5xx response will throw a ``Guzzle\Http\Message\BadResponseException``.  Here's an example of catching a BadResponseException::
 
@@ -187,25 +190,36 @@ Requests that receive a 4xx or 5xx response will throw a ``Guzzle\Http\Message\B
         echo 'Uh oh! ' . $e->getMessage();
     }
 
-Throwing an exception when a 4xx or 5xx response is encountered is the default behavior of Guzzle requests.  This behavior can be overridden by specifying a custom onComplete method for your requests.  An onComplete function should follow this functional prototype::
+Throwing an exception when a 4xx or 5xx response is encountered is the default behavior of Guzzle requests.  This behavior can be overridden by adding an event listener with a higher priority than -255 that stops event propagation.  You can subscribe to ``request.error`` to receive notifications any time an unsuccessful response is received.
 
-    function onComplete(RequestInterface $request, Response $response, array $default);
+You can change the response that will be associated with the request by calling ``setResponse()`` on the ``$event['request']`` object passed into your listener, or by changing the ``$event['response']`` value of the ``Guzzle\Common\Event`` object that is passed to your listener.  Transparently changing the response associated with a request in this manner would allow you to retry failed requests without complicating the code that uses the client.  This might be useful for sending requests to a web service that has expiring auth tokens.  When a response shows that your token has expired, you can get a new token, retry the request with the new token, and return the successful response to the user.
 
-The default onComplete method is passed to any custom onComplete method.  This is useful if you wish to override only certain responses and still utilize the default onComplete method.  Returning a ``Guzzle\Http\Message\Response`` object in your onComplete callback will override the response object set on the original request.  This would allow you to retry failed requests without complicating the code that uses the client.  This might be useful for sending requests to a web service that has expiring auth tokens.  When a response shows that your token has expired, you can get a new token, retry the request with the new token, and return the successful response to the user.
-
-Here's an example of retrying a request using updated authorization credentials when a 401 response is received, overriding the response of the original request with the new response, and still calling the default onComplete method when other response status codes are encountered::
+Here's an example of retrying a request using updated authorization credentials when a 401 response is received, overriding the response of the original request with the new response, and still allowing the default exception behavior to be called when other non-200 response status codes are encountered::
 
     <?php
 
-    $request = $client->get('http://test.com/')->setOnComplete(function($request, $response, $default) {
-        if ($response->getStatusCode() == 401) {
-            $newRequest = $request->clone();
+    $request = $client->getEventDispatcher()->addListener('request.error', function(Event $event) {
+
+        if ($event['response']->getStatusCode() == 401) {
+
+            $newRequest = $event['request']->clone();
             $newRequest->setHeader('X-Auth-Header', MyApplication::getNewAuthToken());
             $newResponse = $newRequest->send();
-            return $newResponse;
+
+            // Set the response object of the request without firing more events
+            $event['response'] = $newResponse;
+
+            // You can also change the response and fire the normal chain of
+            // events by calling $event['request']->setResponse($newResponse);
+
+            // Stop other events from firing when you override 401 responses
+            $event->stopPropagation();
         }
-        call_user_func($default, $request, $response);
+
     });
+
+cURL errors
+^^^^^^^^^^^
 
 Connection problems and cURL specific errors can also occur when transferring requests using Guzzle.  When Guzzle encounters cURL specific errors while transferring a single request, a ``Guzzle\Http\Curl\CurlException`` is thrown with an informative error message and access to the cURL error message.  Sending a request that cannot resolve a host name will result in a CurlException with an exception message similar to the following:
 
@@ -242,7 +256,7 @@ Connection problems and cURL specific errors can also occur when transferring re
 A ``Guzzle\Common\ExceptionCollection`` exception is thrown when a cURL specific error occurs while transferring multiple requests in parallel.  You can then iterate over all of the exceptions encountered during the transfer.
 
 Entity Bodies
-^^^^^^^^^^^^^
+~~~~~~~~~~~~~
 
 `Entity body <http://www.w3.org/Protocols/rfc2616/rfc2616-sec7.html>`_ is the term used for the body of an HTTP message.  The entity body of requests and responses is inherently a `PHP stream <http://php.net/manual/en/book.stream.php>`_ in Guzzle.  The body of the request can be either a string or a PHP stream which are converted into a ``Guzzle\Http\EntityBody`` object using its factory method.  When using a string, the entity body is stored in a `temp PHP stream <http://www.php.net/manual/en/wrappers.php.php>`_.  The use of temp PHP streams helps to protect your application from running out of memory when sending or receiving large entity bodies in your messages.  When more than 2MB of data is stored in a temp stream, it automatically stores the data on disk rather than in memory.
 
