@@ -3,6 +3,8 @@ Upgrading from Guzzle 1.x to Guzzle 2.0
 
 Guzzle 2.0 has been released.  This release brings a framework that is leaps and bounds better than its predecessor, but it does introduce some breaking changes.
 
+Read [Michael Dowling's blog post](http://mtdowling.com/2012/01/24/guzzle-2-released/) to read about the new features and motivations for the changes.
+
 .. note::
 
     If you are using Guzzle 1.0 in product and aren't ready to migrate yet, you can always checkout Guzzle using the 1.0.4 tag

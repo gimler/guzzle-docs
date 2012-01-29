@@ -26,47 +26,48 @@ The first thing you will need to do is create the directory structure of your pr
 
 .. code-block:: bash
 
-    $ cd /path/to/guzzle-client-template
+    $ git clone git://github.com/guzzle/guzzle-client-template.git
+    $ cd guzzle-client-template
     $ phing
 
-This phing build target will ask you a series of questions and generate a template for your web service client at a requested path.  The directory structure should mirror the following:
+This phing build target will ask you a series of questions and generate a template for your web service client at your desired path.  The directory structure should resemble the following (of course substituting FootBar for your web service client's name):
 
 .. code-block:: none
 
-    Command\
-        <Name...>Command.php
-    Tests\
-        mock\
-            <Name...>Response
-        Command\
-            <Name...>CommandTest.php
-        <Service>ClientTest.php
-        bootstrap.php
-    <Service>Client.php
+    src/FooBar/
+    ........... FooBarClient.php
+    ........... client.xml
+    ........... Command/
+    .................... CommandName.php
+    tests/
+    ...... mock/
+    ...... FooBar/
+    .............. Command/
+    ....................... CommandNameTest.php
+    .............. FooBarClientTest.php
+    ...... bootstrap.php
     phpunit.xml.dist
     composer.json
 
-After running the phing build target to generate the project's skeleton, you will need to modify the Client.php file by updating the factory method, adding a constructor if needed, and adding any class properties.
+After running the phing build target to generate the project's skeleton, you will need to modify the *FooBarClient.php* file by updating the factory method, adding a constructor if needed, and adding any class properties.
 
-Command/
-~~~~~~~~
-
-Place all of the commands for your web service in this folder.
-
-Tests/
-~~~~~~
-
-Place your ``bootstrap.php`` file in this folder.  The boostrap.php file is responsible for setting up PHPUnit tests.
-
-Client.php
-~~~~~~~~~~
-
-Rename this class to the CamelCase name of the web service you are implementing followed by ``Client``.  Use strict CamelCasing (e.g. Xml is correct, XML is not).  A good client name would be something like ``FooBarClient.php``.
-
-phpunit.xml.dist
-~~~~~~~~~~~~~~~~
-
-Different developers will configure their development environment differently.  A phpunit.xml file is required to run PHPUnit tests against your service.  ``phpunit.xml.dist`` provides a template for developers to copy and modify.
++--------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| src/FooBar/Command/                  | Place all of the commands for your web service in this folder.                                                   |
++--------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| src/FooBar/FooBarClient.php          | Rename this class to the CamelCase name of the web service you are implementing followed by ``Client``.  Use     |
+|                                      | strict CamelCasing (e.g. Xml is correct, XML is not).  A good client name would be something like                |
+|                                      | ``FooBarClient.php``.                                                                                            |
++--------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| phpunit.xml.dist                     | Different developers will configure their development environment differently.  A phpunit.xml file is required   |
+|                                      | to run PHPUnit tests against your service.  ``phpunit.xml.dist`` provides a template for developers to copy and  |
+|                                      | modify.                                                                                                          |
++--------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| tests/                               | Place your ``bootstrap.php`` file in this folder.  The boostrap.php file is responsible for setting up PHPUnit   |
+|                                      | tests.                                                                                                           |
++--------------------------------------+------------------------------------------------------------------------------------------------------------------+
+| tests/mock                           | Place mock response files in this folder.  Mock response files include HTTP response headers and the entity body |
+|                                      | of a response.  Keep each HTTP response in a separate file.                                                      |
++--------------------------------------+------------------------------------------------------------------------------------------------------------------+
 
 Create a client
 ---------------
@@ -158,7 +159,7 @@ Commands can be created in one of two ways: create a concrete command class that
 Commands help to hide complexity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Commands are the method in which you abstract away the underlying format of the requests that need to be sent to take action on a web service.  Commands in Guzzle are meant to be built by executing a series of setter methods on a command object.  Commands are only validated when they are being executed.  A ``Guzzle\Service\Client`` object is responsible for executing commands.  Commands created for your web service must implement ``Guzzle\Service\Command\CommandIterface``, but it's easier to extend the ``Guzzle\Service\Command\AbstractCommand`` class and implement the ``build()`` method.  The ``build()`` method is responsible for using the arguments of the command to build one or more HTTP requests.
+Commands are the method in which you abstract away the underlying format of the requests that need to be sent to take action on a web service.  Commands in Guzzle are meant to be built by executing a series of setter methods on a command object.  Commands are only validated when they are being executed.  A ``Guzzle\Service\Client`` object is responsible for executing commands.  Commands created for your web service must implement ``Guzzle\Service\Command\CommandInterface``, but it's easier to extend the ``Guzzle\Service\Command\AbstractCommand`` class and implement the ``build()`` method.  The ``build()`` method is responsible for using the arguments of the command to build one or more HTTP requests.
 
 Docblock annotations for commands
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
