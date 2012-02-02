@@ -204,7 +204,7 @@ Attribute        Description                                                    
 ``static``       A value that cannot be changed.                                    ``@guzzle key static="this cannot be changed"``
 ``prepend``      Text to prepend to the value if the value is set.                  ``@guzzle key prepend="this_is_added_before."``
 ``append``       Text to append to the value if the value is set.                   ``@guzzle key append=".this_is_added_after"``
-``filter``       CSV list of functions or static functions that modifies a string   ``@guzzle key filter="strtoupper,strrev"``
+``filters`       CSV list of functions or static functions that modifies a string   ``@guzzle key filters="strtoupper,strrev"``
 ===============  =================================================================  =============================================================
 
 When a command is being prepared for execution, the docblock annotations will be validated against the arguments present on the command.  Any default values will be added to the arguments, and if any required arguments are missing, an exception will be thrown.

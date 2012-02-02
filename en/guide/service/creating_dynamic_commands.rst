@@ -160,7 +160,7 @@ max_length       Maximum value length.                                          
 static           A value that cannot be changed.                                    ``static="this cannot be changed"``
 prepend          Text to prepend to the value if the value is set.                  ``prepend="this_is_added_before."``
 append           Text to append to the value if the value is set.                   ``append=".this_is_added_after"``
-filter           CSV list of functions or static functions that modifies a string   ``@guzzle key filter="strtoupper,strrev"``
+filters          CSV list of functions or static functions that modifies a string   ``@guzzle key filters="strtoupper,strrev"``
 ===============  =================================================================  ===========================================
 
 The **location** attribute can be one of the following values:
@@ -223,13 +223,13 @@ Service descriptions allow for a flexible way to send PUT and POST requests wher
         <param name="data" type="type:SimpleXMLElement" location="body" />
     </command>
 
-If you are sending JSON data, you should consider allowing end-developers to set body parameters using an array.  You can then convert an array to a JSON string by using the ``filter`` attribute of a parameter:
+If you are sending JSON data, you should consider allowing end-developers to set body parameters using an array.  You can then convert an array to a JSON string by using the ``filters`` attribute of a parameter:
 
 .. code-block:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <command name="create_user" method="POST" path="/users">
-        <param name="data" type="type:array" filter="json_encode" location="body" />
+        <param name="data" type="type:array" filters="json_encode" location="body" />
     </command>
 
 Including other service descriptions
@@ -302,7 +302,7 @@ Commands will follow this format:
                     "test": {
                         "type": "string",
                         "required": true,
-                        "filter": "strtolower"
+                        "filters": "strtolower"
                     }
                 }
             }
