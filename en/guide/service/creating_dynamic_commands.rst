@@ -23,44 +23,44 @@ This looks like a fairly simple API.  The following XML service description impl
     <?xml version="1.0" encoding="UTF-8"?>
     <client>
         <commands>
-            <command name="get_users" method="GET" path="/users">
+            <command name="get_users" method="GET" uri="/users">
                 <doc>Get a list of users</doc>
             </command>
-            <command name="create_user" method="POST" path="/users">
+            <command name="create_user" method="POST" uri="/users">
                 <doc>Create a user</doc>
                 <param name="data" type="string" location="body" doc="User XML" />
             </command>
-            <command name="delete_user" method="DELETE" path="/users/{{id}}">
+            <command name="delete_user" method="DELETE" uri="/users/{{id}}">
                 <doc>Delete a user by ID</doc>
-                <param name="id" type="string" required="true" location="path" />
+                <param name="id" type="string" required="true" />
             </command>
-            <command name="get_user" method="GET" path="/users/{{id}}">
-                <param name="id" type="string" required="true" location="path" />
+            <command name="get_user" method="GET" uri="/users/{{id}}">
+                <param name="id" type="string" required="true" />
             </command>
-            <command name="update_user" method="PUT" path="/users">
+            <command name="update_user" method="PUT" uri="/users">
                 <doc>Update a user</doc>
-                <param name="id" type="string" required="true" location="path" />
+                <param name="id" type="string" required="true" />
                 <param name="data" type="string" location="body" doc="User XML" />
             </command>
-            <command name="get_comments" method="GET" path="/comments">
+            <command name="get_comments" method="GET" uri="/comments">
                 <doc>Get a list of comments</doc>
             </command>
-            <command name="create_comment" method="POST" path="/comments">
+            <command name="create_comment" method="POST" uri="/comments">
                 <doc>Create a comment</doc>
                 <param name="data" type="string" location="body" doc="Comment XML" />
             </command>
-            <command name="get_comment" method="GET" path="/comments/{{id}}">
+            <command name="get_comment" method="GET" uri="/comments/{{id}}">
                 <doc>Get a comment by ID</doc>
-                <param name="id" type="string" required="true" location="path" />
+                <param name="id" type="string" required="true" />
             </command>
-            <command name="update_comment" method="PUT" path="/comments/{{id}}">
+            <command name="update_comment" method="PUT" uri="/comments/{{id}}">
                 <doc>Update a comment</doc>
-                <param name="id" type="string" required="true" location="path" doc="Comment ID" />
+                <param name="id" type="string" required="true" doc="Comment ID" />
                 <param name="data" type="string" location="body" doc="Comment XML" />
             </command>
-            <command name="delete_comment" method="DELETE" path="/comments/{{id}}">
+            <command name="delete_comment" method="DELETE" uri="/comments/{{id}}">
                 <doc>Delete a comment by ID</doc>
-                <param name="id" type="string" required="true" location="path" />
+                <param name="id" type="string" required="true" />
             </command>
         </commands>
     </client>
@@ -110,11 +110,11 @@ Dynamic commands are commands that build HTTP requests completely based on the c
 |  method   | The HTTP method the command will execute (GET, HEAD, DELETE, POST,   |
 |           | PUT, OPTIONS).                                                       |
 +-----------+----------------------------------------------------------------------+
-|  path     | The path of the request (e.g. ``/path/to/users``).  The path can be  |
-|           | absolute or relative.  A relative path will append to the path set   |
-|           | on the base_url of the service.  The path attribute can contain      |
-|           | ``{{key_name}}`` injection points, where ``key_name`` is a parameter |
-|           | in the command with a location of ``path``.                          |
+|  uri      | The URI template of the request (e.g. ``/path/to/users``).  The path |
+|           | can be absolute or relative.  A relative path will append to the path|
+|           | set on the base_url of the service.  This attribute can contain      |
+|           | ``{key_name}`` URI templates, where ``key_name`` is a parameter in   |
+|           | command or set in the associated client's configuration data.        |
 +-----------+----------------------------------------------------------------------+
 |  extends  | Extend a previously defined command in the same XML description to   |
 |           | inherit every attribute of the parent command including params.  Any |
@@ -128,13 +128,13 @@ Dynamic commands are commands that build HTTP requests completely based on the c
 
 .. code-block:: xml
 
-    <command name="my_command" method="GET" path="/path/to/users">
+    <command name="my_command" method="GET" uri="/path/to/users">
 
 ``<command>`` nodes can contain an optional ``<doc>`` node that describes what the command does.
 
 .. code-block:: xml
 
-    <command name="my_command" method="GET" path="/path/to/users">
+    <command name="my_command" method="GET" uri="/path/to/users">
         <doc>Documentation about the command</doc>
     </command>
 
@@ -143,7 +143,7 @@ Dynamic commands are commands that build HTTP requests completely based on the c
 ===============  =================================================================  ===========================================
 Attribute        Description                                                        Example
 ===============  =================================================================  ===========================================
-location         The location in which the parameter will be added to the           ``location="path"`` or
+location         The location in which the parameter will be added to the           ``location="query"`` or
                  generated request.                                                 ``location="header:X-Header"``
 type             Type of variable (array, boolean, class, date, enum, float,        ``type="class:Guzzle\Common\Collection"``
                  integer, regex, string, timestamp).  Some type commands accept
@@ -165,8 +165,6 @@ filters          CSV list of functions or static functions that modifies a strin
 
 The **location** attribute can be one of the following values:
 
-+---------+------------------------------------------------------------------------------------------------+
-| path    | Specifies the parameter as one that will inject into the ``path`` attribute of the command     |
 +---------+------------------------------------------------------------------------------------------------+
 | query   | Sets a query string value using the key and value of the parameter.  A custom query string key |
 |         | can be used by providing the custom key after the query location separated by a colon          |
@@ -192,8 +190,8 @@ You can use the ``type`` attribute on command parameters to enforce parameter va
 
     <?xml version="1.0" encoding="UTF-8"?>
     <client>
-        <command name="example_command" method="GET" path="/{{username}}">
-            <param name="my_parameter" type="regex:/[0-9a-zA-z_\-]+/" location="path" />
+        <command name="example_command" method="GET" uri="/{{username}}">
+            <param name="my_parameter" type="regex:/[0-9a-zA-z_\-]+/" />
         </command>
     </client>
 
@@ -206,8 +204,8 @@ When an end-developer creates this command, they will need to pass a value that 
         <type name="username" class="Guzzle.Service.Filter.Regex" default="/[0-9a-zA-z_\-]+/" />
     </types>
     <client>
-        <command name="example_command" method="GET" path="/{{username}}">
-            <param name="my_parameter" type="username" location="path" />
+        <command name="example_command" method="GET" uri="/{{username}}">
+            <param name="my_parameter" type="username" />
         </command>
     </client>
 
@@ -219,7 +217,7 @@ Service descriptions allow for a flexible way to send PUT and POST requests wher
 .. code-block:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <command name="create_user" method="POST" path="/users">
+    <command name="create_user" method="POST" uri="/users">
         <param name="data" type="type:SimpleXMLElement" location="body" />
     </command>
 
@@ -228,7 +226,7 @@ If you are sending JSON data, you should consider allowing end-developers to set
 .. code-block:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <command name="create_user" method="POST" path="/users">
+    <command name="create_user" method="POST" uri="/users">
         <param name="data" type="type:array" filters="json_encode" location="body" />
     </command>
 
@@ -244,8 +242,8 @@ XML
 
     <?xml version="1.0" encoding="UTF-8"?>
     <includes>
-        <include path="/path/to/service.xml" />
-        <include path="../../relative/path/to/service.xml"
+        <include uri="/path/to/service.xml" />
+        <include uri="../../relative/path/to/service.xml"
     </types>
 
 JSON
@@ -293,7 +291,7 @@ Commands will follow this format:
     {
         "commands": {
             "abstract": {
-                "path": "/",
+                "uri": "/",
                 "class": "Service\Command\Default"
             },
             "concrete": {
@@ -317,7 +315,7 @@ Web service clients can utilize both _concrete_ and _dynamic_ commands.  When re
 Concrete commands
 ~~~~~~~~~~~~~~~~~
 
-Concrete commands pass the values specified in ``<param>`` nodes to concrete command objects.  This is useful if you want to create an abstracted concrete command that accepts a collection of parameters that it uses to build a request but still allows for custom response processing so that the command can return a valuable result.  Concrete commands require a ``class`` attribute that references the class name to instantiate when the command is created.  The class attribute can use the PHP namespace separator or periods for namespace separators (e.g. both ``Guzzle.Service.Command.ClosureCommand`` and ``Guzzle\Service\Command\ClosureCommand`` are acceptable). Concrete command nodes don't use a ``method`` or ``path`` attribute; however, these parameters can be specified as ``<param>`` nodes which will be passed to the concrete command as parameters.
+Concrete commands pass the values specified in ``<param>`` nodes to concrete command objects.  This is useful if you want to create an abstracted concrete command that accepts a collection of parameters that it uses to build a request but still allows for custom response processing so that the command can return a valuable result.  Concrete commands require a ``class`` attribute that references the class name to instantiate when the command is created.  The class attribute can use the PHP namespace separator or periods for namespace separators (e.g. both ``Guzzle.Service.Command.ClosureCommand`` and ``Guzzle\Service\Command\ClosureCommand`` are acceptable). Concrete command nodes don't use a ``method`` or ``uri`` attribute; however, these parameters can be specified as ``<param>`` nodes which will be passed to the concrete command as parameters.
 
 This example command will instantiate a ``Guzzle\Service\MyService\Command\DefaultDynamicCommand`` when it is executed from a client (e.g. ``$client->getCommand('my_concrete_command')->execute()``).  The instantiated command will receive the ``<param>`` node values as a ``Guzzle\Common\Collection`` object that it can use to build an HTTP request.
 

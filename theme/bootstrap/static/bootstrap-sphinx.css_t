@@ -9,6 +9,10 @@ body {
   padding-top: 60px;
 }
 
+p {
+    margin-bottom: 14px;
+}
+
 .container-fluid > .content {
     margin-left: 240px !important;
 }

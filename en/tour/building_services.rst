@@ -116,7 +116,7 @@ Let's start creating a custom web service client.  First we will extend the ``Gu
         public static function factory($config)
         {
             $default = array(
-                'base_url' => '{{scheme}}://{{username}}.test.com/',
+                'base_url' => '{scheme}://{username}.test.com/',
                 'scheme' => 'https'
             );
             $required = array('username', 'password', 'base_url');
@@ -245,7 +245,7 @@ Commands can turn HTTP responses into something more valuable for your applicati
 
         protected function build()
         {
-            $this->request = $this->client->get('/{{key}}', $this);
+            $this->request = $this->client->get('/{key}', $this);
             $this->request->setHeader('X-Header', $this->get('other_value'));
         }
 

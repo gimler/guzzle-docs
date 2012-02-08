@@ -76,7 +76,7 @@ $response = $client->get('/resource.xml')->send();</pre>
       <pre class="prettyprint linenums">&lt;?php
 use Guzzle\Service\Client;
 
-$client = new Client('http://www.example.com/api/v1/key/{{key}}', array(
+$client = new Client('http://www.example.com/api/v1/key/{key}', array(
     'key' => '***'
 ));
 
