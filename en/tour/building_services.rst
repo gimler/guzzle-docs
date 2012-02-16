@@ -245,7 +245,7 @@ Commands can turn HTTP responses into something more valuable for your applicati
 
         protected function build()
         {
-            $this->request = $this->client->get('/{key}', $this);
+            $this->request = $this->client->get(array('/{key}', $this->data));
             $this->request->setHeader('X-Header', $this->get('other_value'));
         }
 
