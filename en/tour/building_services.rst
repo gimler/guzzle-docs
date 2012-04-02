@@ -30,7 +30,7 @@ The first thing you will need to do is create the directory structure of your pr
     $ cd guzzle-client-template
     $ phing
 
-This phing build target will ask you a series of questions and generate a template for your web service client at your desired path.  The directory structure should resemble the following (of course substituting FootBar for your web service client's name):
+This phing build target will ask you a series of questions and generate a template for your web service client at your desired path.  The directory structure should resemble the following (of course substituting FooBar for your web service client's name):
 
 .. code-block:: none
 
