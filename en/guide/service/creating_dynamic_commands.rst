@@ -200,10 +200,10 @@ When an end-developer creates this command, they will need to pass a value that 
 .. code-block:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <types>
-        <type name="username" class="Guzzle.Service.Filter.Regex" default="/[0-9a-zA-z_\-]+/" />
-    </types>
     <client>
+        <types>
+            <type name="username" class="Guzzle.Service.Filter.Regex" default="/[0-9a-zA-z_\-]+/" />
+        </types>
         <command name="example_command" method="GET" uri="/{{username}}">
             <param name="my_parameter" type="username" />
         </command>
