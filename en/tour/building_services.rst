@@ -276,7 +276,7 @@ Here's how you would execute this command using the client we created::
         'password' => 'shh!secret'
     ));
 
-    $command = client->getCommand('simple');
+    $command = $client->getCommand('simple');
     $command->setKey('test');
 
     // Result will be an instance of Awesomeobject
