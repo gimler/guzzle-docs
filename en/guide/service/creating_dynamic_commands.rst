@@ -190,9 +190,11 @@ You can use the ``type`` attribute on command parameters to enforce parameter va
 
     <?xml version="1.0" encoding="UTF-8"?>
     <client>
-        <command name="example_command" method="GET" uri="/{{username}}">
-            <param name="my_parameter" type="regex:/[0-9a-zA-z_\-]+/" />
-        </command>
+        <commands>
+            <command name="example_command" method="GET" uri="/{{username}}">
+                <param name="my_parameter" type="regex:/[0-9a-zA-z_\-]+/" />
+            </command>
+        </commands>
     </client>
 
 When an end-developer creates this command, they will need to pass a value that matches the ``/[0-9a-zA-z_\-]+/`` regular expression.  If a supplied parameter does not match this regular expression, an exception will be thrown.  If you use this same pattern in various parts of your XML service description, then you could create a shortcut ``<type>`` node and reference your custom type in each command.
@@ -200,13 +202,15 @@ When an end-developer creates this command, they will need to pass a value that 
 .. code-block:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <types>
-        <type name="username" class="Guzzle.Service.Filter.Regex" default="/[0-9a-zA-z_\-]+/" />
-    </types>
     <client>
-        <command name="example_command" method="GET" uri="/{{username}}">
-            <param name="my_parameter" type="username" />
-        </command>
+        <types>
+            <type name="username" class="Guzzle.Service.Filter.Regex" default="/[0-9a-zA-z_\-]+/" />
+        </types>
+        <commands>
+            <command name="example_command" method="GET" uri="/{{username}}">
+                <param name="my_parameter" type="username" />
+            </command>
+        </commands>
     </client>
 
 Sending PUT and POST requests
@@ -217,18 +221,26 @@ Service descriptions allow for a flexible way to send PUT and POST requests wher
 .. code-block:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <command name="create_user" method="POST" uri="/users">
-        <param name="data" type="type:SimpleXMLElement" location="body" />
-    </command>
+    <client>
+        <commands>
+            <command name="create_user" method="POST" uri="/users">
+                <param name="data" type="type:SimpleXMLElement" location="body" />
+            </command>
+        </commands>
+    </client>
 
 If you are sending JSON data, you should consider allowing end-developers to set body parameters using an array.  You can then convert an array to a JSON string by using the ``filters`` attribute of a parameter:
 
 .. code-block:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <command name="create_user" method="POST" uri="/users">
-        <param name="data" type="type:array" filters="json_encode" location="body" />
-    </command>
+    <client>
+        <commands>
+            <command name="create_user" method="POST" uri="/users">
+                <param name="data" type="type:array" filters="json_encode" location="body" />
+            </command>
+        </commands>
+    </client>
 
 Including other service descriptions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -241,10 +253,12 @@ XML
 .. code-block:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <includes>
-        <include uri="/path/to/service.xml" />
-        <include uri="../../relative/path/to/service.xml"
-    </types>
+    <client>
+        <includes>
+            <include uri="/path/to/service.xml" />
+            <include uri="../../relative/path/to/service.xml"
+        </includes>
+    </client>
 
 JSON
 ^^^^
