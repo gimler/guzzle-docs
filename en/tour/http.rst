@@ -287,6 +287,38 @@ The Response object contains helper methods for retrieving common response heade
 
 The entity body of a response can be retrieved by calling ``$response->getBody()``.  Pass TRUE to this method to retrieve the body as a string rather than an EntityBody object;  this is a convenience feature-- an EntityBody can be cast as a string.
 
+Request and response headers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+HTTP message headers are case insensitive, multiple occurences of any header can be present in an HTTP message (whether it's valid or not), and some servers require specific casing of particular headers.  Because of this, request and response headers are stored in ``Guzzle\Http\Messsage\Header`` objects.  The Header object can be cast as a string, counted, or iterated to retrieve each value from the header.  Casting a Header object to a string will return all of the header values concatenated together using a glue string (typically ', ').  Let's take the following example to see what is returned::
+
+    <?php
+    
+    $request = new Request('GET', 'http://www.example.com');
+    $request->addHeader('Foo', 'bar');
+    $request->addHeader('foo', 'baz');
+    $request->addHeader('Test', '123');
+    
+    // Requests can be cast as a string. Output is "bar, baz"
+    echo $request->getHeader('Foo');
+    
+    // You can count the number of headers of a particular case insensitive name (2 in this example)
+    echo count($request->getHeader('foO'));
+    
+    // You can interate over Header objects
+    foreach ($request->getHeader('foo') as $header) {
+        echo $header;
+    }
+    
+    echo $request->getHeader('Test');
+    // Outputs: "123"
+    
+    // Missing headers return NULL
+    $nullValue = $request->getHeader('Missing');
+    
+    // You can see all of the different variations of a header by calling raw() on the Header
+    var_export($request->getHeader('foo')->raw());
+
 Send HTTP requests in parallel
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
