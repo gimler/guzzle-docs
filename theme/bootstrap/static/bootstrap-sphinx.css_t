@@ -11,6 +11,8 @@ body {
 
 p {
     margin-bottom: 14px;
+    font-size: 14px;
+    line-height: 21px;
 }
 
 #guzzle-documentation {
