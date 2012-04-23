@@ -18,7 +18,7 @@ Files
 
 The basic skeleton of a project can be generated using the phing build script from the Guzzle client template (https://github.com/guzzle/guzzle-client-template).  You will be prompted to answer several questions about your web service and a skeleton client project will be generated for you.
 
-In order to unit test your client, a developer would need to copy phpunit.xml.dst to phpunit.xml and make any needed modifications.  As a best practice and security measure for you and your contributors, it is recommended to add an ignore statement to your SCM so that phpunit.xml is ignored.
+In order to unit test your client, a developer would need to copy phpunit.xml.dist to phpunit.xml and make any needed modifications.  As a best practice and security measure for you and your contributors, it is recommended to add an ignore statement to your SCM so that phpunit.xml is ignored.
 
 Bootstrapping
 ~~~~~~~~~~~~~
@@ -62,7 +62,7 @@ You can perform integration testing with a web service over the internet by maki
 @group internet annotation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When creating tests that require an internet connection, it is recommended that you add ``@group internet`` annotations to your unit tests to specify which tests require network connectivity.  You can then `modify your phpunit.xml.dst <http://www.phpunit.de/manual/current/en/appendixes.configuration.html>`_ file to exclude the internet group by default:
+When creating tests that require an internet connection, it is recommended that you add ``@group internet`` annotations to your unit tests to specify which tests require network connectivity.  You can then `modify your phpunit.xml.dist <http://www.phpunit.de/manual/current/en/appendixes.configuration.html>`_ file to exclude the internet group by default:
 
 .. code-block:: xml
 
@@ -77,7 +77,7 @@ You can then `run PHPUnit tests <http://www.phpunit.de/manual/current/en/textui.
 API credentials
 ^^^^^^^^^^^^^^^
 
-If API  credentials are required to run your integration tests, you must add ``<php>`` parameters to your phpunit.xml.dst file and extract these parameters in your boostrap.php file.
+If API  credentials are required to run your integration tests, you must add ``<php>`` parameters to your phpunit.xml.dist file and extract these parameters in your boostrap.php file.
 
 .. code-block:: xml
 
@@ -160,7 +160,7 @@ You can queue an HTTP response or an array of responses by calling ``$this->getS
 
 The above code queues a single 200 response with an empty body.  Responses are queued using a FIFO order; this response will be returned by the server when it receives the first request and then removed from the queue.  If a request is received by a server with no queued responses, an exception will be thrown in your unit test.
 
-You can inspect the requests that the server has retrieved by calling ``$this->getServer()->getReceivedRequests()``.  This method accepts an optional ``$hydrate`` parameter that specifies if you are retrieving an array of string HTTP requests or an array of ``Guzzle\Http\RequestInterface`` subclassed objects.  "Hydrating" the requests will allow greater flexibility in your unit tests so that you can get easily assert the state of the various parts of a request.
+You can inspect the requests that the server has retrieved by calling ``$this->getServer()->getReceivedRequests()``.  This method accepts an optional ``$hydrate`` parameter that specifies if you are retrieving an array of string HTTP requests or an array of ``Guzzle\Http\RequestInterface`` subclassed objects.  "Hydrating" the requests will allow greater flexibility in your unit tests so that you can  easily assert the state of the various parts of a request.
 
 You will need to modify the base_url of your web service client in order to use it against the test server.
 

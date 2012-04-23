@@ -9,7 +9,7 @@ Guzzle's awesome HTTP support provides the raw materials needed to build robust 
 Command based web service clients
 ---------------------------------
 
-Command based web service clients help to hide the underlying implementation of an API by following the `command pattern <http://en.wikipedia.org/wiki/Command_pattern>`_ and giving a concrete class to each action that can be taken on a web service.
+Command based web service clients help to hide the underlying implementation of an API by following the `command pattern <http://en.wikipedia.org/wiki/Command_pattern>`_ and giving a concrete class or service description to each action that can be taken on a web service.
 
 Instantiating web service clients using a ServiceBuilder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -124,14 +124,14 @@ The above array could be represented as a JSON array::
 Referencing other clients in parameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If one of your clients depends on another client as one of its parameters, you can reference that client by name by enclosing the client's reference key in ``{{ }}``::
+If one of your clients depends on another client as one of its parameters, you can reference that client by name by enclosing the client's reference key in ``{ }``::
 
     {
         "token": {
             "access_key": "xyz"
         },
         "client": {
-            "token_client": "{{token}}",
+            "token_client": "{token}",
             "version": "1.0"
         }
     }
@@ -259,4 +259,4 @@ Guzzle doesn't require that all of the commands in a CommandSet originate from t
 Next steps
 ~~~~~~~~~~
 
-Check the documentation of the web service client you are using to see the available commands for the client.  Some clients will mix :doc:`dynamic commands </guide/service/creating_dynamic_commands>` with concrete commands, so will need to check if an XML or JSON file is shipped with the client that defines dynamic commands.
+Check the documentation of the web service client you are using to see the available commands for the client.  Some clients will mix :doc:`service descriptions </guide/service/service_descriptions>` with concrete commands, so will need to check if an XML or JSON service description is present.

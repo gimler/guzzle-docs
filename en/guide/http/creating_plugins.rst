@@ -16,7 +16,9 @@ Plugins can be attached to any subject, or object in Guzzle that implements that
 Subscribing to a subject
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Observers subscribe to subjects and receive every event emitted from the subject.  You can subscribe an instantiated observer to an event by getting the ``EventDispatcher`` object from the subject and calling  its ``addSubscriber()`` method.::
+You can subscribe an instantiated observer to an event by getting the ``EventDispatcher`` object from the subject and calling  its ``addSubscriber()`` method.
+
+.. code-block:: php
 
     <?php
 

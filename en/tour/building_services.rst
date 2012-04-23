@@ -9,13 +9,13 @@ Building web service clients using commands is better than creating requests man
 #. Better choice for maintainability, features, and ease of use.
 #. Best practices are inherently implemented for the end-developer.
 #. Changes can be made to the underlying request and response processing without breaking the interface.
-#. Can create :doc:`dynamic commands </guide/service/creating_dynamic_commands>` based on a service description.
+#. Can create :doc:`service description </guide/service/service_descriptions>` to create dynamic HTTP requests.
 
 Simple web service clients make the assumption that the end-developer has an intricate understanding of how to send requests to a web service and how that web service will respond.  If you want to build a reusable RESTful web service client for an application you plan on maintaining, then creating a simple client might not cut it.  Simple clients might work for extremely simple web services (like `Yahoo weather <http://developer.yahoo.com/weather/>`_ for example) or quickly prototyping, but when you're dealing with a huge web service with a ton of options (e.g. Amazon S3), then you're going to want to build a robust web service client that executes commands.
 
 A command-based web service client that abstracts away the HTTP request and response makes a client more future-proof; if the API you are interacting with changes (for example, adds a required field), then you would only have to update the command in one place rather than every single file in your project that interacts with the web service.  Guzzle uses the `command pattern <http://en.wikipedia.org/wiki/Command_pattern>`_ for building requests and processing responses.  Abstracting the underlying implementation helps new developers to quickly send requests to an API using any of the best-practices coded into the command itself, rather than assuming that every developer on your team has an intricate understanding of the web service.
 
-Commands can also be created for developers dynamically using a :doc:`service description </guide/service/creating_dynamic_commands>`.
+Commands can also be created for developers dynamically using a :doc:`service description </guide/service/service_descriptions>`.
 
 The following document will describe how to build a command-based web service client for Guzzle.
 
@@ -34,20 +34,20 @@ This phing build target will ask you a series of questions and generate a templa
 
 .. code-block:: none
 
-    src/FooBar/
-    ........... FooBarClient.php
-    ........... client.xml
-    ........... Command/
-    .................... CommandName.php
-    tests/
-    ...... mock/
-    ...... FooBar/
-    .............. Command/
-    ....................... CommandNameTest.php
-    .............. FooBarClientTest.php
-    ...... bootstrap.php
-    phpunit.xml.dist
-    composer.json
+    ./src/FooBar/
+    ├── FooBarClient.php
+    ├── client.xml
+    ├── Command/
+    │   ├── CommandName.php
+    ├── tests/
+    │   ├── mock/
+    |   ├── FooBar/
+    |   |   ├── Command/
+    |   |   |   └── CommandNameTest.php
+    |   |   └── FooBarClientTest.php
+    |   └── bootstrap.php
+    ├── phpunit.xml.dist
+    ├── composer.json
 
 After running the phing build target to generate the project's skeleton, you will need to modify the *FooBarClient.php* file by updating the factory method, adding a constructor if needed, and adding any class properties.
 
@@ -154,7 +154,7 @@ Miscellaneous helper methods for your web service can also be put in the client.
 Create commands
 ---------------
 
-Commands can be created in one of two ways: create a concrete command class that extends ``Guzzle\Service\Command\AbstractCommand`` or :doc:`create a dynamic command based on a service description </guide/service/creating_dynamic_commands>`.  We will describe how to create concrete commands below.
+Commands can be created in one of two ways: create a concrete command class that extends ``Guzzle\Service\Command\AbstractCommand`` or :doc:`create a dynamic command based on a service description </guide/service/service_descriptions>`.  We will describe how to create concrete commands below.
 
 Commands help to hide complexity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
