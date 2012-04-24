@@ -696,6 +696,9 @@ Guzzle ships with an OAuth 1.0 plugin that can sign requests using a consumer ke
 
     <?php
 
+    use Guzzle\Http\Client;
+    use Guzzle\Http\Plugin\OauthPlugin;
+
     $client = new Guzzle\Http\Client('http://api.twitter.com/1');
     $oauth = new Guzzle\Http\Plugin\OauthPlugin(array(
         'consumer_key'    => 'my_key',
