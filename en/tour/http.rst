@@ -445,8 +445,11 @@ Use the ``Guzzle\Http\Plugin\LogPlugin`` to view all data sent over the wire, in
 
     <?php
 
+    use Guzzle\Http\Client;
     use Guzzle\Common\Log\ZendLogAdapter;
     use Guzzle\Http\Plugin\LogPlugin;
+
+    $client = new Client('http://www.test.com/');
 
     $adapter = new ZendLogAdapter(new \Zend_Log(new \Zend_Log_Writer_Stream('php://output')));
     $logPlugin = new LogPlugin($adapter, LogPlugin::LOG_VERBOSE);
@@ -515,9 +518,16 @@ The ``Guzzle\Http\Plugin\ExponentialBackoffPlugin`` automatically retries failed
 
     <?php
 
+    use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\ExponentialBackoffPlugin;
 
-    $client->getEventDispatcher()->addSubscriber(new ExponentialBackoffPlugin());
+    $client = new Client('http://www.test.com/');
+
+    $backoffPlugin = new ExponentialBackoffPlugin();
+
+    // Add the exponential plugin to the client object
+    $client->getEventDispatcher()->addSubscriber($backoffPlugin);
+
     $request = $client->get('http://google.com/');
     $request->send();
 
@@ -532,13 +542,18 @@ Guzzle can leverage HTTP's caching specifications using the ``Guzzle\Http\Plugin
 
     <?php
 
+    use Guzzle\Http\Client;
     use Doctrine\Common\Cache\ArrayCache;
     use Guzzle\Common\Cache\DoctrineCacheAdapter;
     use Guzzle\Http\Plugin\CachePlugin;
 
+    $client = new Client('http://www.test.com/');
+
     $adapter = new DoctrineCacheAdapter(new ArrayCache());
-    $cache = new CachePlugin($adapter, true);
-    $client->getEventDispatcher()->addSubscriber($cache);
+    $cachePlugin = new CachePlugin($adapter, true);
+
+    // Add the cache plugin to the client object
+    $client->getEventDispatcher()->addSubscriber($cachePlugin);
 
     $request = $client->get('http://www.wikipedia.org/');
     $request->send();
@@ -559,11 +574,17 @@ Some web services require a Cookie in order to maintain a session.  The ``Guzzle
 
     <?php
 
+    use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\CookiePlugin;
     use Guzzle\Http\CookieJar\ArrayCookieJar;
 
-    $plugin = new CookiePlugin(new ArrayCookieJar());
-    $client->getEventDispatcher()->addSubscriber($plugin);
+    $client = new Client('http://www.test.com/');
+
+    $cookiePlugin = new CookiePlugin(new ArrayCookieJar());
+
+    // Add the cookie plugin to the client object
+    $client->getEventDispatcher()->addSubscriber($cookiePlugin);
+
     $request = $client->get('http://www.yahoo.com/');
 
     // Send the request with no cookies and parse the returned cookies
@@ -581,10 +602,16 @@ Entity bodies can sometimes be modified over the wire due to a faulty TCP transp
 
     <?php
 
+    use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\Md5ValidatorPlugin;
 
-    $plugin = new Md5ValidatorPlugin();
-    $client->getEventDispatcher()->addSubscriber($plugin);
+    $client = new Client('http://www.test.com/');
+
+    $md5Plugin = new Md5ValidatorPlugin();
+
+    // Add the md5 plugin to the client object
+    $client->getEventDispatcher()->addSubscriber($md5Plugin);
+
     $request = $client->get('http://www.yahoo.com/');
     $request->send();
 
@@ -599,12 +626,17 @@ The history plugin tracks all of the requests and responses sent through a reque
 
     <?php
 
+    use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\HistoryPlugin;
+
+    $client = new Client('http://www.test.com/');
 
     $history = new HistoryPlugin();
     $history->setLimit(5);
 
+    // Add the history plugin to the client object
     $client->getEventDispatcher()->addSubscriber($history);
+
     $client->get('http://www.yahoo.com/')->send();
 
     echo $history->getLastRequest();
@@ -620,13 +652,17 @@ The mock plugin is useful for testing Guzzle clients.  The mock plugin allows yo
 
     <?php
 
+    use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\MockPlugin;
     use Guzzle\Http\Message\Response;
+
+    $client = new Client('http://www.test.com/');
 
     $mock = new MockPlugin();
     $mock->addResponse(new Response(200))
          ->addResponse(new Response(404));
 
+    // Add the mock plugin to the client object
     $client->getEventDispatcher()->addSubscriber($mock);
 
     // The following request will receive a 200 response from the plugin
@@ -646,8 +682,16 @@ If your web service client requires basic authorization, then you can use the Cu
 
     <?php
 
+    use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\CurlAuthPlugin;
-    $client->getEventDispatcher()->addSubscriber(new CurlAuthPlugin('username', 'password'));
+
+    $client = new Client('http://www.test.com/');
+
+    $authPlugin = new CurlAuthPlugin('username', 'password');
+
+    // Add the auth plugin to the client object
+    $client->getEventDispatcher()->addSubscriber($authPlugin);
+
     $response = $client->get('projects/1/people')->send();
     $xml = new SimpleXMLElement($response->getBody(true));
     foreach ($xml->person as $person) {
@@ -699,8 +743,8 @@ Guzzle ships with an OAuth 1.0 plugin that can sign requests using a consumer ke
     use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\OauthPlugin;
 
-    $client = new Guzzle\Http\Client('http://api.twitter.com/1');
-    $oauth = new Guzzle\Http\Plugin\OauthPlugin(array(
+    $client = new Client('http://api.twitter.com/1');
+    $oauth = new OauthPlugin(array(
         'consumer_key'    => 'my_key',
         'consumer_secret' => 'my_secret',
         'token'           => 'my_token',
