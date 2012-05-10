@@ -30,7 +30,7 @@ The two universal options that iterators should support are ``limit`` and ``page
 
 .. note::
 
-    The ``limit`` and ``page_size`` options can also be specified on an iterator using the ``setLimit($limit)`` and ``setPageSize($pageSize)`` methods of an iterator.
+    The ``limit`` and ``page_size`` options can also be specified on an iterator using the ``setLimit($limit)`` and ``setPageSize($pageSize)`` methods.
 
 Resolving iterator class names
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
