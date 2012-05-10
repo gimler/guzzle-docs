@@ -11,6 +11,18 @@ Getting an iterator from a client
 
 The ``getIterator`` method of a ``Guzzle\Service\ClientInterface`` object provides a convenient interface for instantiating a resource iterator for a specific command.  This method implicitly uses a ``Guzzle\Service\Resource\ResourceIteratorFactoryInterface`` object to create resource iterators.  Pass an instantiated command object or the name of a command in the first argument.  When passing the name of a command, the command factory of the client will create the command by name using the ``$commandOptions`` array.  The third argument may be used to pass an array of options to the constructor of the instantiated ``ResourceIteratorInterface`` object.
 
+.. code-block:: php
+
+    <?php
+
+    $iterator = $client->getIterator('get_users');
+
+    foreach ($iterator as $user) {
+        echo $user['name'] . ' age ' . $user['age'] . PHP_EOL;
+    }
+
+The above code sample might execute a single request or a thousand requests.  As a consumer of a web service, I don't care.  I just want to iterate over all of the users.
+
 Iterator options
 ~~~~~~~~~~~~~~~~
 
@@ -97,4 +109,5 @@ As you can see, it's pretty simple to implement an iterator.  There are a few th
 1. You do not need to create a new command in the ``sendRequest()`` method.  A new command object is cloned from the original command passed into the constructor of the iterator before the ``sendRequest()`` method is called.  Remember that the resource iterator expects a command that has not been executed.
 2. When the ``sendRequest()`` method is first called, you will not have a ``$this->nextToken`` value, so always check before setting it on a command.  Notice that the next token is being updated each time a request is sent.
 3. After fetching more resources from the service, always return an array of resources.
+
 
