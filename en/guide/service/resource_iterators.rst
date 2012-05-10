@@ -35,7 +35,7 @@ The two universal options that iterators should support are ``limit`` and ``page
 Resolving iterator class names
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The default resource iterator factory of a client object expects that your iterators are stored under the ``Model`` folder of your client and that an iterator is names after the CameCase name of a command followed by the word "Iterator".  For example, if you wanted to create an iterator for the ``get_users`` command, then your iterator class would be ``Model\GetUsersIterator`` and would be stored in ``Model/GetUsersIterator.php``.
+The default resource iterator factory of a client object expects that your iterators are stored under the ``Model`` folder of your client and that an iterator is names after the CamelCase name of a command followed by the word "Iterator".  For example, if you wanted to create an iterator for the ``get_users`` command, then your iterator class would be ``Model\GetUsersIterator`` and would be stored in ``Model/GetUsersIterator.php``.
 
 Creating an iterator
 --------------------
@@ -109,5 +109,3 @@ As you can see, it's pretty simple to implement an iterator.  There are a few th
 1. You do not need to create a new command in the ``sendRequest()`` method.  A new command object is cloned from the original command passed into the constructor of the iterator before the ``sendRequest()`` method is called.  Remember that the resource iterator expects a command that has not been executed.
 2. When the ``sendRequest()`` method is first called, you will not have a ``$this->nextToken`` value, so always check before setting it on a command.  Notice that the next token is being updated each time a request is sent.
 3. After fetching more resources from the service, always return an array of resources.
-
-
