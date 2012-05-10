@@ -284,7 +284,7 @@ You can create service descriptions using .json files.  The JSON document must m
         "commands": {}
     }
 
-We covered including other service descriptions in the previous section.  Adding custom types in a JSON description must include a class value and can include any number of custom arguments to pass to the Symfony2 constraint object when it is instantiated.
+We covered including other service descriptions in the previous section.  Adding custom types in a JSON description must include a class value and can include any number of custom arguments to pass to the Guzzle constraint object when it is called.
 
 .. code-block:: javascript
 

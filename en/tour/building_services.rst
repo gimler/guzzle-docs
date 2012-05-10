@@ -154,7 +154,7 @@ Miscellaneous helper methods for your web service can also be put in the client.
 Create commands
 ---------------
 
-Commands can be created in one of two ways: create a concrete command class that extends ``Guzzle\Service\Command\AbstractCommand`` or :doc:`create a dynamic command based on a service description </guide/service/service_descriptions>`.  We will describe how to create concrete commands below.
+Commands can be created in one of two ways: create a concrete command class that extends ``Guzzle\Service\Command\AbstractCommand`` or :doc:`create a dynamic command based on a service description </guide/service/service_descriptions>`.  Either method of creating commands is fine, and you are encouraged to use both in tandem when appropriate.  We will describe how to create concrete commands below.
 
 Commands help to hide complexity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -285,16 +285,12 @@ Here's how you would execute this command using the client we created::
     // You can also get the result of the command by calling getResult
     $result = $command->getResult();
 
-Iterating over pages of results
--------------------------------
+Iterating over resources
+------------------------
 
-Some web services return paginated results.  For example, a web service might return the total number of results and a subset of the results in an API response.  Guzzle provides a couple of helpful classes that make it easy to work with web services that implement this type of result pagination.
+Web services often implement pagination in their responses.  Users of your web service client should not be responsible for implementing the logic involved in iterating through pages of results.  Guzzle provides a simple resource iterator foundation to make it easier on web service client developers to offer a useful abstraction layer.
 
-The ``Guzzle\Service\ResourceIterator`` class should be used when dealing with results that can be iterated through by using some type of pagination controls like incrementing a page number or retrieving a list of resources using a next token returned from a web service.  You will need to extend the ResourceIterator class and implement the ``sendRequest()`` method that is responsible for sending a subsequent request when the results of the current page of resources is exhausted.  The ``sendRequest`` method is responsible for sending a request to fetch the next page of results and configuring the internal state of the iterator to begin iterating over the newly fetched results.  You will need to create a concrete command that instantiates your extended ResourceIterator in the command's ``process`` method.  Returning a ResourceIterator from a command object will help developers easily interact with a paginated result set-- all a developer needs to do is ``foreach`` over the result object, and every single resource from the API will be returned.
-
-You might want to retrieve more than one page of results but not necessarily every page of results from a ResourceIterator.  In this case, you should allow end-developers to set a limit parameter on your command.  A limit parameter can be added to a ResourceIterator so that the iterator will not retrieve more resources than the limit amount.  For example, if you are retrieving 10 resources per page and your limit is set to 15, the resource iterator will retrieve a page of 10 resources followed by a page of 5 resources so that it will stay under the limit.  It is not guaranteed that the limit will limit the results to exactly the limit amount as this is dependent on the web service honoring the limit.
-
-See ``Guzzle\Aws\S3\Model\BucketIterator`` and ``Guzzle\Aws\SimpleDb\Model\SelectIterator`` for examples of building resource iterators.
+See the guide on :doc:`Resource Iterators </guide/service/resource_iterators>` for more information on creating resource iterators for your client.
 
 Unit test your service
 ----------------------
