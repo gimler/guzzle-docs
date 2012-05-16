@@ -19,6 +19,9 @@ The best way to instantiate Guzzle web service clients is to let Guzzle handle b
 A ServiceBuilder can source information from an array, an XML file, SimpleXMLElement, or JSON file::
 
     <?php
+
+    use Guzzle\Service\Builder\ServiceBuilder;
+
     // Source service definitions from a JSON file
     $builder = ServiceBuilder::factory('services.json');
 
@@ -34,37 +37,46 @@ Here's an example of retrieving an Unfuddle client from your ServiceBuilder::
 Sourcing data from XML
 ^^^^^^^^^^^^^^^^^^^^^^
 
-A ServiceBuilder can get information from an XML file or a SimpleXMLElement.  The XML file includes ``<client>`` elements that describe each web service client you will use.  Parameters need to be specified in each ``<client>`` element to tell a ``Guzzle\Service\ServiceBuilder`` object how to build the web service client.  Clients are given names which are handy for using multiple accounts for the same service or creating development clients vs. production clients.  Here's an example of a services.xml that uses several `Amazon Web Services <http://aws.amazon.com/>`_ clients and the `Unfuddle <http://www.unfuddle.com/>`_ web service:
+A ServiceBuilder can get information from an XML file or a SimpleXMLElement.  The XML file includes ``<service>`` elements that describe each web service client you will use.  Parameters need to be specified in each ``<service>`` element to tell a ``Guzzle\Service\Builder\ServiceBuilder`` object how to build the web service client.  Clients are given names which are handy for using multiple accounts for the same service or creating development clients vs. production clients.  Here's an example of a services.xml that uses several `Amazon Web Services <http://aws.amazon.com/>`_ clients and the `Unfuddle <http://www.unfuddle.com/>`_ web service:
 
 .. code-block:: xml
 
     <?xml version="1.0" ?>
     <guzzle>
-        <clients>
+
+        <!-- You can optionally provide a list of XML file to include -->
+        <includes>
+            <include path="/path/to/other/services.xml" />
+        </includes>
+
+        <!-- You can optionally specify a ServiceBuilderInterface class to instantiate -->
+        <class>MyService.Awesome.ServiceBuilder</class>
+
+        <services>
             <!-- Abstract service to store AWS account credentials -->
-            <client name="abstract.aws">
+            <service name="abstract.aws">
                 <param name="access_key" value="12345" />
                 <param name="secret_key" value="abcd" />
-            </client>
+            </service>
             <!-- Amazon S3 client that extends the abstract client -->
-            <client name="s3" classs="Guzzle\Aws\S3\S3Client" extends="abstract.aws">
+            <service name="s3" classs="Guzzle\Aws\S3\S3Client" extends="abstract.aws">
                 <param name="devpay_product_token" value="XYZ" />
                 <param name="devpay_user_token" value="123" />
-            </client>
-            <client name="simple_db" class="Guzzle\Aws\SimpleDb\SimpleDbClient" extends="abstract.aws" />
-            <client name="sqs" class="Guzzle.Aws.Sqs.SqsClient" extends="abstract.aws" />
+            </service>
+            <service name="simple_db" class="Guzzle\Aws\SimpleDb\SimpleDbClient" extends="abstract.aws" />
+            <service name="sqs" class="Guzzle.Aws.Sqs.SqsClient" extends="abstract.aws" />
             <!-- Unfuddle client ( "." in class names are converted to "\" )-->
-            <client name="unfuddle" class="Guzzle.Unfuddle.UnfuddleClient">
+            <service name="unfuddle" class="Guzzle.Unfuddle.UnfuddleClient">
                 <param name="username" value="test-user" />
                 <param name="password" value="my-password" />
                 <param name="subdomain" value="my-subdomain" />
-            </client>
-        </clients>
+            </service>
+        </services>
     </guzzle>
 
-Let's dissect what's going on in the above XML file.  The first client defined, ``abstract.aws``, is an **abstract client** that can be used by other clients to share configuration values among a number of clients.  This can be useful when clients share the same username and password (i.e. Amazon Web Services).
+Let's dissect what's going on in the above XML file.  The first client defined, ``abstract.aws``, is an **abstract client** that can be used by other clients to share configuration values among a number of clients.  This can be useful when clients share the same username and password.
 
-The next client is an Amazon S3 client.  Each ``<client>`` nodes must contain a ``class`` attribute that references the full class name of the client being created (you can substitute PHP's namespace separator, ``\``, with a period ``.``).  Client nodes can inherit parameters from other previously defined nodes.  The above Amazon S3 client is inheriting configuration settings from the abstract.aws client and adding `Amazon DevPay <http://aws.amazon.com/devpay/>`_ related parameters.  As you can see from the `Amazon SimpleDB <http://aws.amazon.com/simpledb/>`_ and `Amazon SQS <http://aws.amazon.com/sqs/>`_ clients, not all clients will require additional parameters.
+The next client is an Amazon S3 client.  Each ``<service>`` nodes must contain a ``class`` attribute that references the full class name of the client being created (you can substitute PHP's namespace separator, ``\``, with a period ``.``).  Client nodes can inherit parameters from other previously defined nodes.  The above Amazon S3 client is inheriting configuration settings from the abstract.aws client and adding `Amazon DevPay <http://aws.amazon.com/devpay/>`_ related parameters.  As you can see from the `Amazon SimpleDB <http://aws.amazon.com/simpledb/>`_ and `Amazon SQS <http://aws.amazon.com/sqs/>`_ clients, not all clients will require additional parameters.
 
 Sourcing from an Array
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -97,26 +109,30 @@ Web service clients can be defined using an array of data.::
 Sourcing from a JSON document
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The above array could be represented as a JSON array::
+The above array could be represented as a JSON array.  Note that ``includes`` and ``class`` are optional::
 
     {
-        "aws": {
-            "access_key": "xyz",
-            "secret": "abc"
-        },
-        "s3": {
-            "class": "Guzzle\\Aws\\S3\\S3Client",
-            "extends": "aws",
-            "params": {
-                "subdomain": "michael"
-            }
-        },
-        "unfuddle": {
-            "class": "Guzzle\\Unfuddle\\UnfuddleClient",
-            "params": {
-                "username": "test-user",
-                "password": "test-password",
-                "subdomain": "test"
+        "includes": ["/path/to/file.json"],
+        "class": "Foo\Bar"
+        "services": {
+            "aws": {
+                "access_key": "xyz",
+                "secret": "abc"
+            },
+            "s3": {
+                "class": "Guzzle\\Aws\\S3\\S3Client",
+                "extends": "aws",
+                "params": {
+                    "subdomain": "michael"
+                }
+            },
+            "unfuddle": {
+                "class": "Guzzle\\Unfuddle\\UnfuddleClient",
+                "params": {
+                    "username": "test-user",
+                    "password": "test-password",
+                    "subdomain": "test"
+                }
             }
         }
     }
@@ -127,12 +143,20 @@ Referencing other clients in parameters
 If one of your clients depends on another client as one of its parameters, you can reference that client by name by enclosing the client's reference key in ``{ }``::
 
     {
-        "token": {
-            "access_key": "xyz"
-        },
-        "client": {
-            "token_client": "{token}",
-            "version": "1.0"
+        "services": {
+            "token": {
+                "class": "My\Token\TokenFactory",
+                "params": {
+                    "access_key": "xyz"
+                }
+            },
+            "client": {
+                "class": "My\Client",
+                "params": {
+                    "token_client": "{token}",
+                    "version": "1.0"
+                }
+            }
         }
     }
 
