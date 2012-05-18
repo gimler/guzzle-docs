@@ -203,7 +203,7 @@ When an end-developer creates this command, they will need to pass a value that 
     <?xml version="1.0" encoding="UTF-8"?>
     <client>
         <types>
-            <type name="username" class="Guzzle.Service.Filter.Regex" default="/[0-9a-zA-z_\-]+/" />
+            <type name="username" class="Guzzle\Common\Validation\Regex" pattern="/[0-9a-zA-z_\-]+/" />
         </types>
         <commands>
             <command name="example_command" method="GET" uri="/{{username}}">
