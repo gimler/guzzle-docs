@@ -18,8 +18,6 @@ The best way to instantiate Guzzle web service clients is to let Guzzle handle b
 
 A ServiceBuilder can source information from an array, an XML file, SimpleXMLElement, or JSON file::
 
-    <?php
-
     use Guzzle\Service\Builder\ServiceBuilder;
 
     // Source service definitions from a JSON file
@@ -28,8 +26,6 @@ A ServiceBuilder can source information from an array, an XML file, SimpleXMLEle
 Clients are referenced using a customizable name you provide in your service definition.  The ServiceBuilder is a sort of multiton object-- it will only instantiate a client once and return that client for subsequent retrievals.  You can get a "throwaway" client (a client that is not persisted by the ServiceBuilder) by passing ``TRUE`` in the second argument of ``ServiceBuilder::get()``.
 
 Here's an example of retrieving an Unfuddle client from your ServiceBuilder::
-
-    <?php
     $client = $builder->get('unfuddle');
     // You can also use the ServiceBuilder object as an array
     $client = $builder['unfuddle'];
@@ -83,7 +79,6 @@ Sourcing from an Array
 
 Web service clients can be defined using an array of data.::
 
-    <?php
     $builder = ServiceBuilder::factory(array(
         'aws' => array(
             'access_key' => 'xyz',
@@ -109,7 +104,9 @@ Web service clients can be defined using an array of data.::
 Sourcing from a JSON document
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The above array could be represented as a JSON array.  Note that ``includes`` and ``class`` are optional::
+The above array could be represented as a JSON array.  Note that ``includes`` and ``class`` are optional.
+
+.. code-block:: javascript
 
     {
         "includes": ["/path/to/file.json"],
@@ -140,7 +137,9 @@ The above array could be represented as a JSON array.  Note that ``includes`` an
 Referencing other clients in parameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If one of your clients depends on another client as one of its parameters, you can reference that client by name by enclosing the client's reference key in ``{ }``::
+If one of your clients depends on another client as one of its parameters, you can reference that client by name by enclosing the client's reference key in ``{ }``.
+
+.. code-block:: javascript
 
     {
         "services": {
@@ -180,8 +179,6 @@ Notice how any sub-namespace beneath ``Command`` is converted from ``\`` to ``.`
 
 Here's how you would get the Amazon S3 client from the ServiceBuilder and execute a GetObject command to retrieve an object from Amazon S3::
 
-    <?php
-
     // Retrieve the client by name
     $client = $serviceBuilder['s3'];
 
@@ -195,8 +192,6 @@ Here's how you would get the Amazon S3 client from the ServiceBuilder and execut
     echo $httpResponse->getBody();
 
 The GetObject command just returns the HTTP response object when it is executed.  This is the default behavior of Guzzle commands unless specified otherwise in the docblock of the ``getResult()`` method of a specific command.  Commands don't have to just return the HTTP response; commands might return more valuable information when executed::
-
-    <?php
 
     // Get a command from the Amazon S3 client
     $command = $client->getCommand('bucket.list_bucket');
@@ -219,16 +214,12 @@ The ListBucket command above returns a ``Guzzle\Aws\S3\Model\BucketIterator`` wh
 
 You can take some shortcuts in your code by passing key-value pair arguments to a command::
 
-    <?php
-
     $objects = $client->getCommand('bucket.list_bucket', array('bucket' => 'my_bucket'))->execute();
 
 Executing commands in parallel using CommandSets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Commands can be sent in parallel using ``Guzzle\Service\Command\CommandSet`` objects::
-
-    <?php
 
     $client = $serviceBuilder['simple_db'];
     $client->execute(array(
@@ -249,8 +240,6 @@ Commands can be sent in parallel using ``Guzzle\Service\Command\CommandSet`` obj
     }
 
 Guzzle doesn't require that all of the commands in a CommandSet originate from the same client.  This allows you to write extremely efficient code when you need to send several requests to multiple services::
-
-    <?php
 
     use Guzzle\Service\Command\CommandSet;
 

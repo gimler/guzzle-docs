@@ -1,6 +1,6 @@
 {% extends "basic/layout.html" %}
 {% set script_files = script_files + ['_static/prettify/prettify.js'] %}
-{% set css_files = ['_static/bootstrap.css?v=2', '_static/bootstrap-sphinx.css?v=5', '_static/prettify/prettify.css?v=1'] + css_files %}
+{% set css_files = ['_static/bootstrap.css?v=3', '_static/bootstrap-sphinx.css?v=6', '_static/prettify/prettify.css?v=2'] + css_files %}
 
 {# Sidebar: Rework into our Boostrap nav section. #}
 {% macro navBar() %}
@@ -10,19 +10,19 @@
         <a class="brand" href="{{ pathto(master_doc) }}">{{ shorttitle|e }}</a>
         <ul class="nav">
           <li>
-            <a href="{{ pathto(master_doc) }}">home</a>
+            <a href="{{ pathto(master_doc) }}">Home</a>
           </li>
           <li>
-            <a href="{{ pathto('docs') }}">docs</a>
+            <a href="{{ pathto('docs') }}">Docs</a>
           </li>
           <li>
             <a href="https://github.com/guzzle/guzzle">github</a>
           </li>
           <li>
-            <a href="https://groups.google.com/forum/?hl=en#!forum/guzzle">forum</a>
+            <a href="https://groups.google.com/forum/?hl=en#!forum/guzzle">Forum</a>
           </li>
           <li>
-            <a href="irc:irc.freenode.com/#guzzlephp">irc</a>
+            <a href="irc:irc.freenode.com/#guzzlephp">IRC</a>
           </li>
         </ul>
         <ul class="nav secondary-nav">

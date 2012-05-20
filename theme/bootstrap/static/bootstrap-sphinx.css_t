@@ -7,6 +7,8 @@
 
 body {
   padding-top: 60px;
+  background-color: #FFFFFF;
+  position: relative;
 }
 
 p {
@@ -27,14 +29,29 @@ p {
 }
 
 .hero-unit h1 {
-  font-size: 57px;
+  font-size: 49px;
+  margin-bottom: 12px;
 }
 .hero-unit {
-  padding: 41px;
+  padding: 40px;
+}
+.hero-unit p {
+    font-size: 17px;
 }
 .hero-unit img {
   float: left;
-  margin-right: 24px;
+  margin-right: 17px;
+}
+.hero-unit ul li {
+    margin-left: 220px;
+}
+.hero-unit .buttons {
+    text-align: center;
+}
+
+.other-buttons {
+    margin: 18px 0;
+    text-align: center;
 }
 
 .topbar-inner, .topbar .fill {
@@ -55,20 +72,15 @@ p {
 }
 
 .topbar {
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .topbar .brand {
-  padding: 5px 7px !important;
   font-weight: bold !important;
-  text-shadow: 1px 1px 1px #111111 !important;
-  background: none repeat scroll 0 0 #F67E00;
-  border: 1px solid #000000;
-  border-radius: 5px 5px 5px 5px;
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
   color: #FFFFFF;
-  font-family: Arial,Helvetica,sans-serif;
-  margin: 4px 12px 0 0;
+  font-family: Helvetica,sans-serif;
+  margin: 10px 12px 0 0;
+  padding: 0;
 }
 
 div.documentwrapper {
@@ -87,8 +99,8 @@ div.documentwrapper {
 
 .prettyprint, .highlight pre {
     background-color: #F9F9F9;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
     padding: 9px;
     overflow: auto;
 }

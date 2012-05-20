@@ -13,8 +13,6 @@ The ``getIterator`` method of a ``Guzzle\Service\ClientInterface`` object provid
 
 .. code-block:: php
 
-    <?php
-
     $iterator = $client->getIterator('get_users');
 
     foreach ($iterator as $user) {
@@ -75,8 +73,6 @@ Assume the response to a ``get_users`` command returns JSON data that looks like
 Assume that because there is a ``next_user`` value, there will be more users if a subsequent request is issued.  If the ``next_user`` value is missing or null, then we know there are no more results to fetch.  Let's implement a resource iterator for this command.
 
 .. code-block:: php
-
-    <?php
 
     namespace MyService\Model;
 

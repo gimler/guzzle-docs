@@ -20,14 +20,10 @@ You can subscribe an instantiated observer to an event by getting the ``EventDis
 
 .. code-block:: php
 
-    <?php
-
     $testPlugin = new TestPlugin();
     $client->getEventDispatcher()->addSubscriber($testPlugin);
 
 You can also subscribe to only specific events using a closure::
-
-    <?php
 
     $client->getEventDispatcher()->addListener('request.create', function(Event $event) {
         echo $event->getName();
@@ -48,8 +44,6 @@ Simple Echo plugin
 ~~~~~~~~~~~~~~~~~~
 
 This simple plugin echos a string containing the request that is about to be sent by listening to the ``request.before_send`` event::
-
-    <?php
 
     class EchoPlugin implements Symfony\Component\EventDispatcher\EventSubscriberInterface
     {

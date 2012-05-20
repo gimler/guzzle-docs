@@ -27,8 +27,6 @@ Your web service client should have a tests/ folder that contains a bootstrap.ph
 
 .. code-block:: php
 
-    <?php
-
     Guzzle\Tests\GuzzleTestCase::setServiceBuilder(Guzzle\Service\ServiceBuilder::factory(array(
         'test.unfuddle' => array(
             'class' => 'Guzzle.Unfuddle.UnfuddleClient',
@@ -123,8 +121,6 @@ You can also use the ``Guzzle\Http\Plugin\MockPlugin`` object directly with your
 
 .. code-block:: php
 
-    <?php
-
     $plugin = new Guzzle\Http\Plugin\MockPlugin();
     $plugin->addResponse(new Guzzle\Http\Message\Response(200));
     $client = new Guzzle\Http\Client();
@@ -154,8 +150,6 @@ You can queue an HTTP response or an array of responses by calling ``$this->getS
 
 .. code-block:: php
 
-    <?php
-
     $this->getServer()->enqueue("HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n");
 
 The above code queues a single 200 response with an empty body.  Responses are queued using a FIFO order; this response will be returned by the server when it receives the first request and then removed from the queue.  If a request is received by a server with no queued responses, an exception will be thrown in your unit test.
@@ -165,8 +159,6 @@ You can inspect the requests that the server has retrieved by calling ``$this->g
 You will need to modify the base_url of your web service client in order to use it against the test server.
 
 .. code-block:: php
-
-    <?php
 
     $client = $this->getServiceBuilder()->get('my_client');
     $client->setBaseUrl($this->getServer()->getUrl());

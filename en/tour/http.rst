@@ -32,8 +32,6 @@ Requests can be created by using methods of the ``Guzzle\Http\Client`` object.  
 
 In the following example, we are interacting with the Unfuddle API and issuing a GET request to retrieve a listing of tickets in the 123 project::
 
-    <?php
-
     use Guzzle\Http\Client;
 
     $client = new Client('https://mydomain.unfuddle.com/api/v1');
@@ -54,8 +52,6 @@ Requests
 Requests can be created from a client using method names that match the HTTP verb.  Guzzle supports the following HTTP methods: GET, HEAD, DELETE, PUT, POST, PATCH, and OPTIONS.  You can use any other custom HTTP method by calling ``$client->createRequest($methodName)``.
 
 .. code-block:: php
-
-    <?php
 
     use Guzzle\Http\Client;
 
@@ -88,8 +84,6 @@ Requests can be created from a client using method names that match the HTTP ver
     $supportsDelete = $client->options('/path')->send()->isMethodAllowed('delete');
 
 If you know exactly what HTTP message you want to send, you can create request objects from messages::
-
-    <?php
 
     use Guzzle\Http\Message\RequestFactory;
 
@@ -129,16 +123,12 @@ PUT
 
 You can send PUT requests with raw entity bodies.  Use the ``post()`` method instead to send a POST requests with a custom entity body::
 
-    <?php
-
     $response = $client->put('http://www.example.com/upload', null, 'this is the body')->send();
 
 POST
 ^^^^
 
 Guzzle helps to make it extremely easy to send POST requests.  POST requests will be sent with an ``application/x-www-form-urlencoded`` Content-Type header if no files are being sent in the POST.  If files are specified in the POST, then the Content-Type header will become ``multipart/form-data``.  Here's how to create a multipart/form-data POST request containing files and fields::
-
-    <?php
 
     $request = $client->post('http://www.example.com/upload')
         ->addPostFields(array(
@@ -149,8 +139,6 @@ Guzzle helps to make it extremely easy to send POST requests.  POST requests wil
 
 This can be achieved more succinctly-- ``post()`` accepts three arguments: the URL, optional headers, and the post fields.  To send files in the POST request, prepend the ``@`` symbol to the array value (just like you would if you were using the PHP ``curl_setopt`` function)::
 
-    <?php
-
     $request = $client->post('http://www.example.com/upload', null, array(
         'custom_field' => 'my custom value',
         'file_field'   => '@/path/to/file.xml'
@@ -159,8 +147,6 @@ This can be achieved more succinctly-- ``post()`` accepts three arguments: the U
 .. note::
 
     Remember to **always** sanitize user input when sending POST requests::
-
-        <?php
 
         // Prevent users from accessing sensitive files by sanitizing input
         $_POST = array('firstname' => '@/etc/passwd');
@@ -176,8 +162,6 @@ Exceptions
 
 Requests that receive a 4xx or 5xx response will throw a ``Guzzle\Http\Exception\BadResponseException``.  More specifically, 4xx errors throw a ``Guzzle\Http\Exception\ClientErrorResponseException``, and 5xx errors throw a ``Guzzle\Http\Exception\ServerErrorResponseException``.  You can catch the specific exceptions or just catch the BadResponseException to deal with either type of error.  Here's an example of catching a generic BadResponseException::
 
-    <?php
-
     try {
         $response = $client->get('/not_found.xml')->send();
     } catch (Guzzle\Http\Exception\BadResponseException $e) {
@@ -189,8 +173,6 @@ Throwing an exception when a 4xx or 5xx response is encountered is the default b
 You can change the response that will be associated with the request by calling ``setResponse()`` on the ``$event['request']`` object passed into your listener, or by changing the ``$event['response']`` value of the ``Guzzle\Common\Event`` object that is passed to your listener.  Transparently changing the response associated with a request by modifying the event allows you to retry failed requests without complicating the code that uses the client.  This might be useful for sending requests to a web service that has expiring auth tokens.  When a response shows that your token has expired, you can get a new token, retry the request with the new token, and return the successful response to the user.
 
 Here's an example of retrying a request using updated authorization credentials when a 401 response is received, overriding the response of the original request with the new response, and still allowing the default exception behavior to be called when other non-200 response status codes are encountered::
-
-    <?php
 
     // Add custom error handling to any request created by this client
     $client->getEventDispatcher()->addListener('request.error', function(Event $event) {
@@ -259,8 +241,6 @@ EntityBody objects provide a great deal of functionality: compression, decompres
 
 Here's an example of gzip compressing a text file then sending the file to a URL::
 
-    <?php
-
     use Guzzle\Http\EntityBody;
 
     $body = EntityBody::factory(fopen('/path/to/file.txt', 'r'));
@@ -278,8 +258,6 @@ Sending a request will return a ``Guzzle\Http\Message\Response`` object.  You ca
 
 The Response object contains helper methods for retrieving common response headers.  These helper methods normalize the variations of HTTP response headers::
 
-    <?php
-
     $response->getContentMd5();
     $response->getEtag();
     $response->getCacheControl();
@@ -291,8 +269,6 @@ Request and response headers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 HTTP message headers are case insensitive, multiple occurences of any header can be present in an HTTP message (whether it's valid or not), and some servers require specific casing of particular headers.  Because of this, request and response headers are stored in ``Guzzle\Http\Messsage\Header`` objects.  The Header object can be cast as a string, counted, or iterated to retrieve each value from the header.  Casting a Header object to a string will return all of the header values concatenated together using a glue string (typically ', ').  Let's take the following example to see what is returned::
-
-    <?php
 
     $request = new Request('GET', 'http://www.example.com');
     $request->addHeader('Foo', 'bar');
@@ -326,8 +302,6 @@ Sending many HTTP requests serially (one at a time) can cause an unnecessary del
 
 You can pass a single request or an array of requests to a client's ``send()`` method.  Here's an example of sending three requests in parallel using a client object::
 
-    <?php
-
     use Guzzle\Common\ExceptionCollection;
 
     try {
@@ -357,15 +331,11 @@ Low level cURL access
 
 Most of the functionality implemented in the libcurl bindings has been simplified and abstracted by Guzzle. Developers who need access to `cURL specific functionality <http://www.php.net/curl_setopt>`_ that is not abstracted by Guzzle (e.g. proxies and SSL) can still add cURL handle specific behavior to Guzzle HTTP requests by modifiying the cURL options collection of a request::
 
-    <?php
-
     $request->getCurlOptions()->set(CURLOPT_SSL_VERIFYHOST, true);
 
 You can add cURL options to every request sent from your client by adding configuration options to the client that are prefixed with "curl.".  Clients will automatically map cURL constants for keys and values to their correct PHP value.
 
 .. code-block:: php
-
-    <?php
 
     $client = new Guzzle\Http\Client('https://example.com/', array(
         'curl.CURLOPT_SSL_VERIFYHOST' => false,
@@ -378,8 +348,6 @@ You can blacklist cURL options and headers from ever being sent by cURL by addin
 
 .. code-block:: php
 
-    <?php
-
     $client = new Guzzle\Http\Client('https://example.com/', array(
         'curl.blacklist' => array(CURLOPT_ENCODING, 'header.Accept')
     ));
@@ -390,8 +358,6 @@ URI templates
 Guzzle supports the entire `URI templates RFC <http://tools.ietf.org/html/draft-gregorio-uritemplate-08>`_.  URI templates add a special syntax to URIs that replace template place holders with user defined variables.
 
 Every request created by a Guzzle HTTP client passes through a URI template so that URI template expressions are automatically expanded::
-
-    <?php
 
     $client = new Guzzle\Http\Client('https://example.com/', array(
         'a' => 'hi'
@@ -407,8 +373,6 @@ Because of URI template expansion, the URL of the above request will become ``ht
 
 The URL for this request will become ``https://test.com?a=hi&b=there``.  URI templates aren't limited to just simple variable replacements;  URI templates can provide an enormous amount of flexibility when creating request URIs::
 
-    <?php
-
     $request = $client->get(array('http://example.com{+path}{/segments}{?query,data*}', array(
         'path'     => '/foo/bar',
         'segments' => array('one', 'two'),
@@ -421,8 +385,6 @@ The URL for this request will become ``https://test.com?a=hi&b=there``.  URI tem
 The resulting URL would become ``http://example.com/foo/bar/one/two?query=test&more=value``.
 
 By default, URI template expressions are enclosed in an opening and closing brace (e.g. ``{var}``).  If you are working with a web service that actually uses braces (e.g. Solr), then you can specify a custom regular expression to use to match URI template expressions::
-
-    <?php
 
     $client->getUriTemplate()->setRegex('/\<\$(.+)\>/');
     $client->get('/<$a>');
@@ -442,8 +404,6 @@ Over the wire logging
 ~~~~~~~~~~~~~~~~~~~~~
 
 Use the ``Guzzle\Http\Plugin\LogPlugin`` to view all data sent over the wire, including entity bodies and redirects::
-
-    <?php
 
     use Guzzle\Http\Client;
     use Guzzle\Common\Log\ZendLogAdapter;
@@ -516,8 +476,6 @@ Truncated exponential backoff
 
 The ``Guzzle\Http\Plugin\ExponentialBackoffPlugin`` automatically retries failed HTTP requests using truncated exponential backoff::
 
-    <?php
-
     use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\ExponentialBackoffPlugin;
 
@@ -539,8 +497,6 @@ PHP-based caching forward proxy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Guzzle can leverage HTTP's caching specifications using the ``Guzzle\Http\Plugin\CachePlugin``.  The CachePlugin provides a private transparent proxy cache that caches HTTP responses.  The caching logic, based on `RFC 2616 <http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html>`_, uses HTTP headers to control caching behavior, cache lifetime, and supports ETag and Last-Modified based revalidation::
-
-    <?php
 
     use Guzzle\Http\Client;
     use Doctrine\Common\Cache\ArrayCache;
@@ -572,8 +528,6 @@ Cookie session plugin
 
 Some web services require a Cookie in order to maintain a session.  The ``Guzzle\Http\Plugin\CookiePlugin`` will add cookies to requests and parse cookies from responses using a CookieJar object::
 
-    <?php
-
     use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\CookiePlugin;
     use Guzzle\Http\CookieJar\ArrayCookieJar;
@@ -600,8 +554,6 @@ MD5 hash validator plugin
 
 Entity bodies can sometimes be modified over the wire due to a faulty TCP transport or misbehaving proxy.  If an HTTP response contains a Content-MD5 header, then a MD5 hash of the entity body of a response can be compared against the Content-MD5 header of the response to determine if the response was delivered intact.  The ``Guzzle\Http\Plugin\Md5ValidatorPlugin`` will throw an ``UnexpectedValueException`` if the calculated MD5 hash does not match the Content-MD5 hash::
 
-    <?php
-
     use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\Md5ValidatorPlugin;
 
@@ -623,8 +575,6 @@ History plugin
 The history plugin tracks all of the requests and responses sent through a request or client.  This plugin can be useful for crawling or unit testing.  By default, the history plugin stores up to 10 requests and responses.
 
 .. code-block:: php
-
-    <?php
 
     use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\HistoryPlugin;
@@ -649,8 +599,6 @@ Mock Plugin
 The mock plugin is useful for testing Guzzle clients.  The mock plugin allows you to queue an array of responses that will satisfy requests sent from a client by consuming the request queue in FIFO order.
 
 .. code-block:: php
-
-    <?php
 
     use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\MockPlugin;
@@ -680,8 +628,6 @@ If your web service client requires basic authorization, then you can use the Cu
 
 .. code-block:: php
 
-    <?php
-
     use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\CurlAuthPlugin;
 
@@ -704,8 +650,6 @@ Batch Queue Plugin
 Send a large number of requests using the batch queue plugin.  Any request created by a client will automatically be tracked and queued by the BatchQueuePlugin. In the constructor of the plugin, you can specify the maximum amount of requests to keep in queue before implicitly flushing, or set 0 to never automatically flush.
 
 .. code-block:: php
-
-    <?php
 
     use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\BatchQueuePlugin;
@@ -737,8 +681,7 @@ OAuth 1.0 Plugin
 Guzzle ships with an OAuth 1.0 plugin that can sign requests using a consumer key, consumer secret, OAuth token, and OAuth secret.  Here's an example showing how to send an authenticated request to the Twitter REST API:
 
 .. code-block:: php
-
-    <?php
+    :linenos:
 
     use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\OauthPlugin;

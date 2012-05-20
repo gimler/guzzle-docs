@@ -69,8 +69,6 @@ If you attach this service description to a client, you would be able to execute
 
 .. code-block:: php
 
-    <?php
-
     use Guzzle\Service\Description\ServiceDescription;
 
     $description = ServiceDescription::factory('/path/to/client.xml');
@@ -187,7 +185,6 @@ You can use the ``type`` attribute on command parameters to enforce parameter va
 
 .. code-block:: xml
 
-    <?xml version="1.0" encoding="UTF-8"?>
     <client>
         <commands>
             <command name="example_command" method="GET" uri="/{{username}}">
@@ -200,7 +197,6 @@ When an end-developer creates this command, they will need to pass a value that 
 
 .. code-block:: xml
 
-    <?xml version="1.0" encoding="UTF-8"?>
     <client>
         <types>
             <type name="username" class="Guzzle.Service.Filter.Regex" default="/[0-9a-zA-z_\-]+/" />
@@ -219,7 +215,6 @@ Service descriptions allow for a flexible way to send PUT and POST requests wher
 
 .. code-block:: xml
 
-    <?xml version="1.0" encoding="UTF-8"?>
     <client>
         <commands>
             <command name="create_user" method="POST" uri="/users">
@@ -232,7 +227,6 @@ If you are sending JSON data, you should consider allowing end-developers to set
 
 .. code-block:: xml
 
-    <?xml version="1.0" encoding="UTF-8"?>
     <client>
         <commands>
             <command name="create_user" method="POST" uri="/users">
@@ -251,11 +245,10 @@ XML
 
 .. code-block:: xml
 
-    <?xml version="1.0" encoding="UTF-8"?>
     <client>
         <includes>
             <include uri="/path/to/service.xml" />
-            <include uri="../../relative/path/to/service.xml"
+            <include uri="../../relative/path/to/service.xml" />
         </includes>
     </client>
 

@@ -34,7 +34,9 @@ If you already have your own autoloader and don't want to install the extra libr
 Adding Guzzle to a project using Composer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Create composer.json file in the project root::
+Create composer.json file in the project root:
+
+.. code-block:: javascript
 
     {
         "require": {
@@ -69,9 +71,8 @@ Using your own autoloader
 
 You will need to add Guzzle and Guzzle's dependencies to your application's autoloader.  If your application does not already use an autoloader, you can use the `Symfony2 ClassLoader <https://github.com/symfony/ClassLoader>`_ component::
 
-    <?php
-
     require_once '/path/to/symfony/src/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+    
     $classLoader = new \Symfony\Component\ClassLoader\UniversalClassLoader();
     $classLoader->registerNamespaces(array(
         'Guzzle' => '/path/to/guzzle/src',
