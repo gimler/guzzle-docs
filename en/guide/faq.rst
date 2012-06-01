@@ -10,3 +10,12 @@ You could run into this error if you have the XDebug extension installed and you
 xdebug.max_nesting_level = 1000
 
 [`source <http://stackoverflow.com/a/4293870/151504>`_]
+
+How can I speed up my client?
+-----------------------------
+
+There are several things you can do to speed up your client:
+
+1. Disable type validation on your ``Guzzle\Service\Inspector``
+2. Utilize a C based HTTP message parser (e.g. ``Guzzle\Http\Parser\Message\PeclHttpMessageParser``)
+3. Disable over the wire tracking of requests by setting the 'curl.disable_wire' config setting to true on on your client.

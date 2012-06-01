@@ -49,7 +49,7 @@ This phing build target will ask you a series of questions and generate a templa
     ├── phpunit.xml.dist
     ├── composer.json
 
-After running the phing build target to generate the project's skeleton, you will need to modify the *FooBarClient.php* file by updating the factory method, adding a constructor if needed, and adding any class properties.
+After running the phing build target to generate the project's skeleton, you will need to modify the *FooBarClient.php* file by updating the static factory method, adding a constructor if needed, and adding any class properties.
 
 +--------------------------------------+------------------------------------------------------------------------------------------------------------------+
 | src/FooBar/Command/                  | Place all of the commands for your web service in this folder.                                                   |
@@ -72,11 +72,13 @@ After running the phing build target to generate the project's skeleton, you wil
 Create a client
 ---------------
 
-Now that the directory structure is in place, you can start creating your web service client.  Rename Client.php to the CamelCase name of the web service you are interacting with.  Next you will need to create your client's constructor.  Your client's constructor can require any number of arguments that your client needs.  In order for a ServiceBuilder to create your client using a parameterized array, you'll need to implement a ``factory()`` method that maps an array of parameters into an instantiated client object.  Any class composition should be handled in your client's factory method.
+Now that the directory structure is in place, you can start creating your web service client.  Rename Client.php to the CamelCase name of the web service you are interacting with.  Next you will need to create your client's constructor.  Your client's constructor can require any number of arguments that your client needs.
+
+In order for a ServiceBuilder to create your client using a parameterized array, you'll need to implement a static ``factory()`` method that maps an array of parameters into an instantiated client object.  Any class composition based on configuration settings should be handled in your client's `static factory method <http://twofoos.org/content/static-factory-methods/>`_.  This method is used to flatten the configuration settings of a client into a simplified key value pair array so that the client can easily be configured, utilize default configuration settings, provides simplified validation, and can easily be serialized into various configuration formats.
 
 .. note::
 
-    Your client will not work with a service builder if you do not create a factory method.
+    Your client will not work with a service builder if you do not create a static factory method.
 
 Let's start creating a custom web service client.  First we will extend the ``Guzzle\Service\Client`` class.  Next we will create a constructor that accepts several web service specific arguments.  After creating your constructor, you must create a factory method that accepts an array of configuration data.  The factory method accepts parameters, adds default parameters, validates that required parameters are present, creates a new client, attaches any observers needed for the client, and returns the client object::
 
@@ -145,7 +147,7 @@ Let's start creating a custom web service client.  First we will extend the ``Gu
         }
     }
 
-The ``Inspector::prepareConfig`` method is responsible for adding default parameters to a configuration object and ensuring that required parameters are in the configuration.   The factory method in the above example will be very similar to the code you will need in your client's factory method.  Any object composition required to build the client should be added in the factory method (for example, attaching event observers to the client based on configuration settings).
+The ``Inspector::prepareConfig`` method is responsible for adding default parameters to a configuration object and ensuring that required parameters are in the configuration.   The static factory method in the above example will be very similar to the code you will need in your client's factory method.  Any object composition required to build the client should be added in the factory method (for example, attaching event observers to the client based on configuration settings).
 
 Miscellaneous helper methods for your web service can also be put in the client.  For example, the Amazon S3 client has methods to create a signed URL.
 

@@ -60,17 +60,9 @@ You can perform integration testing with a web service over the internet by maki
 @group internet annotation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When creating tests that require an internet connection, it is recommended that you add ``@group internet`` annotations to your unit tests to specify which tests require network connectivity.  You can then `modify your phpunit.xml.dist <http://www.phpunit.de/manual/current/en/appendixes.configuration.html>`_ file to exclude the internet group by default:
+When creating tests that require an internet connection, it is recommended that you add ``@group internet`` annotations to your unit tests to specify which tests require network connectivity.
 
-.. code-block:: xml
-
-    <groups>
-      <exclude>
-        <group>internet</group>
-      </exclude>
-    </groups>
-
-You can then `run PHPUnit tests <http://www.phpunit.de/manual/current/en/textui.html>`_ on the internet group by running ``phpunit --group internet``.
+You can then `run PHPUnit tests <http://www.phpunit.de/manual/current/en/textui.html>`_ that exclude the @internet group by running ``phpunit --exclude-group internet``.
 
 API credentials
 ^^^^^^^^^^^^^^^
@@ -125,8 +117,13 @@ You can also use the ``Guzzle\Http\Plugin\MockPlugin`` object directly with your
     $plugin->addResponse(new Guzzle\Http\Message\Response(200));
     $client = new Guzzle\Http\Client();
     $client->getEventDispatcher()->addSubscriber($plugin);
+
     // The following request will get the mock response from the plugin in FIFO order
-    $client->get('http://www.test.com/')->send();
+    $request = $client->get('http://www.test.com/');
+    $request->send();
+
+    // The MockPlugin maintains a list of requests that were mocked
+    $this->assertArrayContains($request, $plugin->getReceivedRequests());
 
 node.js web server for integration testing
 ------------------------------------------

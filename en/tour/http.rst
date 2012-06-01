@@ -24,6 +24,7 @@ Quick overview of Guzzle's HTTP features
 * Supports authentication methods provided by cURL (Basic, Digest, GSS Negotiate, NTLM)
 * Transparently follows redirects
 * Subject/Observer signal slot system for modifying request behavior
+* Support for asynchronous requests that do not wait for a response
 
 Using a Client object
 ---------------------
@@ -681,7 +682,6 @@ OAuth 1.0 Plugin
 Guzzle ships with an OAuth 1.0 plugin that can sign requests using a consumer key, consumer secret, OAuth token, and OAuth secret.  Here's an example showing how to send an authenticated request to the Twitter REST API:
 
 .. code-block:: php
-    :linenos:
 
     use Guzzle\Http\Client;
     use Guzzle\Http\Plugin\OauthPlugin;
@@ -698,6 +698,20 @@ Guzzle ships with an OAuth 1.0 plugin that can sign requests using a consumer ke
     $response = $client->get('statuses/public_timeline.json')->send();
 
 If you need to use a custom signing method, you can pass a ``signature_method`` configuration option in the constructor of the OAuth plugin.  The ``signature_method`` option must be a callable variable that accepts a string to sign and signing key and returns a signed string.
+
+Async Plugin
+~~~~~~~~~~~~
+
+The AsyncPlugin allows you to send requests that do not wait on a response.  This is handled through cURL by utilizing the progress event.  When a request has sent all of its data to the remote server, Guzzle adds a 1ms timeout on the request and instructs cURL to not download the body of the response.  The async plugin then catches the exception and adds a mock response to the request, along with an X-Guzzle-Async header to let you know that the response was not fully downloaded.
+
+.. code-block:: php
+
+    use Guzzle\Http\Client;
+    use Guzzle\Http\Plugin\AsyncPlugin;
+
+    $client = new Client('http://www.example.com');
+    $client->getEventDispatcher()->addSubscriber(new AsyncPlugin());
+    $response = $client->get()->send();
 
 Third-party plugins
 ~~~~~~~~~~~~~~~~~~~
