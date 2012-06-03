@@ -116,7 +116,7 @@ You can also use the ``Guzzle\Http\Plugin\MockPlugin`` object directly with your
     $plugin = new Guzzle\Http\Plugin\MockPlugin();
     $plugin->addResponse(new Guzzle\Http\Message\Response(200));
     $client = new Guzzle\Http\Client();
-    $client->getEventDispatcher()->addSubscriber($plugin);
+    $client->addSubscriber($plugin);
 
     // The following request will get the mock response from the plugin in FIFO order
     $request = $client->get('http://www.test.com/');

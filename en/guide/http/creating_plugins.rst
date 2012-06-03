@@ -16,12 +16,12 @@ Plugins can be attached to any subject, or object in Guzzle that implements that
 Subscribing to a subject
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can subscribe an instantiated observer to an event by getting the ``EventDispatcher`` object from the subject and calling  its ``addSubscriber()`` method.
+You can subscribe an instantiated observer to an event by calling ``addSubscriber`` on a subject.
 
 .. code-block:: php
 
     $testPlugin = new TestPlugin();
-    $client->getEventDispatcher()->addSubscriber($testPlugin);
+    $client->addSubscriber($testPlugin);
 
 You can also subscribe to only specific events using a closure::
 
@@ -62,7 +62,7 @@ This simple plugin echos a string containing the request that is about to be sen
 
     $plugin = new EchoPlugin();
     $client = new Guzzle\Service\Client('http://www.test.com/');
-    $client->getEventDispatcher()->addSubscriber($plugin);
+    $client->addSubscriber($plugin);
     $client->get('/')->send();
 
 

@@ -15,7 +15,7 @@ Guzzle can leverage HTTP's caching specifications using the ``Guzzle\Http\Plugin
     $cache = new CachePlugin($adapter, true);
 
     $client = new Client('http://www.wikipedia.org');
-    $client->getEventDispatcher()->addSubscriber($cache);
+    $client->addSubscriber($cache);
 
     $response1 = $client->get('/');
 
