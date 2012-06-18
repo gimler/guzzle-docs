@@ -247,8 +247,8 @@ XML
 
     <client>
         <includes>
-            <include uri="/path/to/service.xml" />
-            <include uri="../../relative/path/to/service.xml" />
+            <include path="/path/to/service.xml" />
+            <include path="../../relative/path/to/service.xml" />
         </includes>
     </client>
 
