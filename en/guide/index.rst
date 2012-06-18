@@ -7,5 +7,6 @@ Guides
     service/testing_clients
     http/creating_plugins
     service/creating_dynamic_commands
+    batching
     http/caching
-    upgrade/1.0-2.0
+    service/resource_iterators

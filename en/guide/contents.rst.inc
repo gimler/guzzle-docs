@@ -3,4 +3,5 @@
 * :doc:`Service descriptions </guide/service/service_descriptions>`
 * :doc:`Resource iterators </guide/service/resource_iterators>`
 * :doc:`Caching </guide/http/caching>`
+* :doc:`Batching requests and commands </guide/batching>`
 * :doc:`FAQ </guide/faq>`
