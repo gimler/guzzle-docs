@@ -37,8 +37,9 @@ The batch object, ``Guzzle\Common\Batch\Batch``, is a queue.  You add requests t
 
     // BatchRequestTransfer acts as both the divisor and transfer strategy
     $transferStrategy = new BatchRequestTransfer(10);
+    $divisorStrategy = $transferStrategy;
 
-    $batch = new Batch($transferStrategy, $transferStrategy);
+    $batch = new Batch($transferStrategy, $divisorStrategy);
 
     // Add some requests to the batch queue
     $batch->add($request1)
