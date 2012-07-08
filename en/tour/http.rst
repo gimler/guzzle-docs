@@ -303,7 +303,7 @@ Sending many HTTP requests serially (one at a time) can cause an unnecessary del
 
 You can pass a single request or an array of requests to a client's ``send()`` method.  Here's an example of sending three requests in parallel using a client object::
 
-    use Guzzle\Common\ExceptionCollection;
+    use Guzzle\Common\Exception\ExceptionCollection;
 
     try {
         $responses = $client->send(array(
@@ -318,7 +318,7 @@ You can pass a single request or an array of requests to a client's ``send()`` m
         }
     }
 
-A single request failure will not cause the entire pool of requests to fail.  Any exceptions thrown while transferring a pool of requests will be aggregated into a ``Guzzle\Common\ExceptionCollection`` exception.
+A single request failure will not cause the entire pool of requests to fail.  Any exceptions thrown while transferring a pool of requests will be aggregated into a ``Guzzle\Common\Exception\ExceptionCollection`` exception.
 
 Managed persistent HTTP connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
