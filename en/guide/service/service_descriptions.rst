@@ -162,19 +162,25 @@ filters          CSV list of functions or static functions that modifies a strin
 
 The **location** attribute can be one of the following values:
 
-+---------+------------------------------------------------------------------------------------------------+
-| query   | Sets a query string value using the key and value of the parameter.  A custom query string key |
-|         | can be used by providing the custom key after the query location separated by a colon          |
-|         | (e.g. ``location="query:QueryKey``)"                                                           |
-+---------+------------------------------------------------------------------------------------------------+
-| header  | The parameter will be added as a header.  The header will be set as the name of the parameter  |
-|         | or you can specify a custom header by providing the custom header after the header location    |
-|         | separated by a colon (e.g. ``location="header:X-Custom-Header"``)                              |
-+---------+------------------------------------------------------------------------------------------------+
-| body    + The parameter value will be used as the body of the generated HTTP request                     |
-+---------+------------------------------------------------------------------------------------------------+
-| data    | This is the default location of parameters that do not contain a location attribute            |
-+---------+------------------------------------------------------------------------------------------------+
++------------+------------------------------------------------------------------------------------------------+
+| query      | Sets a query string value using the key and value of the parameter.  A custom query string key |
+|            | can be used by providing the custom key after the query location separated by a colon          |
+|            | (e.g. ``location="query:QueryKey"``)                                                           |
++------------+------------------------------------------------------------------------------------------------+
+| header     | The parameter will be added as a header.  The header will be set as the name of the parameter  |
+|            | or you can specify a custom header by providing the custom header after the header location    |
+|            | separated by a colon (e.g. ``location="header:X-Custom-Header"``)                              |
++------------+------------------------------------------------------------------------------------------------+
+| body       | The parameter value will be used as the body of the generated HTTP request                     |
++------------+------------------------------------------------------------------------------------------------+
+| data       | This is the default location of parameters that do not contain a location attribute            |
++------------+------------------------------------------------------------------------------------------------+
+| post_field | Sets a post string value using the key and value of the parameter.  A custom post string key   |
+|            | can be used by providing the custom key after the post location separated by a colon           |
+|            | (e.g. ``location="post_field:FieldKey"``)                                                      |
++------------+------------------------------------------------------------------------------------------------+
+| post_file  | Sets a path to file that should be send as post file                                           |
++------------+------------------------------------------------------------------------------------------------+
 
 Use custom ``<types>`` for data validation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
