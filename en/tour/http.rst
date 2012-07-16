@@ -353,6 +353,16 @@ You can blacklist cURL options and headers from ever being sent by cURL by addin
         'curl.blacklist' => array(CURLOPT_ENCODING, 'header.Accept')
     ));
 
+If you are using :doc:`Service Descriptions </guide/service/service_descriptions>` then you can override the cURL options within the definition, for example:
+
+.. code-block:: xml
+
+    <command name="get_users" method="GET" uri="/users">
+        <doc>Get a list of users</doc>
+        <param name="curl.CURLOPT_CONNECTTIMEOUT" default="100" />
+    </command>
+
+
 URI templates
 -------------
 
